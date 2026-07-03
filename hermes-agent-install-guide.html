@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hermes Agent Windows 安裝技術文件：CLI、Desktop、踩雷排除與桌面捷徑</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --ink: #1e293b;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --primary: #2563eb;
+      --primary-soft: #dbeafe;
+      --accent: #0f766e;
+      --warn: #b45309;
+      --warn-soft: #fef3c7;
+      --danger: #b91c1c;
+      --danger-soft: #fee2e2;
+      --ok: #15803d;
+      --ok-soft: #dcfce7;
+      --code-bg: #0f172a;
+      --code-ink: #e5e7eb;
+      --shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.75;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(37,99,235,.12), transparent 28rem),
+        radial-gradient(circle at top right, rgba(15,118,110,.10), transparent 30rem),
+        var(--bg);
+    }
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .layout {
+      display: grid;
+      grid-template-columns: 290px minmax(0, 1fr);
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+    aside {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      padding: 2rem 1.25rem;
+      border-right: 1px solid var(--line);
+      background: rgba(255,255,255,.74);
+      backdrop-filter: blur(16px);
+      overflow: auto;
+    }
+    aside h2 {
+      margin: 0 0 1rem;
+      font-size: 1rem;
+      color: var(--muted);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .toc a {
+      display: block;
+      padding: .46rem .65rem;
+      margin: .16rem 0;
+      border-radius: .7rem;
+      color: #334155;
+      font-size: .94rem;
+    }
+    .toc a:hover { background: var(--primary-soft); text-decoration: none; }
+    main {
+      padding: 2.5rem min(5vw, 4rem) 5rem;
+    }
+    .hero {
+      background: linear-gradient(135deg, #ffffff 0%, #eef6ff 62%, #ecfeff 100%);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      border-radius: 2rem;
+      padding: clamp(1.5rem, 4vw, 3rem);
+      overflow: hidden;
+      position: relative;
+    }
+    .hero::after {
+      content: "Hermes";
+      position: absolute;
+      right: -1rem;
+      bottom: -3.4rem;
+      font-size: clamp(4rem, 12vw, 10rem);
+      color: rgba(37,99,235,.06);
+      font-weight: 900;
+      line-height: 1;
+    }
+    .eyebrow {
+      display: inline-flex;
+      gap: .45rem;
+      align-items: center;
+      padding: .35rem .8rem;
+      border-radius: 999px;
+      color: #1d4ed8;
+      background: var(--primary-soft);
+      font-weight: 700;
+      font-size: .9rem;
+      margin-bottom: 1rem;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4.5vw, 3.6rem);
+      line-height: 1.16;
+      letter-spacing: -0.04em;
+    }
+    .subtitle {
+      max-width: 880px;
+      color: #475569;
+      font-size: 1.1rem;
+      margin: 1rem 0 0;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: .9rem;
+      margin-top: 1.6rem;
+      position: relative;
+      z-index: 1;
+    }
+    .meta-card {
+      background: rgba(255,255,255,.82);
+      border: 1px solid var(--line);
+      border-radius: 1rem;
+      padding: .9rem 1rem;
+    }
+    .meta-card strong { display: block; font-size: .9rem; color: var(--muted); }
+    .meta-card span { display: block; font-weight: 800; margin-top: .2rem; }
+    section {
+      margin-top: 2rem;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 1.35rem;
+      padding: clamp(1.2rem, 3vw, 2rem);
+      box-shadow: 0 8px 22px rgba(15, 23, 42, .04);
+    }
+    h2 {
+      margin: 0 0 1rem;
+      font-size: clamp(1.55rem, 2.6vw, 2.1rem);
+      line-height: 1.3;
+      letter-spacing: -0.025em;
+      border-left: .42rem solid var(--primary);
+      padding-left: .8rem;
+    }
+    h3 { margin: 1.4rem 0 .5rem; font-size: 1.25rem; }
+    p { margin: .65rem 0; }
+    .lead { color: var(--muted); font-size: 1.02rem; }
+    .callout {
+      border-radius: 1rem;
+      padding: 1rem 1.15rem;
+      margin: 1rem 0;
+      border: 1px solid var(--line);
+      background: #f8fafc;
+    }
+    .callout strong { display: inline-block; margin-bottom: .25rem; }
+    .callout.ok { background: var(--ok-soft); border-color: #86efac; }
+    .callout.warn { background: var(--warn-soft); border-color: #facc15; }
+    .callout.danger { background: var(--danger-soft); border-color: #fecaca; }
+    .callout.info { background: var(--primary-soft); border-color: #bfdbfe; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 1rem;
+      padding: 1rem;
+      background: #fbfdff;
+    }
+    .card h3 { margin-top: 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 1rem;
+      margin: 1rem 0;
+      font-size: .96rem;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: .85rem .9rem;
+      vertical-align: top;
+    }
+    th { background: #eff6ff; text-align: left; }
+    tr:nth-child(even) td { background: #f8fafc; }
+    code.inline {
+      background: #eef2ff;
+      color: #3730a3;
+      border: 1px solid #c7d2fe;
+      padding: .1rem .34rem;
+      border-radius: .38rem;
+      font-family: Consolas, "Cascadia Code", monospace;
+      font-size: .92em;
+    }
+    pre {
+      background: var(--code-bg);
+      color: var(--code-ink);
+      border-radius: 1rem;
+      padding: 1rem 1.1rem;
+      overflow-x: auto;
+      border: 1px solid rgba(148,163,184,.28);
+      line-height: 1.55;
+      font-size: .93rem;
+      position: relative;
+    }
+    pre code { font-family: Consolas, "Cascadia Code", "Courier New", monospace; }
+    .step-list {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0 0;
+    }
+    .step-list li {
+      counter-increment: step;
+      position: relative;
+      padding: 1rem 1rem 1rem 3.4rem;
+      margin: .85rem 0;
+      border: 1px solid var(--line);
+      border-radius: 1rem;
+      background: #fbfdff;
+    }
+    .step-list li::before {
+      content: counter(step);
+      position: absolute;
+      left: 1rem;
+      top: 1rem;
+      width: 1.65rem;
+      height: 1.65rem;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--primary);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+    }
+    .kbd {
+      display: inline-block;
+      border: 1px solid #cbd5e1;
+      border-bottom-width: 3px;
+      padding: .08rem .4rem;
+      border-radius: .4rem;
+      background: #fff;
+      font-family: Consolas, monospace;
+      font-size: .9em;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      border-radius: 999px;
+      padding: .2rem .62rem;
+      font-size: .84rem;
+      font-weight: 700;
+      background: #eef2ff;
+      color: #3730a3;
+      margin: .12rem .16rem .12rem 0;
+    }
+    .timeline {
+      position: relative;
+      padding-left: 1.4rem;
+      margin: 1rem 0;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: .25rem;
+      top: .25rem;
+      bottom: .25rem;
+      width: 2px;
+      background: #bfdbfe;
+    }
+    .time-item {
+      position: relative;
+      padding: .6rem 0 .6rem 1rem;
+    }
+    .time-item::before {
+      content: "";
+      position: absolute;
+      left: -.02rem;
+      top: 1.05rem;
+      width: .65rem;
+      height: .65rem;
+      border-radius: 50%;
+      background: var(--primary);
+      transform: translateX(-50%);
+      box-shadow: 0 0 0 4px #dbeafe;
+    }
+    .footer {
+      color: var(--muted);
+      text-align: center;
+      margin: 2rem 0 0;
+      font-size: .92rem;
+    }
+    .print-note { display: none; }
+    @media (max-width: 1050px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { position: relative; height: auto; border-right: none; border-bottom: 1px solid var(--line); }
+      .toc { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .15rem .4rem; }
+      .meta-grid, .grid-3 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+    @media (max-width: 720px) {
+      main { padding: 1rem .85rem 3rem; }
+      aside { padding: 1rem; }
+      .toc { grid-template-columns: 1fr; }
+      .meta-grid, .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      section, .hero { border-radius: 1rem; }
+      table { display: block; overflow-x: auto; white-space: nowrap; }
+    }
+    @media print {
+      body { background: #fff; }
+      .layout { display: block; max-width: none; }
+      aside { display: none; }
+      main { padding: 0; }
+      .hero, section { box-shadow: none; break-inside: avoid; }
+      pre { white-space: pre-wrap; }
+      .print-note { display: block; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside>
+      <h2>目錄</h2>
+      <nav class="toc">
+        <a href="#overview">文件概覽</a>
+        <a href="#env">環境與安裝目標</a>
+        <a href="#timeline">本次安裝歷程</a>
+        <a href="#pitfalls">踩雷總表</a>
+        <a href="#cli">CLI 成功安裝流程</a>
+        <a href="#desktop">Desktop 啟動流程</a>
+        <a href="#shortcut">桌面捷徑與 Logo</a>
+        <a href="#model">模型 Provider 設定</a>
+        <a href="#daily">日常使用指令</a>
+        <a href="#troubleshooting">快速故障排除</a>
+        <a href="#appendix">附錄：可直接複製指令</a>
+      </nav>
+    </aside>
+
+    <main>
+      <header class="hero" id="overview">
+        <div class="eyebrow">🧭 Windows 實戰筆記</div>
+        <h1>Hermes Agent 安裝技術文件</h1>
+        <p class="subtitle">本文件整理這次在 Windows 上安裝 Hermes Agent 的完整過程，包含 CLI 安裝、Desktop 啟動、Gateway / Provider 設定、Git stash 衝突、GPU 啟動錯誤，以及最後如何建立含 Hermes Logo 的桌面捷徑。</p>
+        <div class="meta-grid">
+          <div class="meta-card"><strong>適用系統</strong><span>Windows 10 / 11</span></div>
+          <div class="meta-card"><strong>安裝型態</strong><span>CLI + Desktop</span></div>
+          <div class="meta-card"><strong>主要問題</strong><span>Git 衝突、GPU、Provider</span></div>
+          <div class="meta-card"><strong>文件版本</strong><span>2026-07-03</span></div>
+        </div>
+      </header>
+
+      <section id="env">
+        <h2>一、環境與安裝目標</h2>
+        <p>這次安裝的目標不是只讓 Hermes 指令可以跑，而是要完成一套可日常使用的 Windows 工作環境：</p>
+        <div class="grid-2">
+          <div class="card">
+            <h3>✅ 目標 1：CLI 可用</h3>
+            <p>在 PowerShell 中可以執行 <code class="inline">hermes</code>、<code class="inline">hermes setup model</code>、<code class="inline">hermes desktop</code> 等指令。</p>
+          </div>
+          <div class="card">
+            <h3>✅ 目標 2：Desktop 可用</h3>
+            <p>能啟動 Hermes Desktop 圖形介面，並透過模型 Provider 正常回應。</p>
+          </div>
+          <div class="card">
+            <h3>✅ 目標 3：桌面捷徑</h3>
+            <p>桌面上能建立 Hermes Desktop 捷徑，必要時自動帶入 <code class="inline">--disable-gpu</code> 參數。</p>
+          </div>
+          <div class="card">
+            <h3>✅ 目標 4：踩雷可復原</h3>
+            <p>遇到 Git stash 衝突、Provider 未設定、GPU process 錯誤時，有明確修復步驟。</p>
+          </div>
+        </div>
+
+        <div class="callout info">
+          <strong>本次實際路徑</strong>
+          <p>Hermes 安裝位置最後確認為：<code class="inline">C:\Users\user\AppData\Local\hermes\hermes-agent</code>。不同電腦的使用者名稱可能不同，建議用 <code class="inline">$env:LOCALAPPDATA</code> 代替固定路徑。</p>
+        </div>
+      </section>
+
+      <section id="timeline">
+        <h2>二、本次安裝歷程摘要</h2>
+        <div class="timeline">
+          <div class="time-item"><strong>開始安裝 Hermes Agent。</strong> 系統檢查 Python、Git、Node.js、ripgrep、ffmpeg 等必要依賴。</div>
+          <div class="time-item"><strong>遇到 Nous Portal OAuth 登入。</strong> 出現 device code 與瀏覽器驗證，但因逾時或取消，登入失敗。</div>
+          <div class="time-item"><strong>選擇 Terminal Backend。</strong> 最後採用 <code class="inline">Local / Keep current (local)</code>，讓 Hermes 在本機執行指令。</div>
+          <div class="time-item"><strong>Gateway / Provider 尚未完成。</strong> Desktop 可以進入，但顯示 <code class="inline">Gateway needs setup</code> 或 <code class="inline">Inference not ready</code>。</div>
+          <div class="time-item"><strong>更新時遇到 Git stash 衝突。</strong> 衝突檔案包含 <code class="inline">mixture-of-agents.md</code> 與 <code class="inline">slack.md</code>。</div>
+          <div class="time-item"><strong>找到真正 Git repo。</strong> 初期誤以為 <code class="inline">AppData\Local\hermes</code> 是 repo，後來確認真正 repo 是 <code class="inline">AppData\Local\hermes\hermes-agent</code>。</div>
+          <div class="time-item"><strong>安裝完成。</strong> 畫面顯示 <code class="inline">Ready to go!</code>，CLI 安裝成功。</div>
+          <div class="time-item"><strong>Desktop 啟動遇 GPU 錯誤。</strong> 顯示 <code class="inline">GPU process isn't usable. Goodbye.</code>，最後用 <code class="inline">--disable-gpu</code> 成功啟動。</div>
+        </div>
+      </section>
+
+      <section id="pitfalls">
+        <h2>三、踩雷總表：問題、原因與解法</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>問題畫面 / 訊息</th>
+              <th>可能原因</th>
+              <th>解決方式</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code class="inline">Login failed: Timed out waiting for device authorization</code></td>
+              <td>Nous Portal OAuth 授權沒有在時間內完成。</td>
+              <td>先取消登入，繼續設定。之後可改用 <code class="inline">hermes setup model</code> 設定 OpenRouter、OpenAI、Ollama 或重新登入 Nous Portal。</td>
+            </tr>
+            <tr>
+              <td><code class="inline">Terminal Backend</code> 要選哪個？</td>
+              <td>Hermes 詢問指令要在哪裡執行。</td>
+              <td>一般 Windows 本機使用，選 <strong>6. Keep current (local)</strong> 或直接按 Enter。</td>
+            </tr>
+            <tr>
+              <td>Messaging 平台列表全部 <code class="inline">not configured</code></td>
+              <td>尚未設定 LINE、Telegram、Discord、Slack 等 token。</td>
+              <td>第一次安裝先全部跳過，直接按 Enter。之後有需要再設定。</td>
+            </tr>
+            <tr>
+              <td><code class="inline">Gateway needs setup</code> / <code class="inline">Inference not ready</code></td>
+              <td>Hermes 已啟動，但還沒有模型 Provider。</td>
+              <td>執行 <code class="inline">hermes setup model</code>，選擇 Nous Portal、OpenAI、OpenRouter、Claude 或 Ollama。</td>
+            </tr>
+            <tr>
+              <td><code class="inline">git stash apply failed after update</code></td>
+              <td>安裝器更新 Hermes 後，嘗試還原本機修改，但檔案衝突。</td>
+              <td>進入真正 repo：<code class="inline">$env:LOCALAPPDATA\hermes\hermes-agent</code>，執行 <code class="inline">git reset --hard</code> 與 <code class="inline">git clean -fd</code>。</td>
+            </tr>
+            <tr>
+              <td><code class="inline">fatal: not a git repository</code></td>
+              <td>進錯資料夾，<code class="inline">AppData\Local\hermes</code> 只是資料目錄，不是 Git repo。</td>
+              <td>改進入 <code class="inline">AppData\Local\hermes\hermes-agent</code>。</td>
+            </tr>
+            <tr>
+              <td><code class="inline">GPU process isn't usable. Goodbye.</code></td>
+              <td>Electron Desktop 的 GPU 加速失敗。</td>
+              <td>用 <code class="inline">--disable-gpu --no-sandbox</code> 啟動，並把參數寫入桌面捷徑。</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="cli">
+        <h2>四、CLI 版本成功安裝流程</h2>
+        <p class="lead">CLI 是 Hermes Agent 的基礎。Desktop 其實也依賴底層 Hermes 安裝與設定，因此建議先確定 CLI 成功，再處理 Desktop。</p>
+        <ol class="step-list">
+          <li>
+            <strong>下載並執行官方安裝腳本。</strong>
+            <pre><code>Invoke-WebRequest -Uri "https://hermes-agent.nousresearch.com/install.ps1" -OutFile install.ps1
+.\install.ps1</code></pre>
+          </li>
+          <li>
+            <strong>若問 Restore local changes now?</strong>
+            <p>本次因先前 stash 還原發生衝突，建議選 <code class="inline">n</code>，避免舊的衝突修改再次套回來。</p>
+            <pre><code>Restore local changes now? [Y/n]: n</code></pre>
+          </li>
+          <li>
+            <strong>Terminal Backend 選 Local。</strong>
+            <p>一般個人電腦使用，選 <code class="inline">6. Keep current (local)</code> 或直接按 <span class="kbd">Enter</span>。</p>
+          </li>
+          <li>
+            <strong>看到 Ready to go! 即代表 CLI 安裝完成。</strong>
+            <pre><code>Ready to go!
+
+hermes          Start chatting
+hermes gateway  Start messaging gateway
+hermes doctor   Check for issues</code></pre>
+          </li>
+        </ol>
+
+        <h3>安裝完成後測試 CLI</h3>
+        <pre><code>hermes</code></pre>
+        <p>若可以進入 Hermes 聊天介面，代表 CLI 已可啟動。若沒有回應，通常不是 CLI 壞掉，而是模型 Provider 尚未設定。</p>
+      </section>
+
+      <section id="desktop">
+        <h2>五、Desktop 版本啟動流程</h2>
+        <p>CLI 成功後，可用下列指令啟動 Desktop：</p>
+        <pre><code>hermes desktop</code></pre>
+        <p>本次啟動時，畫面顯示 Desktop packaged app 已是最新，並嘗試啟動：</p>
+        <pre><code>Launching packaged Hermes Desktop:
+C:\Users\user\AppData\Local\hermes\hermes-agent\apps\desktop\release\win-unpacked\Hermes.exe</code></pre>
+
+        <h3>遇到 GPU 錯誤</h3>
+        <div class="callout danger">
+          <strong>錯誤訊息</strong>
+          <pre><code>GPU process exited unexpectedly
+GPU process isn't usable. Goodbye.</code></pre>
+        </div>
+        <p>這代表 Hermes Desktop 的 Electron GUI 在 Windows 顯示卡環境中無法正常使用 GPU 加速。處理方式是改用關閉 GPU 加速的方式啟動。</p>
+
+        <h3>關閉 GPU 加速啟動</h3>
+        <pre><code>&amp; "$env:LOCALAPPDATA\hermes\hermes-agent\apps\desktop\release\win-unpacked\Hermes.exe" --disable-gpu --no-sandbox</code></pre>
+
+        <div class="callout ok">
+          <strong>本次成功解法</strong>
+          <p>使用 <code class="inline">--disable-gpu --no-sandbox</code> 後，Hermes Desktop 已可正常運作。</p>
+        </div>
+      </section>
+
+      <section id="shortcut">
+        <h2>六、建立桌面捷徑與 Hermes Logo</h2>
+        <p>因為本次 Desktop 需要帶入啟動參數，建議不要只手動建立一般捷徑，而是用 PowerShell 自動建立，並把 Hermes 主程式 icon 設成捷徑圖示。</p>
+
+        <h3>建立 Desktop 捷徑：含 Logo 與 GPU 參數</h3>
+        <pre><code>$desktop = [Environment]::GetFolderPath("Desktop")
+$shortcutPath = Join-Path $desktop "Hermes Desktop.lnk"
+$hermesExe = "$env:LOCALAPPDATA\hermes\hermes-agent\apps\desktop\release\win-unpacked\Hermes.exe"
+
+$wsh = New-Object -ComObject WScript.Shell
+$shortcut = $wsh.CreateShortcut($shortcutPath)
+$shortcut.TargetPath = $hermesExe
+$shortcut.Arguments = "--disable-gpu --no-sandbox"
+$shortcut.WorkingDirectory = Split-Path $hermesExe
+$shortcut.Description = "Hermes Desktop"
+$shortcut.IconLocation = "$hermesExe,0"
+$shortcut.Save()
+
+Write-Host "已建立 Hermes Desktop 桌面捷徑"</code></pre>
+
+        <h3>建立 CLI 捷徑：開啟 PowerShell 並執行 hermes</h3>
+        <pre><code>$desktop = [Environment]::GetFolderPath("Desktop")
+$shortcutPath = Join-Path $desktop "Hermes Agent CLI.lnk"
+
+$wsh = New-Object -ComObject WScript.Shell
+$shortcut = $wsh.CreateShortcut($shortcutPath)
+$shortcut.TargetPath = "powershell.exe"
+$shortcut.Arguments = "-NoExit -Command hermes"
+$shortcut.WorkingDirectory = "$env:LOCALAPPDATA\hermes\hermes-agent"
+$shortcut.Description = "Hermes Agent CLI"
+$shortcut.Save()
+
+Write-Host "已建立 Hermes Agent CLI 桌面捷徑"</code></pre>
+
+        <div class="callout warn">
+          <strong>注意</strong>
+          <p>若捷徑圖示沒有立即更新，可在桌面按 <span class="kbd">F5</span> 重新整理，或登出再登入 Windows。</p>
+        </div>
+      </section>
+
+      <section id="model">
+        <h2>七、模型 Provider / Gateway 設定</h2>
+        <p>Hermes Agent 本體安裝完成後，仍需要模型 Provider 才能真正回答問題。若桌面左下角顯示 <code class="inline">Gateway needs setup</code> 或 <code class="inline">Inference not ready</code>，請設定模型。</p>
+
+        <pre><code>hermes setup model</code></pre>
+
+        <table>
+          <thead>
+            <tr><th>Provider</th><th>是否可能付費</th><th>適合情境</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Nous Portal</td><td>可能需要訂閱或額度</td><td>官方推薦、整合度高，但需完成登入授權。</td></tr>
+            <tr><td>OpenAI API</td><td>依 API 用量計費</td><td>已經有 OpenAI API Key 的使用者。</td></tr>
+            <tr><td>OpenRouter</td><td>依模型與用量計費</td><td>想測試多種模型，彈性高。</td></tr>
+            <tr><td>Anthropic / Claude</td><td>依 API 用量計費</td><td>需要高品質文字、規劃與推理任務。</td></tr>
+            <tr><td>Ollama</td><td>API 費可為 0，但吃本機效能</td><td>想先免費測試，或重視本機隱私。</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout info">
+          <strong>建議</strong>
+          <p>初次使用若不想綁訂閱，可先跳過 Nous Portal，之後再用 <code class="inline">hermes setup model</code> 設定 OpenRouter、OpenAI 或 Ollama。</p>
+        </div>
+      </section>
+
+      <section id="daily">
+        <h2>八、日常使用指令</h2>
+        <div class="grid-3">
+          <div class="card">
+            <h3>啟動聊天</h3>
+            <pre><code>hermes</code></pre>
+          </div>
+          <div class="card">
+            <h3>啟動桌面版</h3>
+            <pre><code>hermes desktop</code></pre>
+          </div>
+          <div class="card">
+            <h3>檢查問題</h3>
+            <pre><code>hermes doctor</code></pre>
+          </div>
+          <div class="card">
+            <h3>設定模型</h3>
+            <pre><code>hermes setup model</code></pre>
+          </div>
+          <div class="card">
+            <h3>設定 Terminal Backend</h3>
+            <pre><code>hermes setup terminal</code></pre>
+          </div>
+          <div class="card">
+            <h3>查看設定</h3>
+            <pre><code>hermes config</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="troubleshooting">
+        <h2>九、快速故障排除</h2>
+        <h3>1. 安裝更新又卡在 stash 衝突</h3>
+        <pre><code>cd "$env:LOCALAPPDATA\hermes\hermes-agent"
+git status
+git reset --hard
+git clean -fd</code></pre>
+        <p>重新執行安裝時，若問 <code class="inline">Restore local changes now? [Y/n]</code>，建議輸入 <code class="inline">n</code>。</p>
+
+        <h3>2. 找不到真正 Hermes Git repo</h3>
+        <pre><code>Get-ChildItem -Path $env:LOCALAPPDATA,$env:USERPROFILE -Directory -Recurse -Force -ErrorAction SilentlyContinue | Where-Object { $_.Name -eq ".git" -and $_.FullName -match "hermes" } | ForEach-Object { Split-Path $_.FullName -Parent }</code></pre>
+
+        <h3>3. Desktop 閃退或 GPU 錯誤</h3>
+        <pre><code>&amp; "$env:LOCALAPPDATA\hermes\hermes-agent\apps\desktop\release\win-unpacked\Hermes.exe" --disable-gpu --no-sandbox</code></pre>
+
+        <h3>4. Hermes 沒反應、等待模型太久</h3>
+        <p>先不要丟太大的任務。建議先測試一句：</p>
+        <pre><code>請用繁體中文回答一句話：你現在可以正常回應嗎？</code></pre>
+        <p>若簡單問題也沒有回應，優先檢查 Gateway / Provider 設定。</p>
+      </section>
+
+      <section id="appendix">
+        <h2>十、附錄：可直接複製的完整指令</h2>
+        <h3>A. 重新整理 Hermes Git repo 並安裝</h3>
+        <pre><code>cd "$env:LOCALAPPDATA\hermes\hermes-agent"
+git reset --hard
+git clean -fd
+Invoke-WebRequest -Uri "https://hermes-agent.nousresearch.com/install.ps1" -OutFile install.ps1
+.\install.ps1</code></pre>
+
+        <h3>B. 啟動 Hermes Desktop 關閉 GPU 加速版</h3>
+        <pre><code>&amp; "$env:LOCALAPPDATA\hermes\hermes-agent\apps\desktop\release\win-unpacked\Hermes.exe" --disable-gpu --no-sandbox</code></pre>
+
+        <h3>C. 建立 Hermes Desktop 桌面捷徑</h3>
+        <pre><code>$desktop = [Environment]::GetFolderPath("Desktop")
+$shortcutPath = Join-Path $desktop "Hermes Desktop.lnk"
+$hermesExe = "$env:LOCALAPPDATA\hermes\hermes-agent\apps\desktop\release\win-unpacked\Hermes.exe"
+
+$wsh = New-Object -ComObject WScript.Shell
+$shortcut = $wsh.CreateShortcut($shortcutPath)
+$shortcut.TargetPath = $hermesExe
+$shortcut.Arguments = "--disable-gpu --no-sandbox"
+$shortcut.WorkingDirectory = Split-Path $hermesExe
+$shortcut.Description = "Hermes Desktop"
+$shortcut.IconLocation = "$hermesExe,0"
+$shortcut.Save()</code></pre>
+
+        <h3>D. 設定模型 Provider</h3>
+        <pre><code>hermes setup model</code></pre>
+      </section>
+
+      <p class="footer">本文件依據本次實際安裝 Hermes Agent 的對話紀錄與錯誤排除流程整理，可作為 Windows 安裝與維護筆記。</p>
+    </main>
+  </div>
+</body>
+</html>
