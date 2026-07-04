@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>問題牆在自然教學上的應用｜教師技術文件</title>
+  <style>
+    :root {
+      --bg: #f6f8f5;
+      --card: #ffffff;
+      --text: #1f2a24;
+      --muted: #5f6f66;
+      --primary: #2f6f4e;
+      --primary-soft: #e2f1e8;
+      --accent: #f3b33d;
+      --border: #dce5dd;
+      --code: #f7f4ed;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+    }
+    header {
+      background: linear-gradient(135deg, #244d39, #3e8a62);
+      color: white;
+      padding: 56px 24px;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0 0 16px;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      letter-spacing: 0.04em;
+    }
+    header p {
+      max-width: 860px;
+      margin: 0 auto;
+      font-size: 1.15rem;
+      opacity: 0.95;
+    }
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    nav a {
+      display: inline-block;
+      margin: 4px 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      color: var(--primary);
+      text-decoration: none;
+      background: var(--primary-soft);
+      font-size: 0.95rem;
+    }
+    main {
+      max-width: 1080px;
+      margin: 32px auto;
+      padding: 0 20px 64px;
+    }
+    section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 30px rgba(35, 60, 45, 0.06);
+    }
+    h2 {
+      color: var(--primary);
+      font-size: 1.7rem;
+      margin-top: 0;
+      border-left: 6px solid var(--accent);
+      padding-left: 12px;
+    }
+    h3 { color: #2f5d45; margin-top: 1.5rem; }
+    .lead {
+      font-size: 1.1rem;
+      background: var(--primary-soft);
+      border-radius: 16px;
+      padding: 18px;
+      border-left: 5px solid var(--primary);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: #fbfdfb;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+    }
+    .card strong {
+      color: var(--primary);
+      display: block;
+      font-size: 1.08rem;
+      margin-bottom: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      background: white;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 12px;
+      vertical-align: top;
+    }
+    th {
+      background: var(--primary-soft);
+      color: #234633;
+    }
+    .example {
+      background: var(--code);
+      border-radius: 16px;
+      padding: 18px;
+      border-left: 5px solid var(--accent);
+      margin: 16px 0;
+    }
+    .tag {
+      display: inline-block;
+      background: #fff7df;
+      color: #7a5200;
+      border: 1px solid #f1d486;
+      border-radius: 999px;
+      padding: 2px 10px;
+      margin: 2px;
+      font-size: 0.9rem;
+    }
+    .checklist li { margin-bottom: 8px; }
+    a { color: var(--primary); }
+    footer {
+      text-align: center;
+      padding: 36px 20px;
+      color: var(--muted);
+    }
+    @media print {
+      nav { display: none; }
+      section { box-shadow: none; page-break-inside: avoid; }
+      body { background: white; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>問題牆在自然教學上的應用</h1>
+    <p>從學生提問到科學探究：一份給自然教師使用的課堂技術文件</p>
+  </header>
+
+  <nav>
+    <a href="#definition">定義</a>
+    <a href="#principle">原理</a>
+    <a href="#timing">使用時機</a>
+    <a href="#layout">版面設計</a>
+    <a href="#process">操作流程</a>
+    <a href="#examples">自然課範例</a>
+    <a href="#assessment">評量</a>
+    <a href="#references">參考資料</a>
+  </nav>
+
+  <main>
+    <section id="intro">
+      <h2>一、為什麼自然課需要問題牆？</h2>
+      <p class="lead">自然課不只是讓學生找到答案，而是讓學生學會從現象中提出值得探究的問題。問題牆能把學生的好奇心具體呈現，並引導他們從「我想知道」走向「我可以怎麼驗證」。</p>
+      <p>在課堂中，學生常常習慣等待教師提問與標準答案。但在科學探究中，提出問題本身就是重要能力。問題牆讓學生的觀察、疑問、猜想與驗證方法被看見，也讓教師能掌握學生的先備概念與學習需求。</p>
+    </section>
+
+    <section id="definition">
+      <h2>二、問題牆的定義</h2>
+      <p>問題牆是教師在課堂中設置的實體或數位問題展示區，用來蒐集、整理、分類與延伸學生在學習過程中產生的問題。</p>
+      <div class="grid">
+        <div class="card"><strong>實體形式</strong>白板、壁報紙、便利貼、教室牆面。</div>
+        <div class="card"><strong>數位形式</strong>Padlet、Google Slides、Canva 白板、Microsoft Whiteboard。</div>
+        <div class="card"><strong>核心功能</strong>讓學生的問題可視化，並成為後續探究、討論與評量的素材。</div>
+      </div>
+    </section>
+
+    <section id="principle">
+      <h2>三、問題牆的教學原理</h2>
+      <h3>1. 問題可視化</h3>
+      <p>學生的問題若只停留在口語或腦中，容易被忽略。問題牆將問題外顯成文字、圖像或便利貼，讓教師與同儕都能看見。</p>
+
+      <h3>2. 從發散到收斂</h3>
+      <p>學生一開始提出的問題往往模糊而生活化，例如「為什麼植物長不好？」問題牆能讓教師帶學生逐步改寫成可觀察、可測量、可比較、可驗證的科學問題。</p>
+
+      <h3>3. 連結變因控制</h3>
+      <p>當學生把問題改寫為「不同光照時間是否會影響植物高度？」時，就能自然看見操縱變因、應變變因與控制變因。</p>
+
+      <h3>4. 形成性評量</h3>
+      <p>問題牆可以呈現學生是否能描述現象、提出問題、形成假設、設計方法與產生新問題，是自然課中很好的形成性評量工具。</p>
+    </section>
+
+    <section id="timing">
+      <h2>四、使用時機</h2>
+      <table>
+        <thead>
+          <tr><th>時機</th><th>用途</th><th>範例</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>單元開始前</td><td>引起動機、診斷先備概念</td><td>展示不同生長狀況的植物，讓學生提問。</td></tr>
+          <tr><td>觀察活動中</td><td>蒐集即時疑問</td><td>觀察昆蟲旅館時，記錄學生對孔洞、材料、昆蟲行為的疑問。</td></tr>
+          <tr><td>實驗前</td><td>形成研究問題與假設</td><td>將「聲音為什麼不一樣？」改寫成「不同填充物是否影響聲音持續時間？」</td></tr>
+          <tr><td>實驗後</td><td>整理新問題與延伸探究</td><td>根據實驗結果提出下一步研究問題。</td></tr>
+          <tr><td>科展前置</td><td>從生活疑問發展研究題目</td><td>將「食蟲植物為什麼會吃蟲？」改寫成可實驗問題。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="layout">
+      <h2>五、建議版面設計</h2>
+      <table>
+        <thead>
+          <tr><th>區域</th><th>功能</th><th>學生任務</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>我觀察到的現象</td><td>記錄事實</td><td>寫下看到、聽到、摸到、測到的現象。</td></tr>
+          <tr><td>我想知道的問題</td><td>蒐集疑問</td><td>寫下好奇、困惑或不理解的地方。</td></tr>
+          <tr><td>我猜可能的原因</td><td>形成假設</td><td>用「可能是……因為……」表達想法。</td></tr>
+          <tr><td>我可以怎麼驗證</td><td>發展方法</td><td>想出可以觀察、比較或測量的方法。</td></tr>
+          <tr><td>我們選出的好問題</td><td>收斂探究</td><td>選出最適合研究的問題。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="process">
+      <h2>六、操作流程</h2>
+      <div class="grid">
+        <div class="card"><strong>步驟一：提供刺激物</strong>使用實物、圖片、影片或現象，引發學生觀察與疑問。</div>
+        <div class="card"><strong>步驟二：個人提問</strong>每位學生寫 2–3 個問題，一張便利貼只寫一個問題。</div>
+        <div class="card"><strong>步驟三：小組分類</strong>依現象型、比較型、因果型、方法型、應用型分類。</div>
+        <div class="card"><strong>步驟四：改寫問題</strong>檢查是否可觀察、可測量、可比較、可驗證。</div>
+        <div class="card"><strong>步驟五：投票選題</strong>選出最適合探究或實驗的問題。</div>
+      </div>
+
+      <h3>好問題六項檢核</h3>
+      <ul class="checklist">
+        <li>這個問題可以觀察嗎？</li>
+        <li>這個問題可以測量嗎？</li>
+        <li>這個問題可以比較嗎？</li>
+        <li>這個問題有明確變因嗎？</li>
+        <li>這個問題在學校或家中做得到嗎？</li>
+        <li>這個問題不是只靠查資料就能回答嗎？</li>
+      </ul>
+    </section>
+
+    <section id="examples">
+      <h2>七、自然課應用範例</h2>
+
+      <div class="example">
+        <h3>範例一：植物生長</h3>
+        <p><span class="tag">原始問題</span> 植物為什麼長不好？</p>
+        <p><span class="tag">改寫問題</span> 不同光照時間是否會影響綠豆幼苗的生長高度？</p>
+        <p><span class="tag">變因</span> 操縱變因：光照時間；應變變因：幼苗高度；控制變因：種子種類、土壤、水量、容器大小。</p>
+      </div>
+
+      <div class="example">
+        <h3>範例二：雨聲筒</h3>
+        <p><span class="tag">原始問題</span> 為什麼雨聲筒聲音不一樣？</p>
+        <p><span class="tag">改寫問題</span> 不同填充物是否會影響雨聲筒聲音的持續時間？</p>
+        <p><span class="tag">變因</span> 操縱變因：填充物種類；應變變因：聲音持續時間；控制變因：管子長度、管子材質、填充物重量、傾斜方式。</p>
+      </div>
+
+      <div class="example">
+        <h3>範例三：昆蟲旅館</h3>
+        <p><span class="tag">原始問題</span> 昆蟲喜歡住哪裡？</p>
+        <p><span class="tag">改寫問題</span> 不同孔徑是否會影響昆蟲旅館的入住情形？</p>
+        <p><span class="tag">變因</span> 操縱變因：孔徑大小；應變變因：被封孔洞數或昆蟲使用情形；控制變因：擺放位置、材料、觀察時間。</p>
+      </div>
+    </section>
+
+    <section id="assessment">
+      <h2>八、問題牆評量規準</h2>
+      <table>
+        <thead>
+          <tr><th>面向</th><th>初階</th><th>進階</th><th>優良</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>觀察能力</td><td>能寫出看到的現象</td><td>能描述現象差異</td><td>能用數量或條件描述現象</td></tr>
+          <tr><td>提問能力</td><td>能提出簡單問題</td><td>問題與主題相關</td><td>問題可觀察、可比較、可驗證</td></tr>
+          <tr><td>假設能力</td><td>能提出猜測</td><td>能說出可能原因</td><td>能用「如果……那麼……」形成假設</td></tr>
+          <tr><td>實驗設計</td><td>能提出簡單做法</td><td>能想到比較方法</td><td>能說明變因與控制條件</td></tr>
+          <tr><td>反思能力</td><td>能說出學到什麼</td><td>能根據結果修正想法</td><td>能提出新的延伸問題</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="teacher">
+      <h2>九、教師提醒</h2>
+      <ul>
+        <li>不要太快給答案，先問學生「你可以怎麼驗證？」</li>
+        <li>接納不成熟的問題，把它當成可以加工的素材。</li>
+        <li>問題牆要持續回看，不要只在課堂開始時使用一次。</li>
+        <li>鼓勵學生從同學的問題延伸出新的問題。</li>
+        <li>將問題牆與觀察紀錄、實驗設計、科展題目發展連結。</li>
+      </ul>
+    </section>
+
+    <section id="references">
+      <h2>十、參考資料</h2>
+      <ol>
+        <li><a href="https://www.nextgenscience.org/practice/asking-questions-and-defining-problems" target="_blank">Next Generation Science Standards｜Asking Questions and Defining Problems</a></li>
+        <li><a href="https://www.nationalacademies.org/read/9596" target="_blank">National Academies Press｜Inquiry and the National Science Education Standards</a></li>
+        <li><a href="https://rightquestion.org/what-is-the-qft/" target="_blank">The Right Question Institute｜What is the QFT?</a></li>
+        <li><a href="https://scienceconnections.edu.au/pedagogical-toolbox/question-formulation-technique" target="_blank">Science Connections｜Question Formulation Technique</a></li>
+        <li><a href="https://www.tandfonline.com/doi/full/10.1080/03057260701828101" target="_blank">Chin & Osborne｜Students’ questions: a potential resource for teaching and learning science</a></li>
+        <li><a href="https://www.kathmurdoch.com.au/blog/2023/12/21/information-explanation-and-celebration-wall-documentation-in-an-inquiry-classroom" target="_blank">Kath Murdoch｜Wall Documentation in an Inquiry Classroom</a></li>
+      </ol>
+    </section>
+  </main>
+
+  <footer>
+    問題牆在自然教學上的應用｜教師技術文件
+  </footer>
+</body>
+</html>
