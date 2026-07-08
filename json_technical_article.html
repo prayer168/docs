@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JSON 技術文章｜從資料交換格式到 AI Agent 工作流</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --border: #e5e7eb;
+      --code-bg: #111827;
+      --code-text: #e5e7eb;
+      --accent: #eef6ff;
+      --success: #16a34a;
+      --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #1d4ed8, #0f172a);
+      color: white;
+      padding: 64px 20px 52px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      margin: 0 auto 18px;
+      max-width: 980px;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 1.2;
+      letter-spacing: 0.02em;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 0 auto 28px;
+      color: #dbeafe;
+      font-size: 1.08rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: 0.2s ease;
+      font-size: 0.95rem;
+    }
+
+    .btn-primary {
+      background: white;
+      color: #1d4ed8;
+    }
+
+    .btn-primary:hover { transform: translateY(-2px); }
+
+    .btn-outline {
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.32);
+    }
+
+    .layout {
+      width: min(1180px, calc(100% - 32px));
+      margin: -28px auto 60px;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .toc {
+      position: sticky;
+      top: 18px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .toc h2 {
+      font-size: 1rem;
+      margin: 0 0 10px;
+    }
+
+    .toc a {
+      display: block;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 7px 8px;
+      border-radius: 10px;
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .toc a:hover {
+      color: var(--primary);
+      background: var(--accent);
+    }
+
+    main {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    section {
+      padding: 34px 36px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    section:last-child { border-bottom: 0; }
+
+    h2 {
+      font-size: clamp(1.45rem, 2.3vw, 2rem);
+      margin: 0 0 14px;
+      line-height: 1.35;
+    }
+
+    h3 {
+      font-size: 1.15rem;
+      margin: 24px 0 10px;
+      color: #111827;
+    }
+
+    p { margin: 0 0 16px; }
+
+    ul, ol { padding-left: 1.4em; }
+
+    .lead {
+      font-size: 1.08rem;
+      color: #374151;
+    }
+
+    .note {
+      background: var(--accent);
+      border-left: 5px solid var(--primary);
+      padding: 16px 18px;
+      border-radius: 14px;
+      margin: 18px 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin: 18px 0;
+    }
+
+    .mini-card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      background: #fbfdff;
+    }
+
+    .mini-card strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #111827;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin: 18px 0;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 620px;
+      background: white;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--border);
+      padding: 12px 14px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #111827;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .code-card {
+      margin: 18px 0;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #263244;
+      background: var(--code-bg);
+    }
+
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      background: #0b1220;
+      color: #cbd5e1;
+      font-size: 0.9rem;
+    }
+
+    .copy-btn {
+      border: 1px solid #475569;
+      background: #1f2937;
+      color: #f8fafc;
+      border-radius: 999px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .copy-btn:hover { background: #374151; }
+    .copy-btn.copied { background: var(--success); border-color: var(--success); }
+
+    pre {
+      margin: 0;
+      padding: 18px;
+      overflow-x: auto;
+      color: var(--code-text);
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; }
+
+    .inline-code {
+      background: #eef2ff;
+      color: #3730a3;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 0.92em;
+    }
+
+    .footer {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto 46px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 920px) {
+      .layout {
+        grid-template-columns: 1fr;
+        margin-top: -20px;
+      }
+      .toc {
+        position: relative;
+        top: auto;
+      }
+      .toc nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 4px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero { padding: 48px 18px 42px; }
+      section { padding: 28px 20px; }
+      .grid { grid-template-columns: 1fr; }
+      .toc nav { grid-template-columns: 1fr; }
+      .btn { width: 100%; }
+      .code-header { align-items: flex-start; flex-direction: column; }
+      .copy-btn { width: 100%; }
+    }
+
+    @media print {
+      .toc, .hero-actions, .copy-btn { display: none; }
+      .layout { display: block; margin: 0; width: 100%; }
+      body { background: white; }
+      main { box-shadow: none; border: 0; }
+      section { break-inside: avoid; }
+      .hero { background: white; color: black; padding: 24px; }
+      .hero p { color: #333; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <h1>JSON 技術文章：從資料交換格式到 AI Agent 工作流的核心語言</h1>
+    <p>一份適合教師、開發者與 AI Agent 使用者閱讀的 JSON 入門到實務指南，包含語法規則、API、設定檔、教育科技與科展資料應用範例。</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#start">開始閱讀</a>
+      <button class="btn btn-outline" onclick="copyFullArticle()">複製全文</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="toc" aria-label="目錄">
+      <h2>文章目錄</h2>
+      <nav>
+        <a href="#start">一、什麼是 JSON？</a>
+        <a href="#why">二、為什麼 JSON 重要？</a>
+        <a href="#structure">三、基本結構</a>
+        <a href="#types">四、資料型態</a>
+        <a href="#rules">五、語法規則</a>
+        <a href="#api">六、API 應用</a>
+        <a href="#config">七、設定檔應用</a>
+        <a href="#agent">八、AI Agent 應用</a>
+        <a href="#education">九、教育科技範例</a>
+        <a href="#errors">十、常見錯誤</a>
+        <a href="#schema">十一、JSON Schema</a>
+        <a href="#conclusion">十二、結語</a>
+      </nav>
+    </aside>
+
+    <main id="article">
+      <section id="start">
+        <h2>一、什麼是 JSON？</h2>
+        <p class="lead">JSON，全名是 JavaScript Object Notation，中文常稱為「JavaScript 物件表示法」。它是一種輕量級的資料交換格式，主要用來在不同系統、程式、網站、API、資料庫與 AI Agent 之間傳遞資料。</p>
+        <p>雖然 JSON 的名字裡有 JavaScript，但它並不只屬於 JavaScript。現在幾乎所有主流程式語言都支援 JSON，例如 Python、Java、PHP、C#、Go、Ruby、Swift、Kotlin 等。</p>
+        <div class="note">簡單來說，JSON 就像是一種「程式之間都看得懂的資料表達方式」。</div>
+      </section>
+
+      <section id="why">
+        <h2>二、為什麼 JSON 很重要？</h2>
+        <p>在現代數位系統中，資料不再只存在單一程式裡，而是會在許多地方之間流動。</p>
+        <div class="grid">
+          <div class="mini-card"><strong>前後端資料交換</strong>前端網頁向後端伺服器請求資料，常使用 JSON 作為回傳格式。</div>
+          <div class="mini-card"><strong>App 與雲端服務</strong>手機 App 讀取雲端資料時，JSON 是常見格式。</div>
+          <div class="mini-card"><strong>AI Agent 工具呼叫</strong>Agent 需要明確的參數與輸出格式，JSON 很適合承載。</div>
+          <div class="mini-card"><strong>自動化工作流</strong>任務設定、流程狀態、資料欄位，都可以用 JSON 表示。</div>
+        </div>
+        <p>JSON 的優點包括結構清楚、容易閱讀、檔案體積小、容易被程式解析、適合 API 傳輸，也適合設定檔與資料交換。</p>
+      </section>
+
+      <section id="structure">
+        <h2>三、JSON 的基本結構</h2>
+        <p>JSON 主要由兩種核心結構組成：物件 Object 與陣列 Array。</p>
+
+        <div class="code-card">
+          <div class="code-header"><span>物件 Object：使用大括號 { }</span><button class="copy-btn" onclick="copyCode(this)">複製</button></div>
+<pre><code>{
+  "name": "黑熊老師",
+  "subject": "自然科學",
+  "level": "國小"
+}</code></pre>
+        </div>
+
+        <div class="code-card">
+          <div class="code-header"><span>陣列 Array：使用中括號 [ ]</span><button class="copy-btn" onclick="copyCode(this)">複製</button></div>
+<pre><code>[
+  "自然科學",
+  "AI 教學",
+  "科展指導"
+]</code></pre>
+        </div>
+
+        <p>物件適合表示一筆有欄位名稱的資料，陣列則適合表示多筆資料或清單。</p>
+      </section>
+
+      <section id="types">
+        <h2>四、JSON 的資料型態</h2>
+        <div class="code-card">
+          <div class="code-header"><span>JSON 支援的常見資料型態</span><button class="copy-btn" onclick="copyCode(this)">複製</button></div>
+<pre><code>{
+  "string": "這是文字",
+  "number": 168,
+  "boolean": true,
+  "nullValue": null,
+  "array": ["觀察", "實驗", "紀錄"],
+  "object": {
+    "teacher": "黑熊老師",
+    "subject": "自然"
+  }
+}</code></pre>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>型態</th><th>說明</th><th>範例</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>string</td><td>文字</td><td><code>"自然科學"</code></td></tr>
+              <tr><td>number</td><td>數字</td><td><code>100</code>、<code>3.14</code></td></tr>
+              <tr><td>boolean</td><td>布林值</td><td><code>true</code>、<code>false</code></td></tr>
+              <tr><td>null</td><td>空值</td><td><code>null</code></td></tr>
+              <tr><td>array</td><td>陣列</td><td><code>["A", "B", "C"]</code></td></tr>
+              <tr><td>object</td><td>物件</td><td><code>{"name": "小明"}</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="rules">
+        <h2>五、JSON 的語法規則</h2>
+        <ol>
+          <li>鍵名必須使用雙引號。</li>
+          <li>字串必須使用雙引號。</li>
+          <li>不能使用單引號。</li>
+          <li>最後一個項目後面不能加逗號。</li>
+          <li>註解不屬於標準 JSON。</li>
+          <li><span class="inline-code">true</span>、<span class="inline-code">false</span>、<span class="inline-code">null</span> 必須使用小寫。</li>
+        </ol>
+
+        <div class="code-card">
+          <div class="code-header"><span>正確寫法</span><button class="copy-btn" onclick="copyCode(this)">複製</button></div>
+<pre><code>{
+  "name": "黑熊老師",
+  "active": true,
+  "score": 100
+}</code></pre>
+        </div>
+
+        <div class="code-card">
+          <div class="code-header"><span>錯誤寫法</span><button class="copy-btn" onclick="copyCode(this)">複製</button></div>
+<pre><code>{
+  name: '黑熊老師',
+  active: True,
+  score: 100,
+}</code></pre>
+        </div>
+      </section>
+
+      <section id="api">
+        <h2>六、JSON 在 API 中的應用</h2>
+        <p>JSON 最常見的應用場景之一就是 API。例如一個查詢學生資料的 API，可能會回傳以下內容：</p>
+        <div class="code-card">
+          <div class="code-header"><span>學生資料 API 回傳範例</span><button class="copy-btn" onclick="copyCode(this)">複製</button></div>
+<pre><code>{
+  "studentId": "S001",
+  "name": "陳小明",
+  "grade": 5,
+  "class": "五年甲班",
+  "scores": {
+    "science": 95,
+    "math": 88,
+    "chinese": 92
+  }
+}</code></pre>
+        </div>
+        <p>前端網站或 App 收到這份 JSON 後，就可以把資料顯示成學生姓名、年級、班級與各科成績。</p>
+      </section>
+
+      <section id="config">
+        <h2>七、JSON 在設定檔中的應用</h2>
+        <p>許多工具會使用 JSON 作為設定檔格式，例如網站專案、AI Agent、VS Code、npm、Firebase、Supabase 等。</p>
+        <div class="code-card">
+          <div class="code-header"><span>網站設定檔範例</span><button class="copy-btn" onclick="copyCode(this)">複製</button></div>
+<pre><code>{
+  "siteName": "黑熊老師自然科學教材中心",
+  "theme": "light",
+  "language": "zh-TW",
+  "features": {
+    "search": true,
+    "darkMode": true,
+    "copyButton": true
+  }
+}</code></pre>
+        </div>
+        <p>這種方式的好處是：人可以看懂，程式也可以讀懂。</p>
+      </section>
+
+      <section id="agent">
+        <h2>八、JSON 在 AI Agent 中的應用</h2>
+        <p>在 AI Agent 工作流中，JSON 很重要。因為 Agent 通常需要明確知道要執行什麼任務、使用哪些工具、輸入資料是什麼、輸出格式是什麼，以及成功或失敗條件。</p>
+        <div class="code-card">
+          <div class="code-header"><span>AI Agent 任務描述範例</span><button class="copy-btn" onclick="copyCode(this)">複製</button></div>
+<pre><code>{
+  "task": "generate_lesson_plan",
+  "subject": "自然科學",
+  "grade": "五年級",
+  "topic": "熱的傳播",
+  "outputFormat": ["docx", "html"],
+  "requirements": {
+    "includeObjectives": true,
+    "includeActivities": true,
+    "includeAssessment": true,
+    "language": "zh-TW"
+  }
+}</code></pre>
+        </div>
+        <p>這種寫法比自然語言更明確，也更容易讓 Agent 自動化執行。</p>
+      </section>
+
+      <section id="education">
+        <h2>九、JSON 在教育科技中的應用範例</h2>
+        <p>如果要建立一份自然科學教材資料庫，可以使用 JSON 管理課程內容。</p>
+        <div class="code-card">
+          <div class="code-header"><span>自然科學教材資料庫範例</span><button class="copy-btn" onclick="copyCode(this)">複製</button></div>
+<pre><code>{
+  "course": "國小自然科學",
+  "grade": 5,
+  "unit": "熱的作用與傳播",
+  "lessons": [
+    {
+      "title": "熱如何傳播",
+      "duration": 40,
+      "activities": [
+        "觀察金屬湯匙受熱",
+        "比較不同材質導熱速度",
+        "討論生活中的隔熱材料"
+      ],
+      "assessment": "能說明傳導、對流與輻射的差異"
+    },
+    {
+      "title": "生活中的保溫與散熱",
+      "duration": 40,
+      "activities": [
+        "分析保溫杯構造",
+        "設計讓熱湯變涼的方法",
+        "討論綠建築中的散熱設計"
+      ],
+      "assessment": "能舉例說明保溫與散熱的應用"
+    }
+  ]
+}</code></pre>
+        </div>
+
+        <p>這樣的資料可以進一步轉換成網頁教材、學習單、簡報、題庫、AI Agent 生成教材的輸入資料，或課程管理系統資料。</p>
+
+        <div class="code-card">
+          <div class="code-header"><span>科展觀察紀錄範例</span><button class="copy-btn" onclick="copyCode(this)">複製</button></div>
+<pre><code>{
+  "projectName": "雨聲筒聲音探究",
+  "date": "2026-07-08",
+  "observer": "第五組",
+  "variables": {
+    "tubeMaterial": "PVC",
+    "filling": "綠豆",
+    "tiltAngle": 45
+  },
+  "data": {
+    "durationSeconds": 10,
+    "peakDensity": 62.5,
+    "averageAmplitude": 0.78
+  },
+  "notes": "聲音較密集，接近流水聲。"
+}</code></pre>
+        </div>
+      </section>
+
+      <section id="errors">
+        <h2>十、常見錯誤與排除方式</h2>
+        <h3>1. 多了一個逗號</h3>
+        <div class="code-card">
+          <div class="code-header"><span>錯誤</span><button class="copy-btn" onclick="copyCode(this)">複製</button></div>
+<pre><code>{
+  "name": "黑熊老師",
+  "subject": "自然",
+}</code></pre>
+        </div>
+        <div class="code-card">
+          <div class="code-header"><span>修正</span><button class="copy-btn" onclick="copyCode(this)">複製</button></div>
+<pre><code>{
+  "name": "黑熊老師",
+  "subject": "自然"
+}</code></pre>
+        </div>
+
+        <h3>2. 使用單引號</h3>
+        <div class="code-card">
+          <div class="code-header"><span>錯誤</span><button class="copy-btn" onclick="copyCode(this)">複製</button></div>
+<pre><code>{
+  'name': '黑熊老師'
+}</code></pre>
+        </div>
+        <div class="code-card">
+          <div class="code-header"><span>修正</span><button class="copy-btn" onclick="copyCode(this)">複製</button></div>
+<pre><code>{
+  "name": "黑熊老師"
+}</code></pre>
+        </div>
+
+        <h3>3. 註解放進標準 JSON</h3>
+        <div class="code-card">
+          <div class="code-header"><span>錯誤</span><button class="copy-btn" onclick="copyCode(this)">複製</button></div>
+<pre><code>{
+  // 這是網站名稱
+  "siteName": "Science Portal"
+}</code></pre>
+        </div>
+        <p>標準 JSON 不支援註解。如果需要註解，可以改用 JSONC，或另外撰寫說明文件。</p>
+      </section>
+
+      <section id="schema">
+        <h2>十一、JSON Schema 是什麼？</h2>
+        <p>JSON Schema 可以用來規範 JSON 的資料格式，就像是 JSON 的「格式檢查表」。</p>
+        <div class="code-card">
+          <div class="code-header"><span>JSON Schema 範例</span><button class="copy-btn" onclick="copyCode(this)">複製</button></div>
+<pre><code>{
+  "type": "object",
+  "required": ["course", "grade", "unit"],
+  "properties": {
+    "course": {
+      "type": "string"
+    },
+    "grade": {
+      "type": "number"
+    },
+    "unit": {
+      "type": "string"
+    }
+  }
+}</code></pre>
+        </div>
+        <p>這樣可以避免資料格式混亂，例如少了欄位、型態錯誤或命名不一致。</p>
+      </section>
+
+      <section id="conclusion">
+        <h2>十二、結語</h2>
+        <p>JSON 看似只是簡單的資料格式，但它其實是現代數位系統的重要基礎。從網站前後端、API、資料庫、設定檔，到 AI Agent 工作流，JSON 都扮演著關鍵角色。</p>
+        <p>對教師、開發者與 AI 工作者來說，學會 JSON 不只是學會一種語法，而是學會如何把資料整理成「人看得懂、機器也能處理」的結構。</p>
+        <div class="note">在 AI 時代，能把想法轉成清楚的 JSON 結構，就等於多了一種和系統、工具、Agent 溝通的能力。</div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="footer">
+    JSON 技術文章｜單頁 HTML｜支援 RWD 與一鍵複製
+  </footer>
+
+  <script>
+    async function copyText(text, button) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (err) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
+      if (button) {
+        const originalText = button.textContent;
+        button.textContent = '已複製';
+        button.classList.add('copied');
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.classList.remove('copied');
+        }, 1400);
+      }
+    }
+
+    function copyCode(button) {
+      const card = button.closest('.code-card');
+      const code = card.querySelector('code').innerText;
+      copyText(code, button);
+    }
+
+    function copyFullArticle() {
+      const article = document.querySelector('#article').innerText;
+      copyText(article, document.querySelector('.btn-outline'));
+    }
+  </script>
+</body>
+</html>
