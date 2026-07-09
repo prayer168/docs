@@ -344,6 +344,7 @@
         <a href="#shortcut">桌面捷徑與 Logo</a>
         <a href="#model">模型 Provider 設定</a>
         <a href="#daily">日常使用指令</a>
+        <a href="#yolo">自動核准 / YOLO 模式</a>
         <a href="#troubleshooting">快速故障排除</a>
         <a href="#appendix">附錄：可直接複製指令</a>
       </nav>
@@ -353,11 +354,11 @@
       <header class="hero" id="overview">
         <div class="eyebrow">🧭 Windows 實戰筆記</div>
         <h1>Hermes Agent 安裝技術文件</h1>
-        <p class="subtitle">本文件整理這次在 Windows 上安裝 Hermes Agent 的完整過程，包含 CLI 安裝、Desktop 啟動、Gateway / Provider 設定、Git stash 衝突、GPU 啟動錯誤，以及最後如何建立含 Hermes Logo 的桌面捷徑。</p>
+        <p class="subtitle">本文件整理這次在 Windows 上安裝 Hermes Agent 的完整過程，包含 CLI 安裝、Desktop 啟動、Gateway / Provider 設定、Git stash 衝突、GPU 啟動錯誤、自動核准 / YOLO 權限設定，以及最後如何建立含 Hermes Logo 的桌面捷徑。</p>
         <div class="meta-grid">
           <div class="meta-card"><strong>適用系統</strong><span>Windows 10 / 11</span></div>
           <div class="meta-card"><strong>安裝型態</strong><span>CLI + Desktop</span></div>
-          <div class="meta-card"><strong>主要問題</strong><span>Git 衝突、GPU、Provider</span></div>
+          <div class="meta-card"><strong>主要問題</strong><span>Git 衝突、GPU、Provider、權限核准</span></div>
           <div class="meta-card"><strong>文件版本</strong><span>2026-07-03</span></div>
         </div>
       </header>
@@ -607,8 +608,67 @@ Write-Host "已建立 Hermes Agent CLI 桌面捷徑"</code></pre>
         </div>
       </section>
 
+
+
+      <section id="yolo">
+        <h2>九、開啟 Hermes 自動核准權限：YOLO Mode</h2>
+        <p class="lead">Hermes 在執行指令、修改檔案或呼叫工具時，預設可能會要求人工審核。若希望它自動跑下去，可以開啟 <strong>YOLO mode</strong>，或將 approvals 設為 <code class="inline">off</code>。</p>
+
+        <div class="callout danger">
+          <strong>風險提醒</strong>
+          <p>YOLO / approvals off 代表 Hermes 會自動批准大部分工具與 shell 指令。建議只在你信任的專案資料夾使用，不要讓它在整個磁碟或含有重要資料的資料夾中自由執行。</p>
+        </div>
+
+        <h3>方法一：CLI 直接用 YOLO 模式啟動</h3>
+        <pre><code>hermes --yolo</code></pre>
+        <p>這是最直接的方式，適合臨時開一個自動執行工作階段。</p>
+
+        <h3>方法二：在 Hermes 對話中切換</h3>
+        <pre><code>/yolo</code></pre>
+        <p>進入 Hermes 後輸入 <code class="inline">/yolo</code> 可以切換自動核准模式；再次輸入通常可關閉。</p>
+
+        <h3>方法三：用環境變數啟動</h3>
+        <pre><code>$env:HERMES_YOLO_MODE="1"
+hermes</code></pre>
+        <p>這適合在同一個 PowerShell 視窗中臨時啟用 YOLO mode。</p>
+
+        <h3>方法四：永久改 config</h3>
+        <p>先開啟設定檔：</p>
+        <pre><code>hermes config edit</code></pre>
+        <p>找到或加入以下設定：</p>
+        <pre><code>approvals:
+  mode: off
+  timeout: 60</code></pre>
+        <p>若想保守一點，可改用 <code class="inline">smart</code>，讓低風險操作自動通過，較危險或不確定的操作仍然詢問：</p>
+        <pre><code>approvals:
+  mode: smart
+  timeout: 60</code></pre>
+
+        <h3>Desktop 捷徑版：自動開 YOLO + 關閉 GPU</h3>
+        <p>因為本次 Hermes Desktop 需要 <code class="inline">--disable-gpu --no-sandbox</code> 才能穩定啟動，如果又想讓它預設開啟 YOLO，可建立帶有環境變數的捷徑。</p>
+        <pre><code>$desktop = [Environment]::GetFolderPath("Desktop")
+$shortcutPath = Join-Path $desktop "Hermes Desktop YOLO.lnk"
+$hermesExe = "$env:LOCALAPPDATA\hermes\hermes-agent\apps\desktop\release\win-unpacked\Hermes.exe"
+
+$wsh = New-Object -ComObject WScript.Shell
+$shortcut = $wsh.CreateShortcut($shortcutPath)
+$shortcut.TargetPath = "powershell.exe"
+$shortcut.Arguments = "-NoExit -Command `$env:HERMES_YOLO_MODE='1'; &amp; '$hermesExe' --disable-gpu --no-sandbox"
+$shortcut.WorkingDirectory = Split-Path $hermesExe
+$shortcut.Description = "Hermes Desktop YOLO Mode"
+$shortcut.IconLocation = "$hermesExe,0"
+$shortcut.Save()
+
+Write-Host "已建立 Hermes Desktop YOLO 桌面捷徑"</code></pre>
+
+        <div class="callout info">
+          <strong>建議使用情境</strong>
+          <p>適合處理你已經確認範圍的任務，例如整理單一專案資料夾、修改 Git repo、批次產生教材或文件。若任務可能刪除檔案、重設 Git、操作雲端服務或推送到 GitHub，建議先用 <code class="inline">smart</code> 或分段執行。</p>
+        </div>
+      </section>
+
       <section id="troubleshooting">
-        <h2>九、快速故障排除</h2>
+        <h2>十、快速故障排除</h2>
         <h3>1. 安裝更新又卡在 stash 衝突</h3>
         <pre><code>cd "$env:LOCALAPPDATA\hermes\hermes-agent"
 git status
@@ -629,7 +689,7 @@ git clean -fd</code></pre>
       </section>
 
       <section id="appendix">
-        <h2>十、附錄：可直接複製的完整指令</h2>
+        <h2>十一、附錄：可直接複製的完整指令</h2>
         <h3>A. 重新整理 Hermes Git repo 並安裝</h3>
         <pre><code>cd "$env:LOCALAPPDATA\hermes\hermes-agent"
 git reset --hard
@@ -656,6 +716,16 @@ $shortcut.Save()</code></pre>
 
         <h3>D. 設定模型 Provider</h3>
         <pre><code>hermes setup model</code></pre>
+
+        <h3>E. YOLO / 自動核准模式</h3>
+        <pre><code>hermes --yolo
+
+# 或在 Hermes 對話中輸入
+/yolo
+
+# 或在 PowerShell 臨時設定
+$env:HERMES_YOLO_MODE="1"
+hermes</code></pre>
       </section>
 
       <p class="footer">本文件依據本次實際安裝 Hermes Agent 的對話紀錄與錯誤排除流程整理，可作為 Windows 安裝與維護筆記。</p>
