@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cursor 安裝及使用技術文件｜黑熊老師 AI Coding 筆記</title>
+  <style>
+    :root{
+      --bg:#0f172a;
+      --panel:#111827;
+      --panel2:#1e293b;
+      --card:#ffffff;
+      --muted:#64748b;
+      --text:#0f172a;
+      --brand:#2563eb;
+      --brand2:#7c3aed;
+      --soft:#eff6ff;
+      --soft2:#f5f3ff;
+      --ok:#16a34a;
+      --warn:#f59e0b;
+      --danger:#dc2626;
+      --line:#e2e8f0;
+      --code:#0b1020;
+      --codeText:#e5e7eb;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:linear-gradient(180deg,#eff6ff 0%,#f8fafc 24%,#ffffff 100%);
+      color:var(--text);
+      line-height:1.75;
+    }
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    header{
+      background:radial-gradient(circle at top left,#60a5fa 0,#2563eb 32%,#111827 100%);
+      color:white;
+      padding:56px 20px 42px;
+      position:relative;
+      overflow:hidden;
+    }
+    header:after{
+      content:"</>";
+      position:absolute;
+      right:6vw;
+      top:12px;
+      font-size:120px;
+      opacity:.08;
+      font-weight:900;
+    }
+    .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+    .hero h1{font-size:clamp(30px,5vw,54px);margin:0 0 12px;letter-spacing:.02em}
+    .hero p{max-width:830px;font-size:18px;color:#dbeafe;margin:0 0 24px}
+    .badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    .badge{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);padding:7px 12px;border-radius:999px;font-size:14px;backdrop-filter:blur(6px)}
+    .meta{font-size:14px;color:#cbd5e1;margin-top:12px}
+    nav.toc{
+      position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)
+    }
+    nav.toc .wrap{display:flex;overflow:auto;gap:10px;padding:10px 20px}
+    nav.toc a{white-space:nowrap;background:#f1f5f9;border:1px solid #e2e8f0;color:#334155;padding:8px 12px;border-radius:999px;font-size:14px}
+    main{padding:34px 0 64px}
+    section{margin:0 auto 28px}
+    .card{
+      background:var(--card);border:1px solid var(--line);border-radius:22px;padding:28px;margin-bottom:22px;box-shadow:0 10px 30px rgba(15,23,42,.06)
+    }
+    h2{font-size:28px;margin:0 0 14px;border-left:6px solid var(--brand);padding-left:12px;line-height:1.35}
+    h3{font-size:21px;margin:24px 0 10px;color:#1e293b}
+    h4{font-size:17px;margin:18px 0 8px;color:#334155}
+    p{margin:8px 0 12px}
+    .lead{font-size:18px;color:#334155}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:18px 0}
+    .grid.two{grid-template-columns:repeat(2,1fr)}
+    .mini{background:#f8fafc;border:1px solid var(--line);border-radius:18px;padding:18px}
+    .mini strong{display:block;font-size:18px;margin-bottom:5px;color:#0f172a}
+    .mini .tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;background:var(--soft);color:#1d4ed8;margin-bottom:8px}
+    table{width:100%;border-collapse:collapse;margin:16px 0;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+    th,td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+    th{background:#f1f5f9;text-align:left;color:#334155}
+    tr:last-child td{border-bottom:none}
+    .callout{border-left:5px solid var(--brand);background:var(--soft);padding:16px 18px;border-radius:16px;margin:16px 0}
+    .warn{border-left-color:var(--warn);background:#fffbeb}
+    .danger{border-left-color:var(--danger);background:#fef2f2}
+    .ok{border-left-color:var(--ok);background:#f0fdf4}
+    .steps{counter-reset:step;display:grid;gap:12px;margin:16px 0}
+    .step{counter-increment:step;background:#f8fafc;border:1px solid var(--line);border-radius:18px;padding:16px 16px 16px 58px;position:relative}
+    .step:before{content:counter(step);position:absolute;left:16px;top:16px;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand2));color:white;display:grid;place-items:center;font-weight:800}
+    .codebox{position:relative;margin:14px 0;border-radius:18px;overflow:hidden;border:1px solid #1f2937;background:var(--code)}
+    .codebar{display:flex;justify-content:space-between;align-items:center;background:#111827;color:#cbd5e1;padding:8px 12px;font-size:13px;border-bottom:1px solid #263244}
+    pre{margin:0;padding:16px 18px;overflow:auto;color:var(--codeText);font-size:14px;line-height:1.6;white-space:pre-wrap}
+    code{font-family:"Cascadia Code","Fira Code",Consolas,monospace}
+    button.copy{border:1px solid #334155;background:#1e293b;color:#e2e8f0;border-radius:999px;padding:5px 10px;cursor:pointer;font-size:12px}
+    button.copy:hover{background:#334155}
+    .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:20px 0}
+    .flow div{background:linear-gradient(180deg,#ffffff,#f8fafc);border:1px solid var(--line);border-radius:16px;padding:14px;text-align:center;font-weight:700;min-height:84px;display:grid;place-items:center;position:relative}
+    .flow div:not(:last-child):after{content:"→";position:absolute;right:-15px;color:#94a3b8;font-size:20px;z-index:2}
+    .checklist label{display:block;background:#f8fafc;border:1px solid var(--line);padding:10px 12px;border-radius:12px;margin:8px 0}
+    .checklist input{transform:scale(1.2);margin-right:8px}
+    .pill{display:inline-block;padding:3px 10px;border-radius:999px;background:#eef2ff;color:#3730a3;font-size:13px;margin:3px}
+    footer{background:#0f172a;color:#cbd5e1;padding:28px 20px;text-align:center;font-size:14px}
+    .small{font-size:14px;color:#64748b}
+    @media(max-width:900px){.grid,.grid.two,.flow{grid-template-columns:1fr}.flow div:not(:last-child):after{content:"↓";right:50%;top:auto;bottom:-20px;transform:translateX(50%)}.card{padding:22px}table{font-size:14px}}
+    @media print{nav.toc,button.copy{display:none}.card{box-shadow:none;page-break-inside:avoid}body{background:white}header{background:#111827}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap hero">
+    <h1>Cursor 安裝及使用技術文件</h1>
+    <p>從安裝、帳號登入、VS Code 設定匯入、AI Agent 使用、CLI、專案規範，到常見錯誤排除，一次整理成可直接交給新手或團隊使用的 Cursor 技術文件。</p>
+    <div class="badges">
+      <span class="badge">適用：Windows / macOS / Linux</span>
+      <span class="badge">對象：AI Coding 初學者、教師、開發者</span>
+      <span class="badge">版本基準：官方下載頁 2026-07-09 查詢</span>
+      <span class="badge">格式：HTML / RWD / 一鍵複製</span>
+    </div>
+    <div class="meta">整理者：黑熊老師 AI Coding 筆記｜建議搭配 Git、Node.js、Python、GitHub 使用</div>
+  </div>
+</header>
+<nav class="toc">
+  <div class="wrap">
+    <a href="#intro">認識 Cursor</a>
+    <a href="#install">安裝流程</a>
+    <a href="#first">首次設定</a>
+    <a href="#usage">基本使用</a>
+    <a href="#workflow">AI Coding 流程</a>
+    <a href="#rules">Rules 與規範</a>
+    <a href="#cli">Cursor CLI</a>
+    <a href="#trouble">踩雷排除</a>
+    <a href="#prompts">Prompt 範本</a>
+    <a href="#checklist">檢查表</a>
+  </div>
+</nav>
+<main class="wrap">
+  <section id="intro" class="card">
+    <h2>一、Cursor 是什麼？</h2>
+    <p class="lead">Cursor 是一款以 AI Coding 為核心的程式碼編輯器，可以把它理解成「強化 AI Agent 能力的 VS Code 類工具」。它不只是自動補字，而是能讀取專案脈絡、協助修改多個檔案、解釋錯誤、撰寫測試、重構程式，甚至透過 Agent 模式完成一段開發任務。</p>
+    <div class="grid">
+      <div class="mini"><span class="tag">Tab</span><strong>智慧補全</strong>根據上下文補完程式碼，適合日常撰寫函式、HTML、CSS、Python、JavaScript。</div>
+      <div class="mini"><span class="tag">Chat</span><strong>問答與解釋</strong>可以針對目前檔案、選取程式碼或整個專案提問。</div>
+      <div class="mini"><span class="tag">Agent</span><strong>多檔案任務</strong>可以要求 Cursor 分析專案、修改程式、建立檔案、執行測試並回報結果。</div>
+    </div>
+    <div class="callout">
+      <strong>一句話理解：</strong> VS Code 比較像「專業編輯器」，Cursor 則更像「內建 AI 程式助理的編輯器」。新手可以用它學習，進階者可以用它加速開發，但仍需要人類負責需求判斷、架構決策、測試與驗收。
+    </div>
+  </section>
+
+  <section id="install" class="card">
+    <h2>二、安裝前準備</h2>
+    <h3>建議先安裝的工具</h3>
+    <table>
+      <thead><tr><th>工具</th><th>用途</th><th>建議</th></tr></thead>
+      <tbody>
+        <tr><td>Git</td><td>版本控制、下載 GitHub 專案、提交修改</td><td>強烈建議安裝</td></tr>
+        <tr><td>Node.js LTS</td><td>前端專案、Vite、React、Electron、各種 AI Coding 工具</td><td>做網頁或桌面程式必備</td></tr>
+        <tr><td>Python</td><td>資料分析、自動化、Streamlit、科學計算</td><td>做教學工具或資料處理建議安裝</td></tr>
+        <tr><td>VS Code</td><td>可選。Cursor 可匯入 VS Code 設定與擴充套件</td><td>原本有 VS Code 使用習慣者可保留</td></tr>
+      </tbody>
+    </table>
+    <h3>Windows 安裝流程</h3>
+    <div class="steps">
+      <div class="step"><strong>進入官方下載頁</strong><br>到 Cursor 官方下載頁，選擇 Windows 版本。一般 Windows 11 電腦通常選 <b>Windows x64 User</b> 或 <b>Windows x64 System</b>。</div>
+      <div class="step"><strong>User 與 System 的差異</strong><br><b>User</b> 安裝在目前使用者資料夾，通常不需要系統管理員權限；<b>System</b> 安裝給整台電腦所有使用者，通常需要管理員權限。</div>
+      <div class="step"><strong>執行安裝檔</strong><br>下載後執行安裝檔，依照精靈完成安裝。若 Windows Defender 或 SmartScreen 詢問，確認來源是官方網站後再允許。</div>
+      <div class="step"><strong>開啟 Cursor</strong><br>安裝完成後，從開始選單搜尋 Cursor，或在桌面捷徑開啟。</div>
+    </div>
+    <h3>macOS 安裝流程</h3>
+    <div class="steps">
+      <div class="step">依照 Mac 晶片選擇 <b>ARM64</b>、<b>x64</b> 或 <b>Universal</b>。Apple Silicon 多半選 ARM64；Intel Mac 選 x64。</div>
+      <div class="step">下載後打開 .dmg，將 Cursor 拖曳到 Applications。</div>
+      <div class="step">第一次開啟若跳出安全性提醒，請到「系統設定 → 隱私權與安全性」允許開啟。</div>
+    </div>
+    <h3>Linux 安裝流程</h3>
+    <p>Linux 可依發行版選擇 .deb、RPM 或 AppImage。Ubuntu / Debian 系統通常選 .deb；Fedora / RHEL 系統通常選 RPM；想免安裝可試 AppImage。</p>
+    <div class="codebox">
+      <div class="codebar"><span>Ubuntu / Debian 安裝 .deb 範例</span><button class="copy" data-copy="sudo dpkg -i cursor*.deb\nsudo apt -f install">複製</button></div>
+      <pre><code>sudo dpkg -i cursor*.deb
+sudo apt -f install</code></pre>
+    </div>
+    <div class="callout warn">
+      <strong>版本提醒：</strong> 官方下載頁會持續更新版本。本文以 2026-07-09 查詢到的官方下載資訊撰寫，實際下載時請以官方頁面顯示為準。
+    </div>
+  </section>
+
+  <section id="first" class="card">
+    <h2>三、首次開啟與基本設定</h2>
+    <h3>1. 登入帳號</h3>
+    <p>第一次開啟 Cursor 後，通常會要求登入帳號。可以使用 Email、Google、GitHub 等方式登入。登入後才能使用 AI 功能與同步部分設定。</p>
+    <h3>2. 匯入 VS Code 設定</h3>
+    <p>如果原本使用 VS Code，建議匯入擴充套件、快捷鍵、佈景主題與設定。這樣可以降低轉換成本。</p>
+    <div class="callout ok">
+      <strong>建議：</strong> 不要一次裝太多擴充套件。先保留 Git、Python、ESLint、Prettier、Live Server、Markdown、GitHub 相關工具即可。擴充套件太多時，AI Agent 可能遇到執行環境混亂或提示過多的問題。
+    </div>
+    <h3>3. 開啟專案資料夾</h3>
+    <p>Cursor 最適合以「整個專案資料夾」為單位工作。不要只開單一檔案，因為 AI 需要讀取專案結構、package.json、README、設定檔與相關程式。</p>
+    <div class="codebox">
+      <div class="codebar"><span>建議專案結構</span><button class="copy" data-copy="my-project/\n├─ README.md\n├─ package.json\n├─ src/\n├─ public/\n├─ docs/\n└─ .cursor/\n   └─ rules/">複製</button></div>
+      <pre><code>my-project/
+├─ README.md
+├─ package.json
+├─ src/
+├─ public/
+├─ docs/
+└─ .cursor/
+   └─ rules/</code></pre>
+    </div>
+  </section>
+
+  <section id="usage" class="card">
+    <h2>四、Cursor 基本使用方式</h2>
+    <h3>常用功能總覽</h3>
+    <table>
+      <thead><tr><th>功能</th><th>適合情境</th><th>使用方式</th></tr></thead>
+      <tbody>
+        <tr><td>Tab 補全</td><td>寫函式、補 HTML/CSS、快速完成重複程式</td><td>游標停在程式碼中，等待建議後按 Tab 接受</td></tr>
+        <tr><td>Inline Edit</td><td>針對選取程式碼修改、解釋、重構</td><td>選取程式碼後呼叫 AI 編輯指令</td></tr>
+        <tr><td>Chat</td><td>問概念、除錯、請它分析目前檔案</td><td>在聊天視窗輸入問題，可搭配 @ 檔案</td></tr>
+        <tr><td>Agent / Composer</td><td>建立功能、修 bug、跨檔案修改</td><td>描述任務、限制、驗收條件，讓 Agent 規劃後執行</td></tr>
+        <tr><td>@ 引用</td><td>讓 AI 精準讀取特定檔案、資料夾、文件</td><td>在 Prompt 中使用 @README.md、@src 等</td></tr>
+        <tr><td>終端機整合</td><td>安裝套件、執行測試、啟動開發伺服器</td><td>在 Cursor 內建 Terminal 執行 npm、python、git 等指令</td></tr>
+      </tbody>
+    </table>
+    <h3>常用快速鍵概念</h3>
+    <p>不同版本與作業系統快捷鍵可能略有差異，建議到 Cursor 的 Command Palette 搜尋功能名稱。Windows / Linux 通常使用 <b>Ctrl</b>，macOS 通常使用 <b>Command</b>。</p>
+    <div class="grid two">
+      <div class="mini"><strong>Command Palette</strong>搜尋所有指令、設定與功能，是新手找功能最快的入口。</div>
+      <div class="mini"><strong>Chat / Composer</strong>用自然語言提出任務，適合從「我要做什麼」開始，而不是從「我要改哪一行」開始。</div>
+    </div>
+  </section>
+
+  <section id="workflow" class="card">
+    <h2>五、AI Coding 建議工作流程</h2>
+    <p>不要一開始就叫 Cursor「直接幫我做完整網站」。比較穩定的方式是把 AI 當成工程團隊助手，讓它先理解需求，再規劃、執行、測試、迭代。</p>
+    <div class="flow">
+      <div>需求說明<br><span class="small">我要做什麼？給誰用？</span></div>
+      <div>專案盤點<br><span class="small">目前有哪些檔案？</span></div>
+      <div>任務拆解<br><span class="small">分成小步驟</span></div>
+      <div>執行修改<br><span class="small">一次改一段</span></div>
+      <div>測試驗收<br><span class="small">確認能跑、能用、能維護</span></div>
+    </div>
+    <h3>推薦用法：先請 Cursor 讀專案</h3>
+    <div class="codebox">
+      <div class="codebar"><span>專案盤點 Prompt</span><button class="copy" data-copy="請先不要修改任何檔案。請閱讀目前專案結構，整理這個專案的用途、主要技術、重要檔案、啟動方式，以及你建議我接下來優先檢查的地方。">複製</button></div>
+      <pre><code>請先不要修改任何檔案。請閱讀目前專案結構，整理這個專案的用途、主要技術、重要檔案、啟動方式，以及你建議我接下來優先檢查的地方。</code></pre>
+    </div>
+    <h3>推薦用法：先寫規格再開發</h3>
+    <div class="codebox">
+      <div class="codebar"><span>需求轉規格 Prompt</span><button class="copy" data-copy="我想新增一個功能：〔在這裡描述功能〕。請先幫我寫一份簡短 PRD，包含使用者情境、功能需求、資料結構、頁面流程、驗收條件與可能風險。先不要改程式碼。">複製</button></div>
+      <pre><code>我想新增一個功能：〔在這裡描述功能〕。請先幫我寫一份簡短 PRD，包含使用者情境、功能需求、資料結構、頁面流程、驗收條件與可能風險。先不要改程式碼。</code></pre>
+    </div>
+    <h3>推薦用法：小步修改</h3>
+    <div class="codebox">
+      <div class="codebar"><span>小步修改 Prompt</span><button class="copy" data-copy="請只完成第一階段：〔具體小任務〕。請列出你會修改哪些檔案，說明原因，完成後請提供測試方式。不要順手重構其他無關程式。">複製</button></div>
+      <pre><code>請只完成第一階段：〔具體小任務〕。請列出你會修改哪些檔案，說明原因，完成後請提供測試方式。不要順手重構其他無關程式。</code></pre>
+    </div>
+  </section>
+
+  <section id="rules" class="card">
+    <h2>六、Cursor Rules：讓 AI 知道你的專案規範</h2>
+    <p>Cursor Rules 可以理解成「專案內的 AI 工作守則」。當專案越來越大時，建議建立規範，避免 AI 每次都用不同風格、不同架構、不同命名。</p>
+    <h3>建議規則內容</h3>
+    <div class="grid">
+      <div class="mini"><strong>技術棧</strong>例如使用 React、Vite、Tailwind、Python、Streamlit。</div>
+      <div class="mini"><strong>命名規則</strong>檔名、函式、元件、資料夾如何命名。</div>
+      <div class="mini"><strong>修改原則</strong>不得任意刪除檔案、不得大幅重構、需保留註解。</div>
+      <div class="mini"><strong>輸出格式</strong>回覆需使用繁體中文、列出修改摘要與測試方式。</div>
+      <div class="mini"><strong>安全規範</strong>不得把 API Key 寫死在前端，不得提交 .env。</div>
+      <div class="mini"><strong>教學需求</strong>若是教材專案，需符合國小學生可讀性與 RWD。</div>
+    </div>
+    <div class="codebox">
+      <div class="codebar"><span>Cursor Rules 範本</span><button class="copy" data-copy="# Cursor Project Rules\n\n## 語言與回覆\n- 請使用繁體中文回覆。\n- 修改程式後，請提供：修改摘要、受影響檔案、測試方式、可能風險。\n\n## 開發原則\n- 不要未經要求大幅重構。\n- 不要刪除既有功能。\n- 每次修改以最小可行變更為原則。\n- 若需求不清楚，先提出假設並採用最保守做法。\n\n## 安全原則\n- 不要把 API Key、Token、密碼寫入前端或提交到 Git。\n- 使用 .env 管理機密，並提供 .env.example。\n\n## 教材專案原則\n- 內容需適合國小與國中學生理解。\n- 網頁需支援手機、平板與桌機。\n- 重要操作要有清楚按鈕與提示文字。">複製</button></div>
+      <pre><code># Cursor Project Rules
+
+## 語言與回覆
+- 請使用繁體中文回覆。
+- 修改程式後，請提供：修改摘要、受影響檔案、測試方式、可能風險。
+
+## 開發原則
+- 不要未經要求大幅重構。
+- 不要刪除既有功能。
+- 每次修改以最小可行變更為原則。
+- 若需求不清楚，先提出假設並採用最保守做法。
+
+## 安全原則
+- 不要把 API Key、Token、密碼寫入前端或提交到 Git。
+- 使用 .env 管理機密，並提供 .env.example。
+
+## 教材專案原則
+- 內容需適合國小與國中學生理解。
+- 網頁需支援手機、平板與桌機。
+- 重要操作要有清楚按鈕與提示文字。</code></pre>
+    </div>
+  </section>
+
+  <section id="cli" class="card">
+    <h2>七、Cursor CLI：在終端機使用 AI Agent</h2>
+    <p>Cursor 除了桌面版，也提供 CLI，可用於終端機、自動化腳本、文件更新、安全檢查、CI/CD 流程等情境。官方 CLI 頁面提供安裝指令：</p>
+    <div class="codebox">
+      <div class="codebar"><span>Cursor CLI 安裝指令</span><button class="copy" data-copy="curl https://cursor.com/install -fsS | bash">複製</button></div>
+      <pre><code>curl https://cursor.com/install -fsS | bash</code></pre>
+    </div>
+    <div class="callout warn">
+      <strong>Windows 提醒：</strong> 如果你在 Windows 使用 CLI，建議搭配 WSL / Ubuntu 或 Git Bash。若遇到 PATH 找不到指令，請重新開啟終端機，或檢查安裝訊息中提示的 PATH 設定。
+    </div>
+    <h3>CLI 適合做什麼？</h3>
+    <table>
+      <thead><tr><th>情境</th><th>範例</th></tr></thead>
+      <tbody>
+        <tr><td>文件更新</td><td>自動檢查 README、技術文件、CHANGELOG 是否與程式一致</td></tr>
+        <tr><td>安全檢查</td><td>掃描是否有 API Key、危險套件、明顯漏洞</td></tr>
+        <tr><td>自動化任務</td><td>在 GitHub Actions 或 CI 流程中要求 AI 檢查修改內容</td></tr>
+        <tr><td>大型專案輔助</td><td>讓 Agent 在終端機環境中分析、修改、執行測試</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="trouble" class="card">
+    <h2>八、常見踩雷與排除方式</h2>
+    <table>
+      <thead><tr><th>問題</th><th>可能原因</th><th>解決方式</th></tr></thead>
+      <tbody>
+        <tr><td>安裝後找不到 Cursor</td><td>安裝在使用者資料夾、捷徑未建立</td><td>從開始選單搜尋 Cursor；或到使用者 AppData / Applications 檢查安裝位置</td></tr>
+        <tr><td>Windows 出現安全性阻擋</td><td>SmartScreen 或防毒軟體提醒</td><td>確認下載來源是官方網站，再選擇允許執行</td></tr>
+        <tr><td>AI 無法理解專案</td><td>只開單一檔案、缺 README、專案結構混亂</td><td>用「Open Folder」開整個資料夾，補上 README 與規則檔</td></tr>
+        <tr><td>Agent 改太多檔案</td><td>Prompt 太寬、沒有設定限制</td><td>要求它先列修改計畫，並限制「只改指定檔案」</td></tr>
+        <tr><td>程式能跑但架構很亂</td><td>只要求完成，沒有要求維護性與測試</td><td>加上驗收條件、測試方式、不要重複程式碼、保持模組化</td></tr>
+        <tr><td>npm install 失敗</td><td>Node 版本不合、套件衝突、網路問題</td><td>安裝 Node.js LTS，刪除 node_modules 與 lock file 後重裝，或請 Cursor 分析錯誤訊息</td></tr>
+        <tr><td>Git 權限或推送失敗</td><td>未登入 GitHub、SSH/Token 未設定</td><td>先用 GitHub Desktop 或 gh CLI 完成登入，再回到 Cursor 操作</td></tr>
+        <tr><td>AI 產生假功能或亂引用</td><td>沒有提供檔案脈絡或驗收標準</td><td>使用 @ 引用檔案，要求「只根據目前專案內容回答」</td></tr>
+      </tbody>
+    </table>
+    <div class="callout danger">
+      <strong>最重要的踩雷提醒：</strong> 不要把 Cursor 當成「自動完成整個專案的神燈」。真正穩定的做法是：需求清楚、檔案脈絡清楚、修改範圍清楚、測試方式清楚。
+    </div>
+  </section>
+
+  <section id="prompts" class="card">
+    <h2>九、Cursor 實用 Prompt 範本</h2>
+    <h3>1. 讀懂專案</h3>
+    <div class="codebox"><div class="codebar"><span>讀懂專案</span><button class="copy" data-copy="請先閱讀整個專案，不要修改檔案。請用繁體中文整理：1. 專案用途 2. 技術棧 3. 啟動方式 4. 主要檔案 5. 目前可能的風險 6. 建議下一步。">複製</button></div><pre><code>請先閱讀整個專案，不要修改檔案。請用繁體中文整理：
+1. 專案用途
+2. 技術棧
+3. 啟動方式
+4. 主要檔案
+5. 目前可能的風險
+6. 建議下一步。</code></pre></div>
+    <h3>2. 修 Bug</h3>
+    <div class="codebox"><div class="codebar"><span>修 Bug</span><button class="copy" data-copy="以下是錯誤訊息：〔貼上錯誤〕。請先判斷可能原因，列出 3 個最可能的修正方向。確認後再修改，不要一次改太多檔案。">複製</button></div><pre><code>以下是錯誤訊息：〔貼上錯誤〕。
+請先判斷可能原因，列出 3 個最可能的修正方向。
+確認後再修改，不要一次改太多檔案。</code></pre></div>
+    <h3>3. 建立 HTML 技術文件</h3>
+    <div class="codebox"><div class="codebar"><span>HTML 技術文件</span><button class="copy" data-copy="請將以下內容整理成一份 RWD HTML 技術文件，包含目錄、章節卡片、表格、流程圖、常見問題、一鍵複製按鈕與參考資料。語氣使用繁體中文，適合教師與初學者閱讀。">複製</button></div><pre><code>請將以下內容整理成一份 RWD HTML 技術文件，包含目錄、章節卡片、表格、流程圖、常見問題、一鍵複製按鈕與參考資料。語氣使用繁體中文，適合教師與初學者閱讀。</code></pre></div>
+    <h3>4. 重構程式</h3>
+    <div class="codebox"><div class="codebar"><span>重構</span><button class="copy" data-copy="請檢查目前程式碼是否有重複、過長函式、命名不清楚、責任混雜等問題。請先提出重構計畫，不要直接修改。重構必須保持既有功能不變。">複製</button></div><pre><code>請檢查目前程式碼是否有重複、過長函式、命名不清楚、責任混雜等問題。
+請先提出重構計畫，不要直接修改。
+重構必須保持既有功能不變。</code></pre></div>
+    <h3>5. 產生測試</h3>
+    <div class="codebox"><div class="codebar"><span>測試</span><button class="copy" data-copy="請根據目前功能補上測試。測試需涵蓋正常情境、邊界情境與錯誤情境。完成後請告訴我如何執行測試，以及目前測試仍未涵蓋哪些風險。">複製</button></div><pre><code>請根據目前功能補上測試。
+測試需涵蓋正常情境、邊界情境與錯誤情境。
+完成後請告訴我如何執行測試，以及目前測試仍未涵蓋哪些風險。</code></pre></div>
+  </section>
+
+  <section id="checklist" class="card">
+    <h2>十、安裝與使用檢查表</h2>
+    <div class="checklist">
+      <label><input type="checkbox"> 已從 Cursor 官方網站下載安裝檔</label>
+      <label><input type="checkbox"> 已確認 Windows / macOS / Linux 對應版本</label>
+      <label><input type="checkbox"> 已成功登入 Cursor 帳號</label>
+      <label><input type="checkbox"> 已匯入或設定常用擴充套件</label>
+      <label><input type="checkbox"> 已安裝 Git，並確認可以使用 git --version</label>
+      <label><input type="checkbox"> 若要做前端專案，已安裝 Node.js LTS</label>
+      <label><input type="checkbox"> 若要做 Python 專案，已安裝 Python 與虛擬環境</label>
+      <label><input type="checkbox"> 已用 Open Folder 開啟整個專案資料夾</label>
+      <label><input type="checkbox"> 已建立 README.md 或專案說明</label>
+      <label><input type="checkbox"> 已建立 Cursor Rules 或專案 AI 工作守則</label>
+      <label><input type="checkbox"> 每次讓 Agent 修改前，先要求它列出修改計畫</label>
+      <label><input type="checkbox"> 每次修改後，都有執行測試或手動驗收</label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>十一、參考資料</h2>
+    <ul>
+      <li><a href="https://cursor.com/" target="_blank" rel="noopener">Cursor 官方網站</a></li>
+      <li><a href="https://cursor.com/download" target="_blank" rel="noopener">Cursor 官方下載頁</a></li>
+      <li><a href="https://cursor.com/pricing" target="_blank" rel="noopener">Cursor 官方方案頁</a></li>
+      <li><a href="https://cursor.com/cli" target="_blank" rel="noopener">Cursor CLI 官方頁</a></li>
+      <li><a href="https://cursor.com/docs/cli/installation" target="_blank" rel="noopener">Cursor CLI Installation Docs</a></li>
+    </ul>
+    <p class="small">本文件為教學與技術整理用途。Cursor 功能、方案、安裝連結與版本會更新，實際操作請以官方網站為準。</p>
+  </section>
+</main>
+<footer>
+  Cursor 安裝及使用技術文件｜黑熊老師 AI Coding 筆記｜HTML / RWD / 一鍵複製版
+</footer>
+<script>
+  document.querySelectorAll('button.copy').forEach(btn=>{
+    btn.addEventListener('click', async()=>{
+      const text = btn.getAttribute('data-copy') || '';
+      try{
+        await navigator.clipboard.writeText(text);
+        const old = btn.textContent;
+        btn.textContent = '已複製';
+        setTimeout(()=>btn.textContent=old,1400);
+      }catch(e){
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        const old = btn.textContent;
+        btn.textContent = '已複製';
+        setTimeout(()=>btn.textContent=old,1400);
+      }
+    })
+  })
+</script>
+</body>
+</html>
