@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="將 Grill Me 的開工前反向訪談方法套用到自然探究課堂，提供教師與學生可直接使用的流程、提問腳手架與示範樣本。" />
+  <title>Grill Me for Natural Inquiry｜自然探究技術文章</title>
+  <style>
+    :root {
+      --bg: #f7f8f4;
+      --paper: #ffffff;
+      --ink: #1c2522;
+      --muted: #62736b;
+      --green: #2f6f4e;
+      --green-dark: #244c38;
+      --blue: #2563a9;
+      --amber: #c77b16;
+      --coral: #c4513a;
+      --mint: #e5f2ea;
+      --sky: #e9f2fb;
+      --cream: #fff8ea;
+      --rose: #fff0ed;
+      --line: #dce5dd;
+      --shadow: 0 18px 38px rgba(31, 54, 43, .09);
+      --max: 1120px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, #fbfcf8 0%, var(--bg) 42%, #f5f8fa 100%);
+      line-height: 1.78;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+    .wrap { width: min(var(--max), 92vw); margin: 0 auto; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, .9);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar .wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 12px 0;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--green-dark);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--green), var(--blue));
+      font-weight: 900;
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 6px;
+      font-size: .93rem;
+    }
+    nav a {
+      color: #3d5148;
+      padding: 6px 10px;
+      border-radius: 999px;
+    }
+    nav a:hover { background: var(--mint); text-decoration: none; }
+    header {
+      padding: 62px 0 32px;
+      border-bottom: 1px solid var(--line);
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 36px;
+      align-items: center;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--mint);
+      color: var(--green-dark);
+      border: 1px solid #c7dfcf;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(2.2rem, 5vw, 4.2rem);
+      line-height: 1.08;
+      letter-spacing: 0;
+      color: #10221a;
+    }
+    .hero p {
+      margin: 20px 0 0;
+      max-width: 760px;
+      color: #465a51;
+      font-size: 1.12rem;
+    }
+    .hero-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+    }
+    .inquiry-visual {
+      display: grid;
+      gap: 14px;
+    }
+    .question-node {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdfb;
+    }
+    .node-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--sky);
+      color: var(--blue);
+      font-weight: 900;
+    }
+    .question-node:nth-child(2) .node-icon { background: var(--cream); color: var(--amber); }
+    .question-node:nth-child(3) .node-icon { background: var(--rose); color: var(--coral); }
+    main { padding: 34px 0 68px; }
+    section {
+      margin: 0 0 28px;
+      padding: 32px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 10px 26px rgba(31, 54, 43, .05);
+    }
+    h2 {
+      margin: 0 0 14px;
+      color: var(--green-dark);
+      font-size: clamp(1.55rem, 3vw, 2.05rem);
+      line-height: 1.25;
+    }
+    h3 {
+      margin: 24px 0 10px;
+      color: #2f5c44;
+      font-size: 1.25rem;
+    }
+    p { margin: 0 0 14px; }
+    .lead {
+      padding: 18px 20px;
+      border-left: 6px solid var(--green);
+      background: var(--mint);
+      border-radius: 8px;
+      font-size: 1.06rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .mini-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      background: #fbfdfb;
+    }
+    .mini-card strong {
+      display: block;
+      color: var(--green-dark);
+      font-size: 1.08rem;
+      margin-bottom: 8px;
+    }
+    .process {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .step {
+      min-height: 138px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: linear-gradient(180deg, #ffffff, #f9fbf8);
+    }
+    .step b {
+      display: inline-grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--green);
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      background: #fff;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 12px;
+      vertical-align: top;
+    }
+    th {
+      background: var(--mint);
+      color: var(--green-dark);
+      text-align: left;
+    }
+    .sample {
+      border-top: 5px solid var(--green);
+      background: #fff;
+    }
+    .sample:nth-of-type(2n) { border-top-color: var(--blue); }
+    .dialogue {
+      display: grid;
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .bubble {
+      border-radius: 8px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+    }
+    .bubble.ai { background: var(--sky); border-color: #c8dcef; }
+    .bubble.user { background: var(--cream); border-color: #edd9a9; }
+    .bubble strong { color: #173b5f; }
+    .copy-wrap {
+      position: relative;
+      margin-top: 14px;
+    }
+    pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0;
+      padding: 18px;
+      border-radius: 8px;
+      background: #16251e;
+      color: #f4fbf7;
+      overflow: auto;
+      line-height: 1.65;
+      font-size: .95rem;
+    }
+    .copy-btn {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      border: 1px solid rgba(255,255,255,.2);
+      background: rgba(255,255,255,.12);
+      color: #fff;
+      border-radius: 8px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,.2); }
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px 18px;
+      padding: 0;
+      list-style: none;
+    }
+    .checklist li {
+      padding-left: 28px;
+      position: relative;
+    }
+    .checklist li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: .55em;
+      width: 14px;
+      height: 14px;
+      border: 2px solid var(--green);
+      border-radius: 4px;
+      background: #fff;
+    }
+    .note {
+      background: var(--rose);
+      border-left: 6px solid var(--coral);
+      border-radius: 8px;
+      padding: 16px 18px;
+    }
+    footer {
+      padding: 34px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      text-align: center;
+      background: #fff;
+    }
+    @media (max-width: 900px) {
+      .hero, .grid, .grid.two, .process, .checklist { grid-template-columns: 1fr; }
+      nav { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; }
+      section { padding: 24px; }
+    }
+    @media print {
+      .topbar, .copy-btn { display: none; }
+      body { background: #fff; }
+      section, .hero-card { box-shadow: none; }
+      pre { color: #111; background: #f3f5f2; border: 1px solid var(--line); }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="wrap">
+      <a class="brand" href="#top" aria-label="回到頁首">
+        <span class="brand-mark">G</span>
+        <span>Grill Me Natural Inquiry</span>
+      </a>
+      <nav aria-label="文章導覽">
+        <a href="#definition">定義</a>
+        <a href="#teacher">教師流程</a>
+        <a href="#students">學生用法</a>
+        <a href="#samples">樣本</a>
+        <a href="#prompt">提示詞</a>
+      </nav>
+    </div>
+  </div>
+
+  <header id="top">
+    <div class="wrap hero">
+      <div>
+        <span class="eyebrow">自然探究 × AI 需求釐清</span>
+        <h1>用 Grill Me 把自然探究問清楚</h1>
+        <p>
+          Grill Me 的精髓，是在 AI 或學生開始動手前，先用一串追問把「想研究什麼、如何公平比較、要收集哪些證據、怎麼判斷結果」問到可執行。它不是刁難，而是把模糊的好奇心轉成可觀察、可測量、可討論的探究計畫。
+        </p>
+      </div>
+      <aside class="hero-card" aria-label="Grill Me 探究視覺摘要">
+        <div class="inquiry-visual">
+          <div class="question-node">
+            <span class="node-icon">?</span>
+            <div><strong>先問清楚</strong><br>把一句「我想研究植物」拆成問題、變因、對象與情境。</div>
+          </div>
+          <div class="question-node">
+            <span class="node-icon">=</span>
+            <div><strong>讓比較公平</strong><br>控制條件、紀錄方式、重複次數與安全限制先對齊。</div>
+          </div>
+          <div class="question-node">
+            <span class="node-icon">✓</span>
+            <div><strong>再開始實作</strong><br>產出假設、步驟、表格、判準與反思題，老師可直接帶課。</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="definition">
+      <h2>一、精髓定義：Grill Me 是「探究前的反向訪談」</h2>
+      <p class="lead">
+        在自然探究中，Grill Me 可以定義為：用高密度但友善的追問，協助學習者把好奇、猜想或任務，轉換成符合科學探究精神的可執行計畫。
+      </p>
+      <div class="grid">
+        <div class="mini-card">
+          <strong>從模糊到具體</strong>
+          把「我想做水的實驗」問成明確問題：哪一種水？比較什麼？觀察多久？結果怎麼記錄？
+        </div>
+        <div class="mini-card">
+          <strong>從答案到證據</strong>
+          不急著產生結論，而是先問：需要什麼資料才足以支持這個說法？
+        </div>
+        <div class="mini-card">
+          <strong>從任務到判準</strong>
+          先約定成功標準：哪些現象算支持假設？哪些結果代表需要修正問題？
+        </div>
+      </div>
+      <h3>自然探究版 Grill Me 六問</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>追問面向</th>
+            <th>老師可問學生</th>
+            <th>AI 可協助生成</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>研究問題</td>
+            <td>你真正想知道的是現象、原因、差異，還是關係？</td>
+            <td>把一句主題改寫成 3 個可測量問題。</td>
+          </tr>
+          <tr>
+            <td>變因設計</td>
+            <td>你要改變什麼？要保持哪些條件一樣？</td>
+            <td>列出操縱變因、應變變因、控制變因。</td>
+          </tr>
+          <tr>
+            <td>資料證據</td>
+            <td>你要看、量、數、拍、記錄哪一種資料？</td>
+            <td>產出觀察表、測量欄位與紀錄頻率。</td>
+          </tr>
+          <tr>
+            <td>公平性</td>
+            <td>怎麼避免只是剛好、運氣或工具誤差？</td>
+            <td>建議重複次數、樣本數與控制條件。</td>
+          </tr>
+          <tr>
+            <td>安全限制</td>
+            <td>哪些材料、操作或場地需要老師確認？</td>
+            <td>建立安全提醒與不可做清單。</td>
+          </tr>
+          <tr>
+            <td>表達成果</td>
+            <td>最後要用表格、圖表、海報、口頭報告還是學習單？</td>
+            <td>生成報告架構、反思題與檢核表。</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="teacher">
+      <h2>二、教師直接應用：一節課的 Grill Me 探究流程</h2>
+      <p>
+        老師可以把 Grill Me 當作探究課的前 15 分鐘，也可以把它放進小組討論單。重點不是讓 AI 代替學生想，而是讓 AI 扮演追問者，幫學生補上原本容易漏掉的探究條件。
+      </p>
+      <div class="process">
+        <div class="step"><b>1</b><br><strong>丟出現象</strong><br>給一個自然現象、生活問題或學生好奇點。</div>
+        <div class="step"><b>2</b><br><strong>啟動追問</strong><br>請 AI 一次只問一題，直到問題、變因、證據都清楚。</div>
+        <div class="step"><b>3</b><br><strong>小組回答</strong><br>學生用自己的語言回答，老師只協助判斷是否可測量。</div>
+        <div class="step"><b>4</b><br><strong>生成計畫</strong><br>把問答整理成假設、材料、步驟、紀錄表與安全規範。</div>
+        <div class="step"><b>5</b><br><strong>實作反思</strong><br>用結果回頭檢查：問題是否清楚？資料是否足夠？</div>
+      </div>
+      <div class="note">
+        <strong>教師提醒：</strong>Grill Me 不應該直接給標準答案。它最適合問「你怎麼知道」「如何公平比較」「資料夠不夠」這類能提升探究品質的問題。
+      </div>
+    </section>
+
+    <section id="students">
+      <h2>三、指導孩子使用 Grill Me：把 AI 當作探究教練</h2>
+      <p>學生使用時，可以遵守三個規則：先說想研究的現象、要求 AI 追問、最後請 AI 整理成探究單。老師可以投影以下句型，讓小組直接套用。</p>
+      <div class="grid two">
+        <div class="mini-card">
+          <strong>學生開場句</strong>
+          「我想研究＿＿＿。請你用 Grill Me 的方式，一次問我一個問題，幫我把自然探究計畫問清楚。不要急著給答案。」
+        </div>
+        <div class="mini-card">
+          <strong>學生結尾句</strong>
+          「請根據剛剛的問答，整理成研究問題、假設、變因、材料、步驟、紀錄表、安全注意與結果討論題。」
+        </div>
+      </div>
+      <h3>學生回答時的四句自我檢查</h3>
+      <ul class="checklist">
+        <li>我有說清楚要比較什麼。</li>
+        <li>我有說清楚要測量或觀察什麼。</li>
+        <li>我有說清楚哪些條件要保持一樣。</li>
+        <li>我知道最後要用什麼資料支持結論。</li>
+      </ul>
+    </section>
+
+    <section id="samples" class="sample">
+      <h2>四、樣本一：植物需要多少光才長得好？</h2>
+      <p><strong>原始模糊需求：</strong>我想做植物跟陽光的實驗。</p>
+      <div class="dialogue">
+        <div class="bubble ai"><strong>Grill Me：</strong>你想研究的是「有沒有光」的差異，還是「光照時間長短」和植物生長的關係？</div>
+        <div class="bubble user"><strong>學生：</strong>我想比較光照時間長短，看看豆苗長得怎麼樣。</div>
+        <div class="bubble ai"><strong>Grill Me：</strong>你要用什麼指標判斷「長得好」？高度、葉片數、顏色，還是其他？</div>
+        <div class="bubble user"><strong>學生：</strong>用高度和葉片數，連續觀察 7 天。</div>
+        <div class="bubble ai"><strong>Grill Me：</strong>除了光照時間，水量、土壤、容器、種子數量要怎麼保持一樣？</div>
+        <div class="bubble user"><strong>學生：</strong>每盆 5 顆綠豆、同樣土壤、每天同時間澆 20 毫升水。</div>
+      </div>
+      <table>
+        <tbody>
+          <tr><th>研究問題</th><td>不同光照時間會如何影響綠豆苗 7 天內的高度與葉片數？</td></tr>
+          <tr><th>假設</th><td>每天接受中等光照的綠豆苗，可能比完全無光或長時間強光的綠豆苗生長更穩定。</td></tr>
+          <tr><th>變因</th><td>操縱變因：每日光照時間。應變變因：高度、葉片數。控制變因：種子數、水量、土壤、容器、觀察時間。</td></tr>
+          <tr><th>可生成成果</th><td>觀察紀錄表、折線圖、結論句型：「根據第＿＿天到第＿＿天資料，我們發現＿＿＿。」</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="sample">
+      <h2>五、樣本二：冰塊在哪裡融化最快？</h2>
+      <p><strong>原始模糊需求：</strong>我想研究冰塊融化。</p>
+      <div class="dialogue">
+        <div class="bubble ai"><strong>Grill Me：</strong>你想比較的是位置、材質、溫度，還是冰塊大小？</div>
+        <div class="bubble user"><strong>學生：</strong>比較放在不同材質上，哪個融化最快。</div>
+        <div class="bubble ai"><strong>Grill Me：</strong>要怎麼確保冰塊大小相同？如果大小不同，結果會不會不公平？</div>
+        <div class="bubble user"><strong>學生：</strong>用同一個製冰盒，挑形狀差不多的三顆。</div>
+        <div class="bubble ai"><strong>Grill Me：</strong>你要記錄「完全融化時間」，還是每隔固定時間量水量？</div>
+        <div class="bubble user"><strong>學生：</strong>記錄完全融化時間，每 2 分鐘拍一次照片。</div>
+      </div>
+      <table>
+        <tbody>
+          <tr><th>研究問題</th><td>相同大小的冰塊放在金屬、塑膠、木板上，完全融化所需時間有何差異？</td></tr>
+          <tr><th>探究焦點</th><td>材質導熱差異可能影響冰塊吸收熱的速度。</td></tr>
+          <tr><th>公平比較</th><td>同一教室、同一時間開始、相同冰塊大小、同樣接觸面積、用碼表記錄。</td></tr>
+          <tr><th>延伸追問</th><td>如果換成鋁箔紙、玻璃、布料，結果會如何？這和生活中的保冷材料有什麼關係？</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="sample">
+      <h2>六、樣本三：紙飛機怎麼飛得遠？</h2>
+      <p><strong>原始模糊需求：</strong>我想做紙飛機比賽。</p>
+      <div class="dialogue">
+        <div class="bubble ai"><strong>Grill Me：</strong>你想研究紙飛機的哪一個因素？紙張大小、摺法、機翼寬度、投擲角度，還是投擲力量？</div>
+        <div class="bubble user"><strong>學生：</strong>比較不同機翼寬度會不會影響飛行距離。</div>
+        <div class="bubble ai"><strong>Grill Me：</strong>如果投擲力量每次不同，會干擾結果。你打算怎麼控制？</div>
+        <div class="bubble user"><strong>學生：</strong>同一個人投，站在同一條線，用差不多的角度，每種飛機試飛 5 次。</div>
+        <div class="bubble ai"><strong>Grill Me：</strong>你要用最遠一次當結果，還是用平均距離？</div>
+        <div class="bubble user"><strong>學生：</strong>用 5 次的平均距離比較。</div>
+      </div>
+      <table>
+        <tbody>
+          <tr><th>研究問題</th><td>紙飛機機翼寬度不同時，平均飛行距離是否不同？</td></tr>
+          <tr><th>資料處理</th><td>每種機翼寬度試飛 5 次，刪除明顯失誤需註明原因，再計算平均。</td></tr>
+          <tr><th>科學概念</th><td>飛行距離可能與升力、空氣阻力、穩定性和投擲條件有關。</td></tr>
+          <tr><th>成果表達</th><td>用長條圖比較平均距離，並寫出「最支持假設的證據」和「下一次要控制得更好的條件」。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="prompt">
+      <h2>七、可直接複製的自然探究 Grill Me 提示詞</h2>
+      <p>這段可以給老師備課用，也可以簡化後給學生小組使用。建議要求 AI「一次只問一題」，避免學生被一整串問題淹沒。</p>
+      <div class="copy-wrap">
+        <button class="copy-btn" type="button" aria-label="複製提示詞">複製</button>
+        <pre>你是一位自然探究課的 Grill Me 教練。你的任務不是立刻給答案，而是在學生開始實驗前，用友善但精準的追問，幫他把探究計畫問清楚。
+
+請遵守：
+1. 一次只問一個問題。
+2. 每題都要讓學生更清楚以下至少一項：研究問題、假設、操縱變因、應變變因、控制變因、材料、步驟、紀錄方式、安全限制、成果表達。
+3. 如果學生回答模糊，請追問到可以觀察或測量。
+4. 不要直接替學生決定，請提供 2 到 3 個可選方向，並說明你推薦哪一個以及原因。
+5. 當資訊足夠時，請整理成：
+   - 研究題目
+   - 探究問題
+   - 假設
+   - 變因設計
+   - 材料與安全注意
+   - 實驗步驟
+   - 觀察紀錄表
+   - 結果分析方式
+   - 反思與延伸問題
+
+我的自然探究想法是：＿＿＿＿＿＿</pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>八、評量重點：看學生是否被問出「可探究性」</h2>
+      <p>使用 Grill Me 後，老師不只評量結果是否漂亮，更要看學生是否能說明自己的探究決策。</p>
+      <ul class="checklist">
+        <li>研究問題能被觀察或測量。</li>
+        <li>假設能對應到資料證據。</li>
+        <li>至少能說出一個操縱變因與一個應變變因。</li>
+        <li>知道哪些條件要保持一樣。</li>
+        <li>紀錄表能支持最後的結論。</li>
+        <li>能指出實驗限制與下一次改進方向。</li>
+      </ul>
+      <p class="lead">
+        最好的 Grill Me 結果，不是 AI 產出一份完美學習單，而是學生開始知道：科學探究的品質，取決於問題是否問得足夠清楚。
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      Grill Me for Natural Inquiry｜自然探究課堂可用的 AI 反向訪談流程
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll(".copy-btn").forEach(function (button) {
+        button.addEventListener("click", async function () {
+          const pre = button.parentElement.querySelector("pre");
+          const text = pre ? pre.innerText.trim() : "";
+          try {
+            if (navigator.clipboard && window.isSecureContext) {
+              await navigator.clipboard.writeText(text);
+            } else {
+              const textarea = document.createElement("textarea");
+              textarea.value = text;
+              textarea.style.position = "fixed";
+              textarea.style.left = "-9999px";
+              document.body.appendChild(textarea);
+              textarea.focus();
+              textarea.select();
+              document.execCommand("copy");
+              textarea.remove();
+            }
+            const original = button.textContent;
+            button.textContent = "已複製";
+            window.setTimeout(function () { button.textContent = original; }, 1400);
+          } catch (error) {
+            button.textContent = "複製失敗";
+            window.setTimeout(function () { button.textContent = "複製"; }, 1400);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
