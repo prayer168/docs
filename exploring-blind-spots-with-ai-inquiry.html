@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>看不見的，不等於不存在：用 AI 與科學探究探索自己的盲點</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #24332f;
+      --muted: #61716b;
+      --accent: #176b55;
+      --accent-soft: #e7f3ee;
+      --paper: #fffdf8;
+      --canvas: #eef3ef;
+      --line: #cfdcd6;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(148, 192, 171, .22), transparent 28rem),
+        linear-gradient(180deg, #f5f8f5 0%, var(--canvas) 100%);
+      font-family: "Noto Serif TC", "Microsoft JhengHei", "PingFang TC", serif;
+      font-size: 18px;
+      line-height: 1.95;
+    }
+    main {
+      width: min(100% - 32px, 820px);
+      margin: 48px auto;
+      padding: clamp(28px, 6vw, 72px);
+      background: var(--paper);
+      border: 1px solid rgba(36, 51, 47, .08);
+      border-radius: 24px;
+      box-shadow: 0 24px 64px rgba(35, 64, 54, .10);
+    }
+    h1 {
+      margin: 0 0 1.25em;
+      color: #174c3e;
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      line-height: 1.28;
+      letter-spacing: .035em;
+    }
+    h2 {
+      margin: 2.4em 0 .7em;
+      padding-left: .8em;
+      color: var(--accent);
+      border-left: 5px solid #6fb397;
+      font-size: clamp(1.28rem, 3vw, 1.58rem);
+      line-height: 1.45;
+    }
+    p { margin: 0 0 1.25em; }
+    ol {
+      margin: .4em 0 1.5em;
+      padding: 1.15em 1.25em 1.15em 3.2em;
+      background: var(--accent-soft);
+      border-radius: 14px;
+    }
+    li { margin: .35em 0; padding-left: .25em; }
+    .sources {
+      margin-top: 3em;
+      padding-top: 1.4em;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+      font-size: .9rem;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+    .sources h2 { margin-top: 0; color: #365c50; }
+    .sources ol { margin-bottom: 0; background: transparent; padding-top: 0; padding-right: 0; padding-bottom: 0; }
+    .sources li { margin-bottom: .85em; }
+    a { color: #08674f; text-decoration-thickness: .08em; text-underline-offset: .16em; }
+    a:hover, a:focus-visible { color: #9b4e27; }
+    @media (max-width: 620px) {
+      body { font-size: 17px; line-height: 1.85; }
+      main { width: min(100% - 20px, 820px); margin: 10px auto; border-radius: 16px; }
+      ol { padding-left: 2.7em; }
+    }
+    @media print {
+      body { background: #fff; font-size: 11pt; }
+      main { width: 100%; margin: 0; padding: 0; border: 0; box-shadow: none; }
+      h1, h2 { break-after: avoid; }
+      p, li { orphans: 3; widows: 3; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <article>
+      <h1>看不見的，不等於不存在：用 AI 與科學探究探索自己的盲點</h1>
+
+      <p>午休後，老師帶著學生走到校園中庭。有人指著沒有樹蔭的地面說：「這裡一定比樹下熱。」幾組學生用紅外線溫度計各量一次，數字似乎也支持這個想法。生成式 AI 很快整理出一句結論：「樹蔭能有效降低校園地表溫度。」答案流暢、方向合理，活動看來可以結束了。</p>
+
+      <p>老師卻問：「如果我們一開始就相信樹蔭比較涼，剛才特別挑了哪些位置？又漏看了哪些位置？」學生這才發現，樹下量的是泥土，陽光下量的是深色水泥；有人選了最熱的正午，沒有人記錄早晨；灑水器是否剛運作、雲量與風速也不在表格裡。真正值得探究的，忽然不是哪一區比較熱，而是我們如何知道自己遺漏了什麼。</p>
+
+      <h2>盲點不是缺點，而是尚未被檢查的假設</h2>
+
+      <p>在科學探究中，「盲點」可以指未察覺的變因、選樣方式、測量限制或替代解釋。確認偏誤則是其中常見的一種：人容易優先注意支持既有想法的資訊，沒有充分考慮相反證據。這不表示學生不誠實，而是人會用既有經驗快速理解世界；問題在於，若沒有設計檢查機制，直覺就可能悄悄變成結論。</p>
+
+      <p>臺灣自然科學領域課綱把探究分為發現問題、規劃與研究、論證與建模、表達與分享，並強調詳實記錄、比較不同證據、檢核結果及察覺限制。換句話說，科學素養不只是得到正確答案，也包括找出答案可能錯在哪裡。</p>
+
+      <h2>把「一定」改寫成可被推翻的問題</h2>
+
+      <p>教師可以請學生先不要問「樹蔭是不是比較涼」，而改寫為：「在相同日期與時段，本校選定樣點中，有樹冠遮蔽地面的表面溫度是否低於無遮蔽地面？」接著要求每組寫下兩件事：預期結果，以及什麼結果會使原先預期站不住腳。</p>
+
+      <p>測量計畫也要讓盲點現形。例如在遮蔽與無遮蔽區各選五個樣點，分早上、中午、下午測量，連續三天使用同一支或已比對過的儀器；同時記錄地表材質、測量距離、雲量、風、近期降雨或灑水情形。學生不能因某一次數值「不好看」便刪除，而要標記可能原因並保留原始資料。這些做法不保證研究沒有偏誤，卻讓別人有機會看見並檢查它。</p>
+
+      <h2>先查資料是怎麼來的</h2>
+
+      <p>有些盲點不在觀點，而藏在資料表的形成過程。若不同組使用不同儀器、有人把攝氏輸成華氏、缺值被誤當成零，AI 畫出的趨勢仍可能非常漂亮。因此，每筆資料至少要能回到測量者、時間、地點代碼、儀器、單位與原始紀錄；修改數值時保留理由，不用「清理資料」當作刪去不利結果的藉口。</p>
+
+      <p>例如某天下午的遮蔽區恰好少了三筆資料，班級平均值看起來因此較低。這時先問的不是「平均差多少」，而是「缺掉的是哪些位置，為什麼缺？」若因下雨無法測量，缺失本身就是研究條件的一部分；若因數值太高而被略過，則會系統性扭曲結果。學生可以請 AI 列出缺值分布或檢查單位，但必須回查原始紀錄，因為 AI 看不到當時的天氣、儀器操作與人的選擇。</p>
+
+      <p>教師可穿插四個提問：「哪一筆資料最支持你的想法？哪一筆最不支持？」「如果另一組得到相反結果，你會先檢查什麼？」「目前證據顯示的是相關，還是已足以說明因果？」「還有哪個沒有測量的變因，也能解釋這個現象？」</p>
+
+      <h2>請 AI 當異議者，不當裁判</h2>
+
+      <p>AI 最有價值的角色不是替學生宣布答案，而是協助產生需要查證的候選問題。學生可將去除個資、保留欄名與單位的資料表交給 AI，依序提出要求：</p>
+
+      <ol>
+        <li>只根據表格，分開列出「直接觀察」與「推論」，不得補上缺失值。</li>
+        <li>找出與原假設不一致的資料、可能的異常值，以及仍未控制的變因。</li>
+        <li>提出三個能解釋相同結果的替代說法，並為每一個說法設計下一次測量。</li>
+        <li>說明哪些結論目前只能說「有關聯」，哪些需要對照、重複測量或改變單一條件才能進一步判斷。</li>
+      </ol>
+
+      <p>接著，學生必須逐項核對：AI 指出的那一列是否真的存在？單位有沒有看錯？它把地表溫度誤寫成氣溫了嗎？建議的變因能否在校園中安全測量？外部資料是否來自可追溯的機構？AI 的提醒只有通過這些檢查，才有資格進入研究紀錄。</p>
+
+      <p>「考慮相反情況」是一種可教的策略。2020 年一項預先註冊、以 132 名大學生為對象的研究發現，接受回饋的學生在確認偏誤題目上的表現優於沒有回饋者；但研究沒有發現這項學習能穩定遷移到其他偏誤題型。因此，不能期待問一次「會不會相反」就永久消除盲點。較合理的做法，是在不同探究中反覆練習，並讓同儕與教師提供具體回饋。</p>
+
+      <h2>別忘了：AI 也有自己的盲點</h2>
+
+      <p>生成式 AI 依據資料中的統計模式產生內容，可能把錯誤或虛構資訊說得很有把握。美國國家標準暨技術研究院把這類現象稱為 confabulation，常被俗稱為「幻覺」。教育部《中小學數位教學指引 3.0》也提醒，師生應檢查生成內容的正確性、邏輯、資料限制與偏見，並對所使用的內容負責。聯合國教科文組織的學生 AI 素養架構同樣把以人為本、AI 倫理、技術與應用、系統設計列為四個面向，強調學生應對 AI 解決方案保持批判判斷。</p>
+
+      <p>因此，若學生用偏向原假設的問法，例如「請證明樹蔭可以降溫」，AI 很可能順著問題組織支持材料。教師可以要求改問：「根據這份資料，列出支持、反對與證據不足之處；若資訊不夠，明確說不知道。」再用課綱、政府資料、研究機構文件或可查核論文交叉比對。AI 可以幫忙看見可能遺漏的角落，卻不能證明因果，也不能替學生承擔結論。</p>
+
+      <h2>建立一份「盲點紀錄」，讓思考留下痕跡</h2>
+
+      <p>每次探究可保留六個欄位：原先相信什麼、什麼證據可能推翻它、尚未測量的變因、AI 提出的候選提醒、實際查核結果、目前結論與限制。這份紀錄比一張漂亮圖表更能顯示學生是否真的改變了想法。</p>
+
+      <p>若要延伸成科展或長期研究，可以增加季節、材質與樹冠覆蓋比例，先訂好取樣規則，再持續蒐集資料。若樹蔭區溫度較低，學生最多先說：「在本校這些樣點與測量時段，遮蔽程度和地表溫度呈現某種關聯。」要主張「樹木造成降溫」，還需更嚴謹地排除材質、含水量、時段等替代解釋。承認證據不足，不是失敗，而是下一個可研究問題的起點。</p>
+
+      <p>探索自己的盲點，並不是逼學生否定直覺，而是學會替直覺安排一場公平的測試。AI 能整理資料、提醒矛盾、提出反例與後續問題；學生則要負責現場觀察、測量品質、來源查證、解釋與限制。當一個人能說出「我原本這樣想，但這筆證據讓我修正」，科學探究才真正從找答案，走向理解自己如何知道。</p>
+
+      <section class="sources" aria-labelledby="sources-title">
+        <h2 id="sources-title">資料來源</h2>
+        <ol>
+          <li>教育部，2025，《中小學數位教學指引 3.0》。<a href="https://pads.moe.edu.tw/news_detail.php?id=956" target="_blank" rel="noopener noreferrer">https://pads.moe.edu.tw/news_detail.php?id=956</a>（查閱日期：2026-07-14）</li>
+          <li>國家教育研究院，2018，〈十二年國民基本教育課程綱要國民中小學暨普通型高級中等學校─自然科學領域訂定發布〉。<a href="https://www.naer.edu.tw/PageDoc/Detail?fid=55&amp;id=1290" target="_blank" rel="noopener noreferrer">https://www.naer.edu.tw/PageDoc/Detail?fid=55&amp;id=1290</a>（查閱日期：2026-07-14）</li>
+          <li>UNESCO，2024，AI competency framework for students。<a href="https://www.unesco.org/en/articles/ai-competency-framework-students" target="_blank" rel="noopener noreferrer">https://www.unesco.org/en/articles/ai-competency-framework-students</a>（查閱日期：2026-07-14）</li>
+          <li>Autio, C. et al.，2024，Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile，NIST AI 600-1。<a href="https://doi.org/10.6028/NIST.AI.600-1" target="_blank" rel="noopener noreferrer">https://doi.org/10.6028/NIST.AI.600-1</a>（查閱日期：2026-07-14）</li>
+          <li>National Research Council，2000，Inquiry and the National Science Education Standards: A Guide for Teaching and Learning。<a href="https://doi.org/10.17226/9596" target="_blank" rel="noopener noreferrer">https://doi.org/10.17226/9596</a>（查閱日期：2026-07-14）</li>
+          <li>van Brussel, S., Timmermans, M. C. L., Verkoeijen, P., &amp; Paas, F.，2020，‘Consider the Opposite’ – Effects of elaborative feedback and correct answer feedback on reducing confirmation bias – A pre-registered study。<a href="https://doi.org/10.1016/j.cedpsych.2020.101844" target="_blank" rel="noopener noreferrer">https://doi.org/10.1016/j.cedpsych.2020.101844</a>（查閱日期：2026-07-14）</li>
+        </ol>
+      </section>
+    </article>
+  </main>
+</body>
+</html>
