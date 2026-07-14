@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="React 完整技術文件：定義、核心原理、應用場景、網站與 App 開發、數位教材案例、架構選型、示例與官方資料來源。">
+<title>React 完整技術文件｜從核心原理到 App、網站與數位教材實作</title>
+<style>
+:root{--bg:#f5f7fb;--panel:#fff;--ink:#18212f;--muted:#5f6b7a;--brand:#087ea4;--brand2:#149eca;--line:#dfe5ec;--soft:#eaf7fb;--warn:#fff7df;--code:#111827;--good:#eaf8ef;--shadow:0 12px 35px rgba(25,45,70,.09);--radius:18px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC",Arial,sans-serif;line-height:1.82}a{color:var(--brand);text-decoration:none}a:hover{text-decoration:underline}.wrap{max-width:1180px;margin:auto;padding:0 22px}.hero{background:linear-gradient(135deg,#071b2b 0%,#0c526b 52%,#149eca 100%);color:#fff;padding:76px 0 62px}.hero h1{font-size:clamp(2.2rem,5vw,4.4rem);line-height:1.08;margin:0 0 20px;letter-spacing:-.04em}.hero p{max-width:850px;font-size:1.16rem;color:#e8f7fb}.badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.badge{border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.1);padding:6px 12px;border-radius:99px;font-size:.9rem}.layout{display:grid;grid-template-columns:270px minmax(0,1fr);gap:26px;padding:30px 0 70px}.toc{position:sticky;top:18px;align-self:start;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}.toc strong{display:block;margin-bottom:10px}.toc a{display:block;color:#425165;padding:5px 4px;border-radius:7px;font-size:.93rem}.toc a:hover{background:var(--soft);text-decoration:none}.content{min-width:0}.card,section{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:clamp(22px,4vw,42px);margin-bottom:24px}h2{font-size:clamp(1.55rem,3vw,2.35rem);line-height:1.25;margin:0 0 22px}h3{font-size:1.28rem;margin:32px 0 12px}h4{font-size:1.05rem;margin:24px 0 8px}.lead{font-size:1.15rem;color:#344256}.callout{padding:18px 20px;border-left:5px solid var(--brand2);background:var(--soft);border-radius:10px;margin:20px 0}.warn{background:var(--warn);border-left-color:#d99a00}.good{background:var(--good);border-left-color:#2d9f59}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.mini{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:18px}.mini h3,.mini h4{margin-top:0}.flow{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap;margin:20px 0}.step{flex:1;min-width:145px;background:#f5fbfd;border:1px solid #bce6f2;border-radius:14px;padding:15px;text-align:center}.arrow{display:flex;align-items:center;font-weight:800;color:var(--brand)}table{width:100%;border-collapse:collapse;margin:18px 0;font-size:.96rem}th,td{border:1px solid var(--line);padding:11px 12px;vertical-align:top;text-align:left}th{background:#eef7fa;color:#17465a}code{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace}.codebox{position:relative;background:var(--code);color:#e5edf8;border-radius:14px;margin:18px 0;overflow:hidden}.codehead{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#202b3a;color:#b8c4d6;font-size:.85rem}.copy{border:1px solid #58677a;background:#2b3747;color:#fff;border-radius:7px;padding:5px 10px;cursor:pointer}.copy:hover{background:#3a485b}.codebox pre{margin:0;padding:18px;overflow:auto;line-height:1.58;font-size:.9rem}.diagram{background:#071b2b;color:#dff8ff;border-radius:15px;padding:22px;overflow:auto;font-family:monospace;white-space:pre;line-height:1.5}.check li{margin:.4rem 0}.pill{display:inline-block;background:#e8f5f9;color:#096482;border-radius:99px;padding:2px 9px;font-size:.86rem;margin:2px}.source-list li{margin:.8rem 0}.footer{background:#071b2b;color:#ccdae4;padding:34px 0;text-align:center}.top{position:fixed;right:18px;bottom:18px;width:46px;height:46px;border:0;border-radius:50%;background:var(--brand);color:#fff;cursor:pointer;box-shadow:var(--shadow);font-size:1.2rem}.compare td:first-child{font-weight:700}.tag{font-weight:700;color:#0a6785}.small{font-size:.9rem;color:var(--muted)}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.toc{position:relative;top:auto}.grid,.grid3{grid-template-columns:1fr}.arrow{display:none}.hero{padding-top:54px}.wrap{padding:0 14px}section,.card{padding:24px 18px}}
+@media print{.toc,.top,.copy{display:none}.layout{display:block}.hero{background:#fff;color:#000;padding:20px 0}.hero p{color:#222}section{box-shadow:none;break-inside:avoid}.footer{background:#fff;color:#000}}
+</style>
+</head>
+<body>
+<header class="hero" id="top"><div class="wrap">
+<div class="badges"><span class="badge">完整技術文件</span><span class="badge">React／Next.js／React Native</span><span class="badge">網站、App、數位教材</span><span class="badge">含可複製程式碼</span></div>
+<h1>React：從核心原理到網站、App 與數位教材開發</h1>
+<p>一份以官方文件與開放網路標準為基礎的繁體中文指南，說明 React 的定義、元件化思維、狀態與渲染機制、資料流、Hooks、網站與行動 App 架構、互動式數位教材案例、測試、無障礙、效能與專案選型。</p>
+<p class="small" style="color:#cfeef7">資料整理日期：2026 年 7 月｜適合教師、教材開發者、前端初學者與 AI Coding 使用者</p>
+</div></header>
+<div class="wrap layout">
+<nav class="toc" aria-label="文章目錄"><strong>目錄</strong>
+<a href="#definition">1. React 的定義</a><a href="#role">2. React 扮演的角色</a><a href="#principles">3. 核心原理</a><a href="#render">4. 渲染與更新流程</a><a href="#hooks">5. Hooks 與資料管理</a><a href="#scenes">6. 應用場景</a><a href="#edu">7. 數位教材應用</a><a href="#webapp">8. 網站與 Web App</a><a href="#mobile">9. 行動 App</a><a href="#example">10. 完整教材示例</a><a href="#architecture">11. 技術架構與選型</a><a href="#quality">12. 測試、無障礙、效能</a><a href="#limits">13. 何時不必使用 React</a><a href="#roadmap">14. 學習路線</a><a href="#sources">15. 資料來源</a>
+</nav>
+<main class="content">
+<section id="definition"><h2>1. React 的定義：它不是完整框架，而是 UI 函式庫</h2>
+<p class="lead">React 是一套用來建立 Web 與原生使用者介面的 JavaScript 函式庫。它讓開發者把畫面拆成可重複使用的「元件」，並以資料與狀態描述介面應該呈現的樣子。</p>
+<div class="callout"><strong>最精準的理解：</strong>React 主要解決的是「介面如何由資料產生、如何在資料改變時可靠更新」；路由、後端、資料庫、帳號、部署與完整專案架構通常由其他工具補上。</div>
+<div class="grid"><div class="mini"><h3>React 負責</h3><ul><li>建立 UI 元件</li><li>處理狀態與事件</li><li>根據資料重新渲染</li><li>組合畫面與互動流程</li></ul></div><div class="mini"><h3>React 本身不完整負責</h3><ul><li>網址路由與 SEO</li><li>後端 API 與資料庫</li><li>帳號與權限</li><li>建置、部署與伺服器架構</li></ul></div></div>
+<h3>一句話公式</h3><div class="diagram">UI = f(props, state, context)
+
+畫面 = 元件根據「外部資料、內部狀態、共享環境」計算出的結果</div>
+</section>
+<section id="role"><h2>2. React 在產品開發中扮演什麼角色？</h2>
+<p>React 位於「使用者看得到、點得到、操作得到」的前端介面層。它把設計稿、資料與使用者操作連接起來，是網站或 App 的互動中樞。</p>
+<div class="diagram">使用者
+  ↓ 點擊、輸入、拖曳、選擇
+React UI 元件層
+  ↓ 呼叫
+API／AI 模型／Supabase／Firebase／自建後端
+  ↓ 回傳 JSON、圖片、影音、學習紀錄
+React 更新狀態並重新呈現畫面</div>
+<table class="compare"><tr><th>技術</th><th>主要角色</th><th>與 React 的關係</th></tr><tr><td>HTML</td><td>內容結構與語意</td><td>React 最終仍產生或控制 DOM 結構</td></tr><tr><td>CSS／Tailwind</td><td>視覺樣式與 RWD</td><td>負責元件外觀</td></tr><tr><td>JavaScript／TypeScript</td><td>程式邏輯與資料型別</td><td>React 元件的程式語言</td></tr><tr><td>Next.js</td><td>全端 React 框架</td><td>補上路由、伺服器渲染、資料載入、SEO 與部署架構</td></tr><tr><td>React Native</td><td>原生行動 App UI</td><td>沿用 React 思維，但輸出為 Android／iOS 原生元件</td></tr><tr><td>Supabase</td><td>資料庫、登入、儲存、即時資料</td><td>React 作為前端介面呼叫服務</td></tr></table>
+</section>
+<section id="principles"><h2>3. React 的核心原理</h2>
+<div class="grid3"><div class="mini"><h3>元件化</h3><p>把大型畫面拆成按鈕、卡片、題目、圖表、導覽列等小元件，再組成頁面。</p></div><div class="mini"><h3>宣告式 UI</h3><p>描述「某個狀態下畫面應該長什麼樣」，而不是逐步下指令修改每個 DOM。</p></div><div class="mini"><h3>單向資料流</h3><p>資料通常由父元件往下傳，事件由子元件回報，讓狀態來源更容易追蹤。</p></div></div>
+<h3>3.1 元件 Component</h3><p>現代 React 主要使用函式元件。每個元件接收 props，並回傳 JSX。</p>
+<div class="codebox"><div class="codehead"><span>ScienceCard.jsx</span><button class="copy">複製</button></div><pre><code>function ScienceCard({ title, description }) {
+  return (
+    &lt;article className="science-card"&gt;
+      &lt;h2&gt;{title}&lt;/h2&gt;
+      &lt;p&gt;{description}&lt;/p&gt;
+    &lt;/article&gt;
+  );
+}</code></pre></div>
+<h3>3.2 JSX</h3><p>JSX 是 JavaScript 的語法擴充，讓開發者以接近 HTML 的方式描述 UI。它不是字串，也不是瀏覽器直接理解的 HTML；建置工具會將它轉換成 JavaScript。</p>
+<h3>3.3 Props 與 State</h3><table><tr><th>概念</th><th>用途</th><th>例子</th></tr><tr><td>props</td><td>父元件傳入的唯讀資料</td><td>題目文字、學生姓名、卡片標題</td></tr><tr><td>state</td><td>元件需要記住且會變動的資料</td><td>目前答案、分數、頁碼、是否顯示提示</td></tr><tr><td>context</td><td>跨多層元件共享資料</td><td>語言、登入者、主題色、課程資訊</td></tr></table>
+<h3>3.4 純渲染與不可變更新</h3><p>React 元件應盡量保持純粹：相同 props、state、context 應產生相同輸出。更新物件或陣列狀態時，通常建立新值，而不是直接修改原物件，讓更新更可預測。</p>
+</section>
+<section id="render"><h2>4. React 如何渲染與更新畫面？</h2>
+<div class="flow"><div class="step"><strong>1. 觸發</strong><br>初次載入或 setState</div><div class="arrow">→</div><div class="step"><strong>2. Render</strong><br>呼叫元件計算 UI</div><div class="arrow">→</div><div class="step"><strong>3. 比較</strong><br>計算需要改變之處</div><div class="arrow">→</div><div class="step"><strong>4. Commit</strong><br>更新必要的 DOM</div></div>
+<p>「Virtual DOM」是常見簡化說法，但更完整的理解是：React 會重新呼叫相關元件，取得新的 UI 描述，經過協調與差異計算後，在提交階段對真實 DOM 執行必要更新。</p>
+<div class="callout warn"><strong>重要：</strong>重新渲染不等於整個網頁全部重畫。React 可能重新執行元件函式，但提交到 DOM 的通常只是必要變更。</div>
+<h3>Key 為什麼重要？</h3><p>渲染清單時，key 協助 React 辨識每一筆資料的身分，決定狀態該保留、移動或重設。應使用穩定且唯一的資料 ID，避免任意使用陣列索引。</p>
+</section>
+<section id="hooks"><h2>5. Hooks：讓函式元件使用 React 能力</h2>
+<table><tr><th>Hook</th><th>用途</th><th>教材例子</th></tr><tr><td><code>useState</code></td><td>保存元件狀態</td><td>選擇答案、計分、開關提示</td></tr><tr><td><code>useEffect</code></td><td>同步外部系統</td><td>讀取 API、計時器、事件訂閱</td></tr><tr><td><code>useRef</code></td><td>保留值或取得 DOM</td><td>聚焦輸入框、控制影片</td></tr><tr><td><code>useContext</code></td><td>共享跨層資料</td><td>全站語言、登入、課程主題</td></tr><tr><td><code>useReducer</code></td><td>管理複雜狀態流程</td><td>多步驟實驗、題組作答流程</td></tr><tr><td><code>useMemo</code></td><td>快取昂貴計算</td><td>大量實驗資料統計</td></tr></table>
+<div class="codebox"><div class="codehead"><span>簡易計數器</span><button class="copy">複製</button></div><pre><code>import { useState } from 'react';
+
+export default function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    &lt;section&gt;
+      &lt;p&gt;觀察次數：{count}&lt;/p&gt;
+      &lt;button onClick={() =&gt; setCount(count + 1)}&gt;
+        增加一次
+      &lt;/button&gt;
+    &lt;/section&gt;
+  );
+}</code></pre></div>
+<div class="callout"><strong>useEffect 的正確觀念：</strong>它主要用來讓元件與 React 外部系統同步，例如網路連線、第三方元件、瀏覽器 API 或訂閱；不應把所有一般資料計算都塞進 Effect。</div>
+</section>
+<section id="scenes"><h2>6. React 的典型應用場景</h2>
+<div class="grid3"><div class="mini"><h3>互動網站</h3><p>搜尋、篩選、登入、購物車、動態表單、會員中心。</p></div><div class="mini"><h3>管理系統</h3><p>儀表板、資料表格、權限管理、即時監控、報表。</p></div><div class="mini"><h3>AI 應用</h3><p>聊天介面、生成器、Agent 工作台、RAG 知識庫、串流回覆。</p></div><div class="mini"><h3>數位教材</h3><p>互動模擬、測驗、學習路徑、圖表、動畫、學習紀錄。</p></div><div class="mini"><h3>PWA</h3><p>可安裝、離線、跨平台的 Web App。</p></div><div class="mini"><h3>原生 App</h3><p>搭配 React Native 開發 Android 與 iOS 應用。</p></div></div>
+<h3>React 特別適合的情況</h3><ul class="check"><li>畫面包含大量會改變的資料或互動狀態。</li><li>同一個 UI 元件會在多個頁面重複使用。</li><li>需要多人協作與清楚的元件邊界。</li><li>未來可能擴充登入、資料庫、AI、圖表或跨平台 App。</li></ul>
+</section>
+<section id="edu"><h2>7. React 在數位教材與自然科教學中的角色</h2>
+<p>React 可以把「靜態教材頁」升級為「可操作、可回饋、可記錄、可個人化」的學習系統。教師提供科學內容與教學流程，React 負責把學習活動轉化為互動介面。</p>
+<table><tr><th>教材功能</th><th>React 的作用</th><th>自然科例子</th></tr><tr><td>互動模擬</td><td>根據滑桿、按鈕即時改變模型</td><td>月相、電路、熱傳導、槓桿</td></tr><tr><td>探究紀錄</td><td>保存觀察值、步驟與照片狀態</td><td>昆蟲調查、植物生長、雨量紀錄</td></tr><tr><td>形成性評量</td><td>題目元件、即時回饋、分數計算</td><td>酸鹼判斷、電流方向、分類活動</td></tr><tr><td>資料視覺化</td><td>將資料轉成圖表或比較表</td><td>溫度曲線、聲音振幅、物種數量</td></tr><tr><td>差異化教學</td><td>依程度顯示不同提示與任務</td><td>基礎、進階、挑戰三層題目</td></tr><tr><td>AI 助教</td><td>串接模型 API 並呈現串流答案</td><td>引導提問、實驗建議、資料解釋</td></tr></table>
+<h3>數位教材的元件拆分示例</h3><div class="diagram">ScienceLessonPage
+├── LessonHeader
+├── ConceptCard
+├── InteractiveSimulation
+│   ├── ControlSlider
+│   ├── ModelCanvas
+│   └── ObservationPanel
+├── InquiryWorksheet
+├── QuizSection
+│   ├── QuestionCard
+│   └── FeedbackBox
+└── LearningProgress</div>
+<div class="callout good"><strong>教育價值：</strong>元件化不只方便寫程式，也對應教學設計。概念說明、操作、觀察、推理、回饋與評量可以各自封裝，再依不同單元重新組合。</div>
+</section>
+<section id="webapp"><h2>8. React 在網站與 Web App 開發中的應用</h2>
+<h3>8.1 純 React 單頁應用 SPA</h3><p>SPA 通常先載入一份主要網頁文件，再由 JavaScript 更新內容。適合後台、工具、儀表板與登入後系統。</p>
+<h3>8.2 搭配 Next.js 的內容型或全端網站</h3><p>Next.js 是 React 框架，提供檔案路由、伺服器與客戶端元件、資料載入、SEO、影像最佳化及部署等能力。教材入口網站、公開課程網站與需要搜尋引擎收錄的內容，通常比純 SPA 更適合採用 Next.js。</p>
+<h3>8.3 PWA</h3><p>PWA 使用 Web 技術，但可提供接近平台 App 的體驗，例如安裝到主畫面、離線使用及背景能力。對校園平板、戶外調查與網路不穩的教材特別有價值。</p>
+<div class="grid"><div class="mini"><h3>適合純 React＋Vite</h3><ul><li>內部工具</li><li>登入後儀表板</li><li>小型互動模擬</li><li>靜態主機部署</li></ul></div><div class="mini"><h3>適合 Next.js</h3><ul><li>公開教材入口</li><li>SEO 與社群分享</li><li>大量內容頁</li><li>需要伺服器功能或全端整合</li></ul></div></div>
+</section>
+<section id="mobile"><h2>9. React 在 Android／iOS App 開發中的應用</h2>
+<p>React Native 將 React 的元件、props、state 與 Hooks 思維帶入原生行動開發。它不是把網頁塞進 App，而是使用 React 描述介面，再映射到 Android 與 iOS 的原生視圖元件。</p>
+<div class="codebox"><div class="codehead"><span>React Native 範例</span><button class="copy">複製</button></div><pre><code>import { View, Text, Pressable } from 'react-native';
+import { useState } from 'react';
+
+export default function ObservationApp() {
+  const [count, setCount] = useState(0);
+
+  return (
+    &lt;View&gt;
+      &lt;Text&gt;已觀察昆蟲：{count} 隻&lt;/Text&gt;
+      &lt;Pressable onPress={() =&gt; setCount(count + 1)}&gt;
+        &lt;Text&gt;新增紀錄&lt;/Text&gt;
+      &lt;/Pressable&gt;
+    &lt;/View&gt;
+  );
+}</code></pre></div>
+<h3>App 教材可加入</h3><p><span class="pill">相機拍照</span><span class="pill">GPS 定位</span><span class="pill">離線紀錄</span><span class="pill">推播提醒</span><span class="pill">麥克風錄音</span><span class="pill">感測器資料</span></p>
+<p>例如「校園生物多樣性調查 App」可用相機拍攝、GPS 標記位置、離線保存，回到教室後同步至雲端資料庫。</p>
+</section>
+<section id="example"><h2>10. 完整示例：酸鹼指示劑互動教材</h2>
+<p>下例示範 React 如何管理選項、計算結果、提供即時回饋，並將資料驅動的教材內容拆成可維護元件。</p>
+<div class="codebox"><div class="codehead"><span>AcidBaseLab.jsx</span><button class="copy">複製</button></div><pre><code>import { useState } from 'react';
+
+const samples = [
+  { id: 1, name: '檸檬汁', type: '酸性', color: '紅色' },
+  { id: 2, name: '食鹽水', type: '中性', color: '紫色' },
+  { id: 3, name: '小蘇打水', type: '鹼性', color: '藍綠色' },
+];
+
+function SampleButton({ sample, onChoose }) {
+  return (
+    &lt;button onClick={() =&gt; onChoose(sample)}&gt;
+      {sample.name}
+    &lt;/button&gt;
+  );
+}
+
+export default function AcidBaseLab() {
+  const [selected, setSelected] = useState(null);
+  const [guess, setGuess] = useState('');
+
+  const isCorrect = selected && guess === selected.type;
+
+  return (
+    &lt;main&gt;
+      &lt;h1&gt;紫色高麗菜酸鹼實驗&lt;/h1&gt;
+
+      &lt;section&gt;
+        {samples.map(sample =&gt; (
+          &lt;SampleButton
+            key={sample.id}
+            sample={sample}
+            onChoose={setSelected}
+          /&gt;
+        ))}
+      &lt;/section&gt;
+
+      {selected && (
+        &lt;section&gt;
+          &lt;h2&gt;預測：{selected.name} 是哪一類？&lt;/h2&gt;
+          {['酸性', '中性', '鹼性'].map(option =&gt; (
+            &lt;button key={option} onClick={() =&gt; setGuess(option)}&gt;
+              {option}
+            &lt;/button&gt;
+          ))}
+
+          {guess && (
+            &lt;p role="status"&gt;
+              {isCorrect
+                ? `答對了！指示劑約呈 ${selected.color}。`
+                : '再想想：觀察顏色變化與酸鹼性之間的關係。'}
+            &lt;/p&gt;
+          )}
+        &lt;/section&gt;
+      )}
+    &lt;/main&gt;
+  );
+}</code></pre></div>
+<h3>此示例包含的 React 觀念</h3><ul><li>資料陣列驅動畫面，而不是重複手寫三組 HTML。</li><li>使用 key 辨識每個樣本與選項。</li><li>父元件保存目前樣本與答案狀態。</li><li>條件渲染控制題目與回饋何時出現。</li><li>以 props 與 callback 連接子元件。</li><li><code>role="status"</code> 改善輔助科技對即時回饋的感知。</li></ul>
+</section>
+<section id="architecture"><h2>11. 實務技術架構與選型</h2>
+<h3>11.1 小型互動教材</h3><div class="diagram">React + Vite + CSS
+↓
+GitHub Pages / Cloudflare Pages / Vercel</div>
+<h3>11.2 完整教材平台</h3><div class="diagram">Next.js + TypeScript + Tailwind CSS
+↓
+Supabase Auth + PostgreSQL + Storage
+↓
+Vercel 部署
+↓
+AI API / 圖表 / 學習分析</div>
+<h3>11.3 行動調查 App</h3><div class="diagram">React Native（或 Expo）
+↓
+相機 / GPS / 離線資料
+↓
+Supabase / Firebase
+↓
+教師管理網站（React / Next.js）</div>
+<table><tr><th>需求</th><th>建議</th></tr><tr><td>只做一個可互動的教材頁</td><td>React＋Vite</td></tr><tr><td>建立多單元公開網站、需要 SEO</td><td>Next.js</td></tr><tr><td>手機相機、GPS、推播、原生體驗</td><td>React Native／Expo</td></tr><tr><td>離線又可安裝，但希望維持網站技術</td><td>React／Next.js＋PWA</td></tr><tr><td>資料庫、登入、檔案上傳</td><td>React 前端＋Supabase 等後端服務</td></tr></table>
+</section>
+<section id="quality"><h2>12. 測試、無障礙、效能與安全</h2>
+<h3>12.1 測試</h3><p>React Testing Library 強調以接近使用者操作的方式查找與互動元件，而不是緊盯元件內部實作。教材應測試「學生是否看得到題目、能否按鈕作答、回饋是否正確」。</p>
+<h3>12.2 無障礙</h3><p>React 不會自動保證無障礙。仍需使用正確 HTML 語意、鍵盤可操作、替代文字、表單標籤、足夠對比與清楚焦點，並依 WCAG 原則設計。數位教材尤其要考量視覺、聽覺、肢體、認知與閱讀差異。</p>
+<h3>12.3 效能</h3><ul><li>先測量再最佳化，不要過早大量使用 memo。</li><li>大型清單可採分頁或虛擬化。</li><li>非必要功能可使用 lazy 與 Suspense 延遲載入。</li><li>避免重複、矛盾或可由其他狀態計算出的 state。</li><li>圖片、影片與 3D 模型應壓縮並按需載入。</li></ul>
+<h3>12.4 安全</h3><ul><li>不要把私密 API Key 寫在前端程式。</li><li>AI 回傳內容與學生輸入需驗證、過濾與權限控管。</li><li>後端資料庫必須設定存取規則；不能只靠隱藏按鈕。</li><li>避免不必要使用 <code>dangerouslySetInnerHTML</code>。</li></ul>
+</section>
+<section id="limits"><h2>13. 何時不一定需要 React？</h2>
+<p>React 很強，但不是所有網站都必須使用。</p>
+<table><tr><th>情況</th><th>更簡單的選擇</th></tr><tr><td>只有少量文字、圖片、沒有互動</td><td>純 HTML＋CSS</td></tr><tr><td>單一活動頁，只需幾個簡單按鈕</td><td>原生 JavaScript</td></tr><tr><td>內容管理為主，現有 CMS 已足夠</td><td>WordPress／其他 CMS</td></tr><tr><td>極小型嵌入式互動</td><td>Web Components 或輕量工具</td></tr></table>
+<div class="callout warn"><strong>常見誤區：</strong>為了「技術看起來新」而使用 React，可能增加建置、依賴、維護與除錯成本。選型應從互動複雜度、團隊能力、內容更新方式與長期維護出發。</div>
+</section>
+<section id="roadmap"><h2>14. 建議學習與實作路線</h2>
+<ol><li><strong>HTML、CSS、JavaScript 基礎：</strong>DOM、事件、陣列方法、模組、非同步。</li><li><strong>React 基礎：</strong>元件、JSX、props、state、事件、條件與清單渲染。</li><li><strong>Hooks 與設計：</strong>useState、useEffect、狀態提升、元件拆分。</li><li><strong>TypeScript：</strong>為 props、API 資料與教材模型加上型別。</li><li><strong>路由與資料：</strong>React Router 或 Next.js、Fetch、Supabase。</li><li><strong>品質：</strong>測試、無障礙、RWD、效能、安全。</li><li><strong>專案：</strong>完成一套可部署的互動自然科教材。</li></ol>
+<h3>推薦第一個專案</h3><p>「校園生物觀察教材」：包含物種卡片、搜尋篩選、拍照紀錄、地點、觀察次數、圖表、學習單與教師後台。先做 Web 版，再視需求擴展為 PWA 或 React Native App。</p>
+</section>
+<section id="sources"><h2>15. 官方與權威資料來源</h2>
+<p>以下來源用於本文件的技術定義與重要判斷。版本與 API 可能更新，正式開發時應再次確認官方文件。</p>
+<ol class="source-list">
+<li><a href="https://react.dev/" target="_blank" rel="noopener">React 官方網站：React—The library for web and native user interfaces</a></li>
+<li><a href="https://react.dev/learn" target="_blank" rel="noopener">React 官方 Learn：Quick Start</a></li>
+<li><a href="https://react.dev/learn/render-and-commit" target="_blank" rel="noopener">React 官方：Render and Commit</a></li>
+<li><a href="https://react.dev/learn/thinking-in-react" target="_blank" rel="noopener">React 官方：Thinking in React</a></li>
+<li><a href="https://react.dev/reference/react/hooks" target="_blank" rel="noopener">React 官方：Built-in React Hooks</a></li>
+<li><a href="https://react.dev/reference/react/useEffect" target="_blank" rel="noopener">React 官方：useEffect</a></li>
+<li><a href="https://nextjs.org/docs" target="_blank" rel="noopener">Next.js 官方文件</a></li>
+<li><a href="https://nextjs.org/docs/app/getting-started/server-and-client-components" target="_blank" rel="noopener">Next.js：Server and Client Components</a></li>
+<li><a href="https://reactnative.dev/" target="_blank" rel="noopener">React Native 官方網站</a></li>
+<li><a href="https://reactnative.dev/docs/intro-react-native-components" target="_blank" rel="noopener">React Native：Core Components and Native Components</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Frameworks_libraries/Introduction" target="_blank" rel="noopener">MDN：Introduction to client-side frameworks</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Glossary/SPA" target="_blank" rel="noopener">MDN：Single-page application</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps" target="_blank" rel="noopener">MDN：Progressive Web Apps</a></li>
+<li><a href="https://testing-library.com/docs/react-testing-library/intro/" target="_blank" rel="noopener">React Testing Library 官方文件</a></li>
+<li><a href="https://www.w3.org/WAI/standards-guidelines/wcag/" target="_blank" rel="noopener">W3C WAI：WCAG Overview</a></li>
+<li><a href="https://www.w3.org/WAI/fundamentals/accessibility-intro/" target="_blank" rel="noopener">W3C WAI：Introduction to Web Accessibility</a></li>
+</ol>
+<p class="small">本文件以教學與技術理解為目的；程式碼示例需依實際專案環境調整。</p>
+</section>
+</main></div>
+<footer class="footer"><div class="wrap">React 完整技術文件｜繁體中文 RWD 單檔 HTML</div></footer>
+<button class="top" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="回到頁首">↑</button>
+<script>
+document.querySelectorAll('.copy').forEach(btn=>btn.addEventListener('click',async()=>{const code=btn.closest('.codebox').querySelector('code').innerText;try{await navigator.clipboard.writeText(code);const old=btn.textContent;btn.textContent='已複製';setTimeout(()=>btn.textContent=old,1400)}catch(e){btn.textContent='請手動複製'}}));
+</script>
+</body></html>
