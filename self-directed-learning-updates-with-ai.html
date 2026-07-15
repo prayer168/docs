@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI技能既然可以迭代更新，自主學習也可以嗎？</title>
+  <style>
+    :root { color-scheme:light; --ink:#27323a; --muted:#667079; --orange:#d96b2b; --blue:#24758c; --cream:#fffaf1; --card:#fff; --line:#eadbc8; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:linear-gradient(145deg,#f8ead7 0,#e9f4f4 100%); color:var(--ink); font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif; line-height:1.9; }
+    main { width:min(100% - 2rem,800px); margin:clamp(1rem,4vw,3.5rem) auto; padding:clamp(1.4rem,5vw,4rem); background:var(--cream); border-radius:24px; box-shadow:0 20px 55px rgba(60,45,30,.12); }
+    header { position:relative; padding:0 0 1.4rem; border-bottom:3px solid var(--orange); }
+    header::after { content:""; position:absolute; right:0; bottom:-8px; width:56px; height:13px; border-radius:99px; background:var(--blue); }
+    h1 { margin:0; font-size:clamp(1.9rem,5vw,3rem); line-height:1.3; letter-spacing:.02em; }
+    .subtitle { margin:.8rem 0 0; color:var(--orange); font-size:1.08rem; font-weight:700; }
+    h2 { margin:2.55rem 0 .7rem; color:#175d70; font-size:clamp(1.25rem,3vw,1.55rem); line-height:1.45; }
+    p { margin:.78rem 0; text-align:justify; }
+    .dialogue { margin:.75rem 0; padding:.85rem 1.1rem; background:var(--card); border-left:5px solid var(--orange); border-radius:9px; font-weight:650; }
+    .scene { margin:1.1rem 0; padding:1.1rem 1.25rem; background:#eef8f7; border:1px solid #cfe4e1; border-radius:14px; }
+    ol { padding-left:1.5rem; }
+    li { margin:.85rem 0; }
+    a { color:#075fa7; overflow-wrap:anywhere; text-underline-offset:.18em; }
+    footer { margin-top:2rem; padding-top:1rem; border-top:1px solid var(--line); color:var(--muted); font-size:.92rem; }
+    @media (max-width:600px) { main { width:100%; margin:0; padding:1.25rem; border-radius:0; box-shadow:none; } p { text-align:left; } }
+    @media print { body { background:#fff; } main { width:100%; margin:0; padding:0; box-shadow:none; } a { color:inherit; text-decoration:none; } }
+  </style>
+</head>
+<body>
+<main>
+  <article>
+    <header>
+      <h1>AI技能既然可以迭代更新，自主學習也可以嗎？</h1>
+      <p class="subtitle">從一杯融化的冰水，聊到會自己長大的學習方法</p>
+    </header>
+
+    <h2>午休時，冰塊先出了題目</h2>
+    <p>午休鐘一響，小安打開保溫杯，裡面的冰塊還在叮叮噹噹；坐在窗邊的小傑搖了搖透明水壺，只剩下一杯微涼、看起來有點寂寞的水。</p>
+    <div class="dialogue">「一定是我的杯子比較黑，吸熱啦！」</div>
+    <div class="dialogue">「才不是，你剛才上體育課一直拿在手上。」</div>
+    <div class="dialogue">「也可能是你的冰塊比較小顆。」</div>
+    <p>三句話不到，一場迷你科學辯論就在便當盒、橡皮擦和半顆滷蛋旁邊開張了。老師聽了一會兒，沒有公布答案，只笑著問：「你們現在有三種解釋，哪一種有證據？」</p>
+    <p>教室突然安靜半秒。原來，猜得很熱鬧，不等於真的知道。</p>
+
+    <h2>第一次做，亂一點很正常</h2>
+    <p>學生決定隔天再帶冰水來比一比。有人負責計時，有人拿溫度計，有人很有氣勢地在紀錄紙上寫下「冰塊融化大作戰」。可是實驗一開始，狀況比冰塊融得還快：每個人的杯子大小不同，水量靠目測，冰塊有大有小，還有一杯被同學偷喝了兩口。</p>
+    <p>這一輪當然得不出可靠結論，卻不是白做。大家至少抓到了幾個會搗蛋的角色：杯子材質、水量、冰塊大小、起始溫度、擺放位置，甚至有人一直摸杯子，也可能影響結果。</p>
+    <p>生活裡很多學習都是這樣。第一次煎蛋，蛋白黏成一張破地圖；第一次整理書包，把明天不用的美勞材料帶得最齊，數學作業卻安穩地躺在書桌上；第一次背英文單字，抄了十遍，隔天只記得自己昨晚手很痠。我們常把這些叫作「失敗」，其實它們更像方法的試用版。</p>
+    <p>如果第二次只是原樣再做一次，那叫重播；如果看見問題，改一個做法，再看看結果有沒有變好，那才叫更新。</p>
+
+    <h2>原來，AI也有自己的工作小抄</h2>
+    <p>這時候，AI才慢慢走進故事。老師向學生介紹：有些AI技能就像一份可重複使用的工作小抄，會寫清楚遇到什麼任務、需要哪些資料、依序做什麼，以及完成前要檢查什麼。OpenAI的技能說明也把它稱為可重複使用的工作流程；流程既然能被寫下，就能修改、分享，甚至留下不同版本。</p>
+    <p class="dialogue">小傑聽完問：「那我們可不可以也幫自己做一個技能？」</p>
+    <p>當然可以。只不過人的技能不會按一下就安裝完成，也不會從此永遠不出錯。它比較像一張會長大的小卡片：這次我想解決什麼？我打算怎麼做？什麼現象算是有效？哪裡出錯？下一次只改哪一件事？</p>
+    <p>冰水實驗的第一張卡被命名為0.1版，上面誠實寫著：「大家各帶一杯來比較。」旁邊補上一行失敗原因：「差異太多，無法判斷。」0.2版改成使用相同杯子、相同水量與相同起始溫度，只比較有沒有加杯套，並每隔五分鐘記錄一次。這一次，問題終於從一團毛線，慢慢拉出一條可以追蹤的線。</p>
+
+    <h2>AI很快，但它沒有站在教室裡</h2>
+    <p>學生把紀錄交給AI，請它整理表格、畫出溫度變化，並提出可能解釋。AI幾秒內就列出隔熱、熱傳導、環境溫度等詞，還非常有自信地說：「杯套阻止冷空氣跑出去，所以水溫上升較慢。」</p>
+    <p>大家乍看覺得很有道理，直到有人皺著眉說：「等一下，跑出去的是冷空氣嗎？」</p>
+    <p>這正是AI最有意思的時刻。它提供了一個聽起來順口的候選解釋，也順手送來一個值得查證的問題。學生回頭查資料、討論熱如何從較高溫的環境傳向較低溫的水，再重新描述杯套如何減慢熱量傳遞。AI沒有替他們完成結論，反而因為說得太滿，逼大家把原本模糊的理解弄清楚。</p>
+    <div class="scene">老師接著問：「兩杯放的位置一樣嗎？窗邊那杯會不會曬到太陽？溫度計插入的深度相同嗎？如果明天再做一次，結果還會一樣嗎？」於是0.3版又多了固定位置、相同測量深度與重複實驗。若其中一筆溫度突然跳高，學生也不急著刪掉，而是回想當時是否有人移動杯子，並把異常和可能原因一起留下。</div>
+    <p>這時，自主學習已經不再是「學生自己做完」，而是學生知道自己正在怎麼做，也有能力根據證據換一種做法。</p>
+
+    <h2>更新的不是答案，是下一次出手的方法</h2>
+    <p>自我調整學習研究常把學習看成一個循環：先想清楚目標與策略，進行時留意自己的做法，完成後再回看結果，讓反思走進下一輪。說穿了，很像學騎腳踏車。第一次只顧著不要倒，第二次發現眼睛不能一直盯著前輪，第三次才學會在轉彎前減速。每一次身體晃了一下，都在悄悄改寫下一次的動作。</p>
+    <p>所以，一張真正有用的學習技能卡，不必寫得像說明書那麼厚。它可以只有幾句話：「開始前，先寫下自己的猜測。」「找到資料時，問它從哪裡來。」「請AI提供兩種不同解釋。」「完成後，留下最意外的一件事。」「下一次，只改一個最關鍵的步驟。」</p>
+    <p>它也能跟著學生走出自然教室。背單字老是忘，可以比較只閱讀、遮住答案回想和隔天自我測驗的差別；練投籃總是偏右，可以錄下幾次動作而不是只記成功球；每天早上都忘記帶東西，可以試試睡前清單、門口提示或固定收納位置。自主學習不是一張漂亮計畫表，而是願意觀察自己的方法，然後動手微調。</p>
+
+    <h2>老師沒有消失，只是換了站的位置</h2>
+    <p>談自主學習，最容易出現的誤會是：既然自主，就讓學生自己想辦法。可是剛學騎車的人需要有人扶一下車尾，剛學探究的人也需要看見問題是怎麼被問出來的。英國教育捐贈基金會的後設認知指引提醒，規劃、監控與評估需要明確教導、示範與適當鷹架，而且放進真實學科任務中會更有意義。</p>
+    <p>教師的工作因此不是退出教室，而是慢慢換位置：一開始示範怎麼比較證據，接著用問題陪學生找出漏洞，最後才把決定下一步的權利交出去。OECD以「學習羅盤」比喻學生能動性，也不是要學生孤零零地找方向，而是希望他能在陌生情境裡作選擇、負責任地行動，並和教師、同儕一起前進。</p>
+    <p>AI也應該站在相似的位置。UNESCO的學生AI能力框架強調人本思維、倫理與對AI結果的批判判斷；臺灣教育部的注意事項則提醒，生成內容應視為參考，必須辨識來源、多方查證，並保留使用過程。AI可以幫忙整理、畫圖、抓漏和提出反方問題，卻不替學生碰杯子、讀刻度、承擔資料品質，更不能為科學結論簽名。</p>
+
+    <h2>還沒寫完的0.4版</h2>
+    <p>幾天後，冰水實驗告一段落。學生沒有宣布「杯套在任何情況下都一定有效」，只說在這次的杯子、時間與教室環境裡，加杯套的水溫上升較慢；若要更確定，還可以換不同材質、延長時間，或在不同地點重複測量。</p>
+    <p>放學前，小傑在技能卡背面寫下0.4版的第一句：「問AI以前，先寫自己的猜測和理由。」他想了想，又留了一格空白，準備明天再補。</p>
+    <p>這大概就是自主學習最迷人的地方。它不是終於學會一套完美方法，而是開始看得見：原來我的方法可以改，我的判斷需要證據，我也不必因為第一版亂七八糟，就認定自己不會學。</p>
+    <p>冰塊最後還是融化了，故事卻沒有。桌上留下兩個空杯子、一張塗塗改改的紀錄表，還有一個尚未完成的版本號。下一次遇到新問題時，它們會一起提醒學生：先別急著問標準答案，看看這一次的自己，準備怎麼更新。</p>
+
+    <h2>資料來源</h2>
+    <ol>
+      <li>OpenAI Academy，Using skills，2026年4月10日。<a href="https://openai.com/academy/skills/" target="_blank" rel="noopener noreferrer">https://openai.com/academy/skills/</a></li>
+      <li>國家教育研究院，十二年國民基本教育課程綱要總綱，教育部發布、2021年修正。<a href="https://www.naer.edu.tw/PageSyllabus?fid=52" target="_blank" rel="noopener noreferrer">https://www.naer.edu.tw/PageSyllabus?fid=52</a></li>
+      <li>Zimmerman, Barry J.，Becoming a Self-Regulated Learner: An Overview，Theory Into Practice，2002。<a href="https://eric.ed.gov/?id=EJ656632" target="_blank" rel="noopener noreferrer">https://eric.ed.gov/?id=EJ656632</a></li>
+      <li>Education Endowment Foundation，Metacognition and Self-Regulated Learning，第二版，2025年11月13日。<a href="https://educationendowmentfoundation.org.uk/education-evidence/guidance-reports/metacognition" target="_blank" rel="noopener noreferrer">https://educationendowmentfoundation.org.uk/education-evidence/guidance-reports/metacognition</a></li>
+      <li>OECD，The OECD Learning Compass 2030。<a href="https://www.oecd.org/en/data/tools/oecd-learning-compass-2030.html" target="_blank" rel="noopener noreferrer">https://www.oecd.org/en/data/tools/oecd-learning-compass-2030.html</a></li>
+      <li>UNESCO，AI Competency Framework for Students，2024年8月8日，2026年1月16日更新。<a href="https://www.unesco.org/en/articles/ai-competency-framework-students" target="_blank" rel="noopener noreferrer">https://www.unesco.org/en/articles/ai-competency-framework-students</a></li>
+      <li>教育部，國民中小學學生學習評量及作業使用生成式人工智慧注意事項，2025年3月3日。<a href="https://yces.chc.edu.tw/storage/074693/posts/1108/files/376470000A_1140082036_ATTACH1.pdf" target="_blank" rel="noopener noreferrer">https://yces.chc.edu.tw/storage/074693/posts/1108/files/376470000A_1140082036_ATTACH1.pdf</a></li>
+    </ol>
+    <footer>以上資料查閱日期：2026年7月15日。</footer>
+  </article>
+</main>
+</body>
+</html>
