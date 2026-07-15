@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI技能既然可以迭代更新，自主學習也可以嗎？</title>
+  <style>
+    :root { color-scheme:light; --ink:#1d2935; --muted:#596775; --accent:#155f73; --accent2:#9a5b24; --paper:#fffdf8; --panel:#eef5f6; --line:#d8e1e3; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#e9eff1; color:var(--ink); font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif; line-height:1.9; }
+    main { width:min(100% - 2rem,800px); margin:clamp(1rem,4vw,3.5rem) auto; padding:clamp(1.4rem,5vw,4rem); background:var(--paper); border-radius:20px; box-shadow:0 18px 50px rgba(29,41,53,.11); }
+    header { padding-bottom:1.35rem; border-bottom:3px solid var(--accent); }
+    h1 { margin:0; font-size:clamp(1.9rem,5vw,3rem); line-height:1.3; letter-spacing:.02em; }
+    .subtitle { margin:.75rem 0 0; color:var(--accent2); font-size:1.08rem; font-weight:700; }
+    h2 { margin:2.55rem 0 .7rem; color:var(--accent); font-size:clamp(1.25rem,3vw,1.55rem); line-height:1.45; }
+    p { margin:.78rem 0; text-align:justify; }
+    .questions { margin:1.15rem 0; padding:1.05rem 1.25rem; background:var(--panel); border-left:5px solid var(--accent); border-radius:10px; }
+    .action { margin:1.2rem 0; padding:1.1rem 1.25rem; background:#fbf3e9; border:1px solid #ead8c5; border-radius:12px; }
+    ol { padding-left:1.5rem; }
+    li { margin:.85rem 0; }
+    a { color:#075fa7; overflow-wrap:anywhere; text-underline-offset:.18em; }
+    footer { margin-top:2rem; padding-top:1rem; border-top:1px solid var(--line); color:var(--muted); font-size:.92rem; }
+    @media (max-width:600px) { main { width:100%; margin:0; padding:1.25rem; border-radius:0; box-shadow:none; } p { text-align:left; } }
+    @media print { body { background:#fff; } main { width:100%; margin:0; padding:0; box-shadow:none; } a { color:inherit; text-decoration:none; } }
+  </style>
+</head>
+<body>
+<main>
+  <article>
+    <header>
+      <h1>AI技能既然可以迭代更新，自主學習也可以嗎？</h1>
+      <p class="subtitle">從「完成任務」走向「能根據證據修正方法」</p>
+    </header>
+
+    <h2>當報告完成了，學習也完成了嗎？</h2>
+    <p>七年級學生研究「校園樹蔭是否具有降溫效果」。成果發表時，三組報告都很完整：有研究動機、溫度圖表，也引用生成式AI整理的遮蔭、蒸散與熱輻射解釋。可是教師翻到原始紀錄，卻看見不同組量的是不同對象：有人量氣溫，有人量地表溫度，有人只在樹下量一次；其中一組還刪除了一筆偏高數據，理由是「AI說那可能是異常值」。</p>
+    <div class="questions">教師沒有先批改結論，而是問：「哪一筆現場證據支持你們的解釋？」「如果拿掉AI整理的文字，你們還能說明為什麼要刪除那筆數據嗎？」「這次的測量能證明是蒸散造成降溫，還是只能顯示兩個位置的溫度不同？」</div>
+    <p>這些問題揭露了一個不容易察覺的矛盾：學生完成了自主學習計畫，卻未必真的調整過自己的學習方法。計畫表填滿、成果順利上傳、報告看起來專業，都只能證明任務完成；自主學習更關鍵的證據，可能是學生能否說出自己在哪裡改變判斷，以及什麼證據促成了改變。</p>
+
+    <h2>AI技能提供了一面值得借用的鏡子</h2>
+    <p>OpenAI將技能描述為可重複使用的工作流程，通常包含任務、輸入、步驟、輸出格式與完成前檢查。流程被寫下來，就能檢視、重複使用與修訂。由此回看自主學習，可以提出一個不同的問題：學生是否也能把「我如何學習」外顯成可檢查、可更新的流程？</p>
+    <p>這個類比有用，但不能把學生當成程式。人的學習受到先備知識、動機、情緒、同儕與情境影響，不可能按下更新就穩定升級。真正值得借用的不是版本號本身，而是版本之間必須留下修正依據：原本怎麼做，遇到什麼證據，改了哪一步，下一次要如何檢驗新方法是否較好。</p>
+    <p>Zimmerman對自我調整學習的說明，正好提供這種循環視角。學習者先分析任務、設定目標與選擇策略；執行時監控自己的做法與進度；完成後依結果反思，再把回饋帶入下一輪。英國教育捐贈基金會的後設認知指引也強調，規劃、監控與評估需要被明確教導、示範與搭鷹架，並嵌入具體學科任務。這表示自主不是教師減少介入，而是教師改變介入方式：從提供答案，轉向協助學生看見方法與證據之間的關係。</p>
+
+    <h2>從0.1版到0.3版，改的是探究方法</h2>
+    <p>回到樹蔭研究。學生可以把第一次測量視為0.1版：在中午分別到樹下與空曠處讀取溫度，再請AI解釋差異。這一版很快得到答案，卻混合了測量對象、時間、儀器高度、地面材質與日照條件。AI提出的蒸散解釋雖然合理，現有資料仍不足以證明它是主要原因。</p>
+    <p>0.2版不是把提示語寫得更長，而是根據前一輪問題修改方法：使用同型儀器、固定測量高度，讓樹下與日照處同步記錄，並在一段時間內重複測量。若曲線中出現突高值，學生先回查當時是否移動探頭、陽光是否短暫照入，保留原始值與處理理由，而不是交由AI決定資料該不該刪。</p>
+    <p>到了0.3版，AI可以協助整理時間序列、繪製圖表、比較各組紀錄欄位，並提出遮蔭、風、蒸散與地表材質等候選解釋。學生則要查可信來源，判斷哪些解釋受到支持，哪些仍需新的測量。最後的結論也必須限定在特定日期、地點與測法之內。即使多次觀察到樹下較低溫，也不能直接把相關差異寫成由單一因素造成的因果關係。</p>
+    <p>這三個版本真正更新的，不是答案的文句，而是取得與判斷證據的方法。AI讓整理與提出假設更快，學生因而更需要對資料品質、推理與限制負責。</p>
+
+    <h2>自主學習不是「自己做」，而是「能說明為何改」</h2>
+    <p>十二年國教把自主行動列為核心素養的重要面向；OECD學習羅盤則以學生能動性說明，學生應能在陌生情境中設定方向、作出選擇並負責任地行動。這些概念都不等同於讓學生獨自完成任務。若教師完全退出，缺乏經驗的學習者可能只是重複原有策略，甚至把AI的完整回答誤認為自己的理解。</p>
+    <p>另一種看法是：自主學習的核心不是「幫助變少」，而是判斷責任逐步移交。教師先示範如何區分觀察與推測、如何查來源、如何看待異常值；學生逐漸接手決定哪些資料可信、結論能說到哪裡，以及下一輪要改什麼。UNESCO的學生AI能力框架強調人本思維、倫理與對AI方案的批判判斷；臺灣教育部的生成式AI注意事項也要求把生成內容視為參考、辨識來源並多方查證。AI可以參與回饋循環，但不能坐上判斷的主位。</p>
+
+    <h2>教學上可以先改一個欄位</h2>
+    <div class="action">要讓自主學習具有「版本歷史」，不必立刻設計一套新的課程。下一次科學探究時，教師可以先在既有學習單或數位歷程中增加一個欄位：「哪一項新證據使我保留、修改或放棄原來的方法？」學生不只寫反思感想，而要留下原始判斷、AI提出的候選解釋、新取得的證據，以及實際修改的步驟。</div>
+    <p>這項改變是否有效，也需要證據。教師可以觀察三件事：學生能否區分現場觀察、AI推測、資料庫記載與自己的結論；修正答案時，能否指出促使自己改變的具體證據；換到豆苗生長、蒸發速率或擺動週期等新任務時，能否轉用相同的查證、重複測量或控制變因方法。若學生只是在欄位裡填上「我學到很多」，這個設計仍未觸及自我調整。</p>
+    <p>這種做法也有限制。不是每一次學習改變都能立即量化，版本紀錄若過度繁瑣，可能反而增加負擔；教師也不能把它變成監控學生每個念頭的工具。它的價值在於保留少數關鍵轉折，讓學生與教師都能看見：學習方法是否真的因證據而改變。</p>
+
+    <h2>我們保存的是成果，還是更新的理由？</h2>
+    <p>AI技能可以靠修改指令、資源與檢查流程持續迭代；自主學習也可以更新，但它不是把學生變成一套標準流程。它要培養的是一種能動性：面對新問題時，學生知道如何選擇方法、監控結果、承認證據不足，並為下一步修正提出理由。</p>
+    <p>因此，真正值得保存在學習歷程裡的，除了最後一版報告，還有版本之間發生了什麼。如果作品集只留下最完整的成果，卻刪除了猜錯、補測、換來源與修正假設的痕跡，我們看到的可能只是答案變漂亮了，還看不見學習者是否變得更能判斷。</p>
+    <p>下一次學生交出一份由AI協助完成的精美報告時，教師或許可以先不問「答案對不對」，而問：「哪一筆證據，讓你改變了原來的想法或方法？」學生若能回答這個問題，自主學習才真正留下了可繼續更新的起點。</p>
+
+    <h2>資料來源</h2>
+    <ol>
+      <li>OpenAI Academy，Using skills，2026年4月10日。<a href="https://openai.com/academy/skills/" target="_blank" rel="noopener noreferrer">https://openai.com/academy/skills/</a></li>
+      <li>國家教育研究院，十二年國民基本教育課程綱要總綱，教育部發布、2021年修正。<a href="https://www.naer.edu.tw/PageSyllabus?fid=52" target="_blank" rel="noopener noreferrer">https://www.naer.edu.tw/PageSyllabus?fid=52</a></li>
+      <li>Zimmerman, Barry J.，Becoming a Self-Regulated Learner: An Overview，Theory Into Practice，2002。<a href="https://eric.ed.gov/?id=EJ656632" target="_blank" rel="noopener noreferrer">https://eric.ed.gov/?id=EJ656632</a></li>
+      <li>Education Endowment Foundation，Metacognition and Self-Regulated Learning，第二版，2025年11月13日。<a href="https://educationendowmentfoundation.org.uk/education-evidence/guidance-reports/metacognition" target="_blank" rel="noopener noreferrer">https://educationendowmentfoundation.org.uk/education-evidence/guidance-reports/metacognition</a></li>
+      <li>OECD，The OECD Learning Compass 2030。<a href="https://www.oecd.org/en/data/tools/oecd-learning-compass-2030.html" target="_blank" rel="noopener noreferrer">https://www.oecd.org/en/data/tools/oecd-learning-compass-2030.html</a></li>
+      <li>UNESCO，AI Competency Framework for Students，2024年8月8日，2026年1月16日更新。<a href="https://www.unesco.org/en/articles/ai-competency-framework-students" target="_blank" rel="noopener noreferrer">https://www.unesco.org/en/articles/ai-competency-framework-students</a></li>
+      <li>教育部，國民中小學學生學習評量及作業使用生成式人工智慧注意事項，2025年3月3日。<a href="https://yces.chc.edu.tw/storage/074693/posts/1108/files/376470000A_1140082036_ATTACH1.pdf" target="_blank" rel="noopener noreferrer">https://yces.chc.edu.tw/storage/074693/posts/1108/files/376470000A_1140082036_ATTACH1.pdf</a></li>
+    </ol>
+    <footer>以上資料查閱日期：2026年7月15日。</footer>
+  </article>
+</main>
+</body>
+</html>
