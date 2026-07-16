@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>模組不是積木的同義詞：從科學探究看模組化學習與積木式學習的差異</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17302c;
+      --muted: #526762;
+      --paper: #fffdf7;
+      --wash: #eef5ef;
+      --line: #cbdcd2;
+      --accent: #176b57;
+      --accent-dark: #104b3e;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { background: #dde9e1; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(255, 255, 255, .85), transparent 35rem),
+        linear-gradient(180deg, #e8f1ea 0, #f5f3e9 26rem, #f5f3e9 100%);
+      font-family: "Noto Serif TC", "Source Han Serif TC", "PMingLiU", serif;
+      font-size: 18px;
+      line-height: 1.95;
+    }
+
+    main {
+      width: min(100% - 40px, 860px);
+      margin: 56px auto;
+      padding: 64px 72px;
+      background: var(--paper);
+      border: 1px solid rgba(23, 107, 87, .15);
+      border-radius: 20px;
+      box-shadow: 0 22px 65px rgba(33, 69, 58, .12);
+    }
+
+    h1, h2 {
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      text-wrap: balance;
+    }
+
+    h1 {
+      margin: 0 0 2.2rem;
+      padding-bottom: 1.25rem;
+      color: var(--accent-dark);
+      border-bottom: 4px solid var(--accent);
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      line-height: 1.25;
+      letter-spacing: .015em;
+    }
+
+    h2 {
+      margin: 3.2rem 0 1rem;
+      color: var(--accent-dark);
+      font-size: 1.45rem;
+      line-height: 1.45;
+    }
+
+    p {
+      margin: 0 0 1.25rem;
+      text-align: justify;
+      text-justify: inter-ideograph;
+    }
+
+    article > p:first-of-type {
+      color: #29453e;
+    }
+
+    .sources {
+      margin-top: 4rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      font-size: .88rem;
+      line-height: 1.7;
+    }
+
+    .sources h2 { margin-top: 0; }
+
+    .sources ol {
+      margin: 0;
+      padding-left: 1.5rem;
+    }
+
+    .sources li { margin-bottom: .85rem; }
+
+    a {
+      color: var(--accent);
+      overflow-wrap: anywhere;
+      text-decoration-thickness: .08em;
+      text-underline-offset: .15em;
+    }
+
+    a:hover, a:focus { color: #8a4b20; }
+
+    .accessed { margin-top: 1.5rem; }
+
+    @media (max-width: 680px) {
+      body { font-size: 17px; }
+      main {
+        width: 100%;
+        margin: 0;
+        padding: 36px 22px 48px;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+      h1 { font-size: 2rem; }
+      h2 { margin-top: 2.6rem; }
+      p { text-align: left; }
+    }
+
+    @media print {
+      @page { margin: 18mm; }
+      html, body { background: #fff; }
+      body { color: #000; font-size: 11pt; }
+      main {
+        width: auto;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+      h1, h2 { color: #000; }
+      a { color: #000; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <article>
+      <h1>模組不是積木的同義詞：從科學探究看模組化學習與積木式學習的差異</h1>
+
+      <h2>同一份課程，為什麼兩種「拆小」不一樣？</h2>
+
+      <p>一位自然科教師準備帶學生研究：「校園裡有樹蔭的地面，溫度一定比較低嗎？」他把課程拆成四段：提出假設、設計測量、整理圖表、解釋結果。生成式 AI 很快建議，四段可以各自做成含目標、教材與測驗的單元，學生依序完成；它又說，這就是「積木式學習」，因為小單元能堆成完整課程。</p>
+
+      <p>這個答案聽來合理，卻把兩個層次混在一起。把課程切成可管理、可評量的單元，較接近模組化學習；把觀察、測量技能、概念與證據逐步連接，最後形成可修改的解釋，才是本文所說的積木式學習。兩者都會「拆小再組合」，但拆的是什麼、由誰組、組合後要證明什麼，並不相同。</p>
+
+      <h2>先釐清：兩個名稱的穩定程度不同</h2>
+
+      <p>「模組化學習」有相對明確的課程設計脈絡。國家教育研究院教育百科把教學模組說明為一門課程中可獨立存在的教學單元，常包含目標、學習材料、活動與後測。OECD 對職業教育模組化的整理也強調：每個模組有清楚邊界與學習成果，可以獨立評量，並能依規則彈性組合。換句話說，模組先回答的是「課程如何封裝」：這一單元教什麼、完成標準是什麼、能否更換次序、哪些學生可以跳過或補學。</p>
+
+      <p>「積木式學習」則不是像探究式學習或問題導向學習那樣，有一致定義的單一理論。臺灣教學現場至少有三種用法：使用實體積木或圖像化程式積木；把先備技能當成後續學習的基礎；或以「縱向堆疊、橫向擴展」描述概念與功能的整合。教育部教學實踐研究計畫的一份成果報告，就把積木式教學操作為單元功能的縱向堆疊、資料技術的橫向結合，再整合成較完整的系統。因此，教師若要使用這個名稱，應先說明自己的操作定義，不能只憑「像積木」的比喻推定成效。</p>
+
+      <p>本文採用較適合科學探究的定義：積木式學習是讓學生把可辨識的知識與證據元件，在先備關係、比較、測試與修正中，建成較完整的模型、解釋或作品。它與 Papert 的建構論相近之處，是學習者不只接收內容，而是在製作可見成果的過程中建構意義；但本文不把兩者直接畫上等號，因為「積木式學習」仍可能被不同教師用成不同做法。</p>
+
+      <h2>真正差異在四個問題</h2>
+
+      <p>第一，設計焦點不同。模組化關心課程架構，基本單位是可教、可學、可評量的教學包；積木式關心知識或能力如何生成，基本單位可能是「會校正溫度計」、「分辨日照與樹蔭」、「讀懂折線圖」或「用蒸散與遮蔭提出候選解釋」。一個四週模組可以包含許多積木；一項概念積木也可能在不同模組中反覆使用。</p>
+
+      <p>第二，組合者不同。模組多半先由教師、課程設計者或平臺安排，學生可依需求選擇路徑；積木式若要具有建構價值，學生必須參與連接。他們要說明：「這筆溫度差支持哪個主張？還缺少哪一塊證據？」若學生只照順序點完四個模組，課程雖然模組化，卻未必發生積木式的知識建構。</p>
+
+      <p>第三，順序邏輯不同。模組可以相對獨立、替換或重排，但不是毫無先備限制；積木的連接則常受概念依賴約束。尚未分清控制變因，就急著用圖表解釋樹蔭效果，像把屋頂放在沒有支柱的地方。美國國家科學院的 K–12 科學教育架構強調跨年級的連貫進展，以及科學實作、跨領域概念與核心概念的整合，提醒我們：切小能增加彈性，卻不能犧牲知識之間的連貫。</p>
+
+      <p>第四，完成證據不同。模組完成通常看是否達到該單元的學習目標；積木式完成則要看學生能否把元件帶到新情境，重新組合並解釋。認知科學的 KLI 架構把知識元件、學習事件、教學事件與評量事件分開，正好提醒教師：看見學生完成活動，不等於知道他建立了哪個知識連結。真正的證據可能是學生到走廊、草地與 PU 跑道後，仍能自行決定測量時段、控制表面材質，並說明為何不能只憑一次數值宣稱樹蔭造成降溫。</p>
+
+      <h2>讓 AI 當候選組裝者，不當結論負責人</h2>
+
+      <p>在這堂課中，AI 可以做兩類工作。備課時，教師請它把「地表溫度探究」整理成可替換的模組，為不同程度學生提出補測或延伸路徑；探究中，學生請它列出遮蔭、蒸散、風速、地表材質與測量時間等候選變因，或協助把匿名數據轉成圖表。然而 AI 不曾站在校園量測，可能把一般氣候知識說成這所學校的確定原因，也可能把相關寫成因果。</p>
+
+      <p>因此，教師可以追問：「這個答案中的哪一句是我們的觀察？哪一句只是 AI 的推測？如果兩組數據相反，要補哪一種測量？」學生必須保留時間、地點、儀器、表面材質與原始讀值，查核外部資料，並比較支持與反對證據。教育部的中小學生成式 AI 注意事項也要求把 AI 內容當參考，辨識來源並以可信資料多方查證。AI 可以提示缺塊、提出替代排列，不能代替學生決定哪一塊證據承重。</p>
+
+      <h2>不是二選一，而是容器與連接的配合</h2>
+
+      <p>較穩健的做法，是用模組管理教學彈性，用積木式任務維持知識連貫。例如教師保留「測量設計」模組，但把單一作答改成一張證據連接圖，要求每組用箭頭連出「觀察—候選原因—支持資料—反例—暫時結論」。對已能穩定測量的學生，可略過儀器操作練習；但任何人都不能略過說明變因、限制與證據關係。</p>
+
+      <p>這也挑戰一個常見假設：課程拆得越細，學習就越個人化。切小只提供選擇的可能；若模組彼此沒有共同概念、任務情境與轉用機會，學生可能得到許多完成標記，卻組不回完整理解。反過來說，只強調自由組裝而沒有必要鷹架，也可能讓先備知識不足的學生反覆試錯，卻不知道錯在測量、圖表還是因果推論。《How People Learn II》指出，先備知識能支持新學習，也可能使人忽略新情境的差異；因此「已有積木」不等於「一定會搭對」。</p>
+
+      <h2>下一堂課就能嘗試的小改變</h2>
+
+      <p>教師不必重做整套課程。先挑一個既有模組，在學習單增加四欄：「我觀察到的」、「AI 或他人提出的」、「我查到或測到的證據」、「我目前的連接與限制」。課末不只檢查答案，而請學生圈出一條曾經改接的關係，寫下讓自己改變判斷的證據。</p>
+
+      <p>實施後可觀察三件事：學生能否區分原始觀察與 AI 推測；遇到矛盾時是否主動補測或找替代解釋；換到另一個校園地點後，能否重用同一套控制變因與證據連接方法。若只能完成各欄卻說不出關係，代表模組包裝成功，知識積木尚未真正扣合。</p>
+
+      <p>所以，模組化學習與積木式學習最有價值的差異，不是新舊或優劣，而是兩種不同的設計責任：前者確保課程單元有邊界、有出口，也有彈性；後者要求學習者把概念、技能與證據連成能接受反例、能再次拆修的理解。AI 提供候選模組與可能連法，學生用現場資料和推理決定結構是否站得住。當我們說要把課程「拆小」時，下一個更重要的問題應是：學生最後看見的是一排完成的盒子，還是一個能解釋、能遷移、也能修正的知識結構？</p>
+    </article>
+
+    <section class="sources" aria-labelledby="sources-heading">
+      <h2 id="sources-heading">資料來源</h2>
+      <ol>
+        <li>國家教育研究院，教育百科「模組」，未註明日期。<a href="https://pedia.cloud.edu.tw/Entry/Detail/?search=%E6%A8%A1&amp;title=%E6%A8%A1%E7%B5%84" target="_blank" rel="noopener noreferrer">https://pedia.cloud.edu.tw/Entry/Detail/?search=%E6%A8%A1&amp;title=%E6%A8%A1%E7%B5%84</a></li>
+        <li>OECD，Building Future-Ready Vocational Education and Training Systems，2023。<a href="https://doi.org/10.1787/28551a79-en" target="_blank" rel="noopener noreferrer">https://doi.org/10.1787/28551a79-en</a></li>
+        <li>陳世芳，教育部教學實踐研究計畫成果報告「積木式教學設計於介面技術課程學習成效之研究」，2022。<a href="https://ir-lib.stust.edu.tw/Sysid/ir_lib/edu111/%E9%99%B3%E4%B8%96%E8%8A%B3-111-%E7%A9%8D%E6%9C%A8%E5%BC%8F%E6%95%99%E5%AD%B8%E8%A8%AD%E8%A8%88%E6%96%BC%E3%80%90%E4%BB%8B%E9%9D%A2%E6%8A%80%E8%A1%93%E3%80%91%E8%AA%B2%E7%A8%8B%E5%AD%B8%E7%BF%92%E6%88%90%E6%95%88%E4%B9%8B%E7%A0%94%E7%A9%B6.pdf" target="_blank" rel="noopener noreferrer">https://ir-lib.stust.edu.tw/Sysid/ir_lib/edu111/%E9%99%B3%E4%B8%96%E8%8A%B3-111-%E7%A9%8D%E6%9C%A8%E5%BC%8F%E6%95%99%E5%AD%B8%E8%A8%AD%E8%A8%88%E6%96%BC%E3%80%90%E4%BB%8B%E9%9D%A2%E6%8A%80%E8%A1%93%E3%80%91%E8%AA%B2%E7%A8%8B%E5%AD%B8%E7%BF%92%E6%88%90%E6%95%88%E4%B9%8B%E7%A0%94%E7%A9%B6.pdf</a></li>
+        <li>Nathan Holbert、Matthew Berland、Yasmin B. Kafai（編），Designing Constructionist Futures，MIT Press，2020。<a href="https://mitpress.mit.edu/9780262361095/designing-constructionist-futures/" target="_blank" rel="noopener noreferrer">https://mitpress.mit.edu/9780262361095/designing-constructionist-futures/</a></li>
+        <li>National Research Council，A Framework for K–12 Science Education，National Academies Press，2012。<a href="https://doi.org/10.17226/13165" target="_blank" rel="noopener noreferrer">https://doi.org/10.17226/13165</a></li>
+        <li>Kenneth R. Koedinger、Albert T. Corbett、Charles Perfetti，The Knowledge-Learning-Instruction Framework，Cognitive Science，2012。<a href="https://doi.org/10.1111/j.1551-6709.2012.01245.x" target="_blank" rel="noopener noreferrer">https://doi.org/10.1111/j.1551-6709.2012.01245.x</a></li>
+        <li>National Academies of Sciences, Engineering, and Medicine，How People Learn II: Learners, Contexts, and Cultures，2018。<a href="https://doi.org/10.17226/24783" target="_blank" rel="noopener noreferrer">https://doi.org/10.17226/24783</a></li>
+        <li>教育部，「中小學使用生成式人工智慧注意事項 2.1」，2026。<a href="https://pads.moe.edu.tw/download_file.php?file=_upload_aba798ab3bb88f11d0c43a7e477fb9c5.pdf" target="_blank" rel="noopener noreferrer">https://pads.moe.edu.tw/download_file.php?file=_upload_aba798ab3bb88f11d0c43a7e477fb9c5.pdf</a></li>
+      </ol>
+      <p class="accessed">查閱日期：2026 年 7 月 16 日</p>
+    </section>
+  </main>
+</body>
+</html>
