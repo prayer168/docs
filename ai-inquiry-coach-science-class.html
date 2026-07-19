@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI 不急著替學生回答，而是透過追問引導自然科探究、實驗設計、資料分析與科學論證。">
+  <title>別急著讓 AI 告訴學生答案：把它變成自然課裡最會追問的「探究教練」</title>
+  <style>
+    :root { color-scheme: light dark; --bg: #f7f7f5; --paper: #fff; --text: #242424; --muted: #666; --line: #ddd; --accent: #315d47; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", sans-serif; line-height: 1.85; }
+    main { width: min(100% - 2rem, 820px); margin: 2.5rem auto; padding: clamp(1.5rem, 5vw, 4rem); background: var(--paper); border: 1px solid var(--line); }
+    header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--line); }
+    h1 { margin: 0; font-size: clamp(2rem, 6vw, 3.5rem); line-height: 1.25; letter-spacing: -.025em; }
+    h2 { margin: 3.25rem 0 1rem; font-size: clamp(1.45rem, 4vw, 2rem); line-height: 1.4; }
+    h3 { margin: 2.25rem 0 .75rem; font-size: 1.25rem; }
+    p { margin: 0 0 1.25rem; }
+    .subtitle { margin: 1.25rem 0 0; color: var(--muted); font-size: 1.15rem; }
+    strong { color: var(--accent); }
+    a { color: var(--accent); text-underline-offset: .2em; }
+    ol { padding-left: 1.5rem; }
+    li { margin-bottom: 1.1rem; }
+    .references a { overflow-wrap: anywhere; }
+    .byline { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line); color: var(--muted); }
+    .byline p { margin-bottom: .35rem; }
+    hr { margin: 3rem 0; border: 0; border-top: 1px solid var(--line); }
+    code { padding: .12rem .3rem; border-radius: .2rem; background: #eee; font-size: .9em; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #171817; --paper: #202220; --text: #eceeea; --muted: #b7bbb6; --line: #3b3e3b; --accent: #91c7a7; }
+      code { background: #303330; }
+    }
+    @media (max-width: 600px) { main { width: 100%; margin: 0; border: 0; } }
+  </style>
+</head>
+<body>
+  <main>
+    <article>
+      <header>
+        <h1>別急著讓 AI 告訴學生答案：把它變成自然課裡最會追問的「探究教練」</h1>
+      </header>
+      <p>自然教室裡，三個燒杯並排放在窗邊。</p>
+      <p>第一杯裝清水，第二杯裝鹽水，第三杯也裝清水，但杯口覆蓋了一層保鮮膜。六年級學生圍在桌旁，猜測哪一杯的水會消失得最快。</p>
+      <p>有人說：「放鹽的那杯，因為鹽會吸水。」</p>
+      <p>有人立刻反駁：「應該是沒蓋保鮮膜的清水，水比較容易跑出去。」</p>
+      <p>另一位學生拿起平板，準備直接問 AI：「答案是哪一杯？」</p>
+      <p>老師卻按住螢幕，笑著說：</p>
+      <p>「今天可以問 AI，但不能問它答案。你要請它幫你把問題問得更好。」</p>
+      <p>這個小小的改變，正好呼應近期教育 AI 發展的一項重要趨勢：AI 的價值正在從「快速產生答案」，轉向「引導學習者逐步思考」。</p>
+      <p>OpenAI 在 2026 年 7 月公布面向中小學教育者的 AI 技能活動，將重點放在實際教學、備課、溝通與負責任使用，而不只是讓老師學會操作某一項工具。官方強調，教育者需要有能力判斷 AI 適合解決什麼問題，以及如何在不削弱學生主動思考的情況下，把它帶進教室。</p>
+      <p>Google 在 2026 年 6 月底公布的教育工具更新，也提出由教師主導、結合學校課程脈絡的 AI 學習活動。這類活動不只回覆學生問題，還希望讓教師看見學生真正理解了什麼、在哪一個概念卡住，再提供後續支持。</p>
+      <p>這些發展對自然科教師而言非常關鍵。</p>
+      <p>因為自然科真正要教的，從來不只是「正確答案」，而是如何觀察現象、提出假設、設計測試、讀取證據，再根據證據修正想法。</p>
+      <p>如果學生一開始就把題目交給 AI，AI 很可能在十秒內說明蒸發原理、列出影響因素，甚至替學生寫好結論。答案或許很完整，學習卻可能還沒開始。</p>
+      <p>但如果我們重新設計 AI 的角色，情況就會完全不同。</p>
+      <p>AI 可以不當「解題者」，而成為一位不斷追問的探究教練。</p>
+      <p>以「哪些因素會影響水的蒸發速度」為例，教學對象可以設定為國小六年級，也可調整為國中七年級的探究與實作活動。使用的工具不限定特定品牌，只要是能進行多輪對話、讀取圖片或表格，並依照指令提供回饋的生成式 AI 即可。</p>
+      <p>第一階段，學生先觀察生活現象。</p>
+      <p>老師可以展示兩條濕毛巾：一條攤開，一條揉成一團，再請學生預測哪一條會先乾。學生先把自己的想法寫在學習單上，不能先問 AI。</p>
+      <p>接著，學生才把自己的預測輸入 AI，但提示詞不是「哪一條先乾」，而是：</p>
+      <p>「你是一位國小自然科探究教練。請不要直接告訴我答案，也不要替我寫實驗結論。請根據我的想法，一次只問一個問題，引導我找出可以改變的因素、需要測量的結果，以及應保持相同的條件。我的預測是：攤開的毛巾會比較快乾，因為它接觸到比較多空氣。」</p>
+      <p>這時 AI 可能會問：</p>
+      <p>「你所說的『接觸到比較多空氣』，可以用什麼方式觀察或測量？」</p>
+      <p>學生可能回答：「看毛巾多久會乾。」</p>
+      <p>AI 接著追問：</p>
+      <p>「除了毛巾攤開或揉成一團之外，兩條毛巾還有哪些條件必須相同，實驗才公平？」</p>
+      <p>學生便開始想到毛巾材質、大小、加水量、放置位置、開始時間、風力與日照。</p>
+      <p>這個過程中，AI 沒有給答案，卻幫助學生把模糊的生活經驗，逐步轉化為可以測試的科學問題。</p>
+      <p>第二階段是設計實驗。</p>
+      <p>每組學生選擇一個自變因，例如毛巾展開面積、風吹強弱、環境溫度或水中是否含鹽。應變因可以是完全乾燥所需時間，也可以每隔固定時間測量質量變化。</p>
+      <p>學生把實驗設計交給 AI 審查，提示詞可寫成：</p>
+      <p>「請檢查這份實驗設計是否能公平比較蒸發速度。只指出可能影響結果的控制變因，以及我們尚未說清楚的測量方式。不要替我們改寫完整實驗。」</p>
+      <p>這個限制很重要。</p>
+      <p>若沒有說明，AI 往往會直接產出一套漂亮而完整的步驟，學生只剩照著做。當我們要求它只提供問題與檢核，設計實驗的責任就仍然留在學生身上。</p>
+      <p>第三階段是資料分析。</p>
+      <p>學生每隔十分鐘測量一次濕布質量，將數據輸入試算表，繪製時間與質量變化圖。AI 可以協助檢查表格格式、提醒單位、建議合適圖表，但不能直接決定要刪除哪些資料。</p>
+      <p>例如某組第三次測量的質量突然增加，AI 可能判斷這是一筆異常值。學生仍要回頭查看紀錄：是不是電子秤沒有歸零？濕布碰到桌面上的水？不同同學讀錯數字？在原因尚未確認前，不能只因為資料「不好看」就刪除。</p>
+      <p>第四階段才是形成結論。</p>
+      <p>此時可以讓 AI 扮演「反方審查員」：</p>
+      <p>「以下是我們的實驗結果與結論。請找出結論中超過資料能支持範圍的地方，並提出兩個其他可能的解釋。不要直接判定我們對或錯。」</p>
+      <p>假設學生只做了一次實驗，卻寫下「有風時水一定蒸發得比較快」，AI 就應提醒：目前資料只能支持這次條件下的觀察，還需要重複實驗，才能提高可信度。</p>
+      <p>學生在這裡學到的，不只是蒸發。</p>
+      <p>他們也在練習分辨變因、建立公平測試、閱讀圖表、處理異常值、區分觀察與推論，以及理解科學結論具有條件與限制。</p>
+      <p>AI 成了探究過程中的鏡子，讓學生看見自己思考裡尚未說清楚的地方。</p>
+      <p>然而，這種教學仍有幾項風險需要教師把關。</p>
+      <p>首先是 AI 幻覺。AI 可能提出聽起來合理、實際上卻不正確的解釋，例如把蒸發與沸騰混為一談，或斷言鹽水在任何條件下都一定比清水蒸發得慢。學生必須以實驗結果、課本與可信科學資料進行查證。</p>
+      <p>其次是提示方式造成的偏誤。如果老師在提示詞中暗示某個答案，AI 的追問也可能朝預設結論前進。因此，教師應使用「提出其他可能」「指出缺少的證據」等中性語句。</p>
+      <p>第三是個資與資料安全。學生不必輸入姓名、學號或照片，也不應上傳包含人臉、家庭資訊或精確住址的內容。實驗資料使用組別代碼即可。</p>
+      <p>第四是著作權與引用。AI 提供的文字、插圖或資料來源不能直接視為無主內容。若用於報告、科展或公開教材，仍應標示 AI 協助範圍，並查證原始來源與授權方式。</p>
+      <p>第五是過度依賴。AI 若參與每一個步驟，學生可能養成「沒問 AI 就不敢開始」的習慣。老師可以設定使用節點：先由學生獨立思考五分鐘，再進行組內討論，最後才開啟 AI；每次查看 AI 回應後，也必須寫下自己接受或不接受的理由。</p>
+      <p>近期 OpenAI 對青少年使用 AI 的說明，同樣強調工具應支持主動參與、批判思考與逐步學習，而不是只提供答案。 這也提醒我們，真正好的 AI 自然課，不是學生問得越少、完成得越快，而是他們提出的問題越來越精準，解釋越來越有證據。</p>
+      <p>回到教室裡那三個燒杯。</p>
+      <p>學生最後沒有直接從 AI 得到答案。他們自行決定水量、容器大小、擺放位置與測量時間，再每天記錄水位與質量。</p>
+      <p>AI 只負責在旁邊追問：</p>
+      <p>「你怎麼確定差異是鹽造成的？」</p>
+      <p>「保鮮膜上的小水滴從哪裡來？」</p>
+      <p>「如果換一個更寬的容器，結果可能一樣嗎？」</p>
+      <p>幾天後，當學生站在紀錄表前爭論哪一項證據最可靠時，老師會發現：AI 並沒有取代探究，反而把更多時間還給探究。</p>
+      <p>未來的自然科教師，不一定要找到最會回答問題的 AI，而是要學會設計一個不急著回答、懂得持續追問的 AI。</p>
+      <p>因為在科學教室裡，真正推動學習的，通常不是那句最快出現的答案，而是下一個值得繼續追查的問題。</p>
+      <h2>參考資料與延伸閱讀：</h2>
+      <ol class="references">
+        <li>OpenAI，〈Helping K–12 educators build practical AI skills〉，2026 年 7 月 8 日。<br><a href="https://openai.com/index/k-12-educators-practical-skills/">https://openai.com/index/k-12-educators-practical-skills/</a></li>
+        <li>Google for Education，〈ISTE 2026: Supporting teaching and learning with connected AI tools〉，2026 年 6 月 25 日。<br><a href="https://blog.google/products-and-platforms/products/education/collection-iste-june-2026/">https://blog.google/products-and-platforms/products/education/collection-iste-june-2026/</a></li>
+        <li>Google for Education，〈Building AI tailored for education, with educators in the lead〉，2026 年 6 月 25 日。<br><a href="https://blog.google/products-and-platforms/products/education/iste-2026-educator-updates/">https://blog.google/products-and-platforms/products/education/iste-2026-educator-updates/</a></li>
+        <li>Google，〈The latest AI news we announced in June 2026〉，2026 年 7 月 1 日。<br><a href="https://blog.google/innovation-and-ai/technology/ai/google-ai-updates-june-2026/">https://blog.google/innovation-and-ai/technology/ai/google-ai-updates-june-2026/</a></li>
+        <li>OpenAI，〈Why teens deserve access to safe AI〉，2026 年 7 月 16 日。<br><a href="https://openai.com/index/why-teens-deserve-access-safe-ai/">https://openai.com/index/why-teens-deserve-access-safe-ai/</a></li>
+      </ol>
+      <footer class="byline">
+        <p>2026 年 07 月 19 日</p>
+        <p>作者：陳賢宗</p>
+      </footer>
+    </article>
+  </main>
+</body>
+</html>
