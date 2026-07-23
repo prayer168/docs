@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Cognee AI 智能體長期記憶與知識圖譜完整技術指南：定義、架構、功能、使用場景、安裝、程式範例、Claude Code 整合概念與參考文獻。">
+<title>Cognee：讓 AI 智能體擁有知識圖譜長期記憶的完整技術指南</title>
+<style>
+:root{
+  --bg:#f4f7fb;--paper:#fff;--ink:#172033;--muted:#607089;--line:#dce4ef;
+  --brand:#4f46e5;--brand2:#0891b2;--soft:#eef2ff;--code:#0d1424;
+  --good:#047857;--warn:#b45309;--shadow:0 16px 45px rgba(36,48,78,.10)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.82}
+a{color:#3730a3;text-decoration:none}a:hover{text-decoration:underline}
+.hero{background:radial-gradient(circle at 85% 15%,rgba(34,211,238,.28),transparent 28%),linear-gradient(135deg,#111936,#312e81 58%,#0e7490);color:#fff;padding:72px 22px 58px}
+.hero-inner,.layout{max-width:1180px;margin:auto}
+.eyebrow{display:inline-block;padding:5px 12px;border:1px solid rgba(255,255,255,.35);border-radius:999px;font-size:.84rem;letter-spacing:.05em;background:rgba(255,255,255,.08)}
+h1{font-size:clamp(2.15rem,5vw,4.35rem);line-height:1.14;margin:18px 0 20px;max-width:980px}
+.hero p{font-size:1.14rem;max-width:850px;color:#dce8ff}
+.meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;color:#cbd5e1;font-size:.92rem}
+.layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:26px;padding:30px 18px 72px}
+nav{position:sticky;top:18px;align-self:start;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+nav strong{display:block;margin-bottom:8px}nav a{display:block;padding:7px 9px;border-radius:9px;color:#42516a;font-size:.93rem}
+nav a:hover{background:var(--soft);text-decoration:none;color:#312e81}
+article{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:clamp(24px,5vw,58px);box-shadow:var(--shadow);min-width:0}
+h2{font-size:1.75rem;margin:2.6em 0 .7em;padding-top:.2em;border-bottom:2px solid #e9edf5;padding-bottom:.35em}
+h3{font-size:1.25rem;margin:1.8em 0 .45em}
+p{margin:.8em 0}
+.lead{font-size:1.1rem;color:#34435b}
+.callout{border-left:5px solid var(--brand);background:var(--soft);padding:17px 19px;border-radius:0 13px 13px 0;margin:22px 0}
+.callout.warn{border-color:#f59e0b;background:#fff7ed}
+.callout.good{border-color:#10b981;background:#ecfdf5}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:20px 0}
+.card{border:1px solid var(--line);border-radius:15px;padding:18px;background:#fbfdff}
+.card h3{margin-top:0}
+.flow{overflow:auto;background:#f8fafc;border:1px solid var(--line);border-radius:15px;padding:22px;margin:20px 0;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre;line-height:1.65}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:.94rem}
+th,td{border:1px solid var(--line);padding:12px 13px;text-align:left;vertical-align:top}
+th{background:#eef2ff;color:#312e81}
+pre{background:var(--code);color:#e5edf9;border-radius:15px;padding:19px;overflow:auto;line-height:1.6;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+:not(pre)>code{background:#eef2f7;color:#253858;border-radius:6px;padding:.15em .4em}
+.tag{display:inline-block;background:#e0f2fe;color:#075985;border-radius:999px;padding:2px 9px;font-size:.8rem;margin:2px}
+.steps{counter-reset:step;padding:0;list-style:none}
+.steps li{counter-increment:step;position:relative;padding:0 0 20px 50px}
+.steps li:before{content:counter(step);position:absolute;left:0;top:2px;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--brand);color:#fff;font-weight:700}
+.ref{padding-left:1.5em}.ref li{margin:.75em 0}
+.small{font-size:.9rem;color:var(--muted)}
+.footer{margin-top:48px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+@media(max-width:850px){.layout{display:block;padding:16px 10px 45px}nav{position:relative;top:0;margin-bottom:16px}.grid{grid-template-columns:1fr}.hero{padding-top:54px}article{border-radius:16px;padding:24px 18px}}
+@media print{body{background:#fff}.hero{background:#fff;color:#000;padding:30px 0}.hero p,.meta{color:#333}.layout{display:block;padding:0}nav{display:none}article{box-shadow:none;border:0;padding:0}a{color:#000}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow">AI Agent Memory × Knowledge Graph × Graph RAG</span>
+    <h1>Cognee：讓 AI 智能體擁有知識圖譜長期記憶的完整技術指南</h1>
+    <p>從定義、核心架構與記憶生命週期開始，說明 Cognee 如何把文件、程式碼、對話與專案脈絡轉換成可搜尋、可追溯、可跨會話使用的 AI 記憶，並提供 Python 實作、Claude Code 應用構想、使用場景、限制與參考文獻。</p>
+    <div class="meta"><span>繁體中文技術文章</span><span>查證日期：2026-07-22</span><span>主要專案：topoteretes/cognee</span></div>
+  </div>
+</header>
+
+<div class="layout">
+<nav aria-label="文章目錄">
+<strong>文章目錄</strong>
+<a href="#intro">一、為什麼 AI 需要記憶</a>
+<a href="#definition">二、Cognee 的定義</a>
+<a href="#concepts">三、核心概念</a>
+<a href="#architecture">四、系統架構</a>
+<a href="#lifecycle">五、記憶生命週期</a>
+<a href="#features">六、主要功能</a>
+<a href="#rag">七、與一般 RAG 比較</a>
+<a href="#scenarios">八、使用場景</a>
+<a href="#graph-example">九、語意關係範例</a>
+<a href="#install">十、安裝與基本操作</a>
+<a href="#claude">十一、Claude Code 整合</a>
+<a href="#design">十二、實務設計建議</a>
+<a href="#limits">十三、限制與風險</a>
+<a href="#references">十四、參考資料</a>
+</nav>
+
+<article>
+<section id="intro">
+<h2>一、為什麼 AI 智能體需要外部記憶？</h2>
+<p class="lead">大型語言模型本身並不等於一個會持續累積經驗的知識系統。模型每次收到提示詞時，主要根據當下提供的上下文、模型訓練時學到的參數，以及外部工具傳入的資料產生回答。當對話結束、上下文超過長度限制，或智能體重新啟動後，先前的專案決策、使用者偏好、文件內容與操作經驗不一定會被保留。</p>
+<p>因此，長時間工作的 AI 智能體通常需要一個獨立的「記憶層」，負責保存、整理、更新與檢索資訊。單純保存完整聊天記錄雖然容易，卻會產生資料量快速膨脹、關鍵資訊被雜訊淹沒、同一實體名稱不一致，以及難以進行多步關係推理等問題。</p>
+<div class="callout"><strong>核心問題：</strong>記憶系統不只要回答「哪些段落和問題相似」，還要理解「誰使用什麼工具、某工具建立什麼產物、產物部署在哪裡、決策何時改變，以及資訊來自哪一份文件」。</div>
+</section>
+
+<section id="definition">
+<h2>二、Cognee 的定義</h2>
+<p><strong>Cognee</strong> 是由 GitHub 專案 <a href="https://github.com/topoteretes/cognee" target="_blank" rel="noopener">topoteretes/cognee</a> 開發的開源 AI 智能體記憶平台。官方將它定位為一個能讓智能體跨會話保有持久長期記憶的記憶控制層：系統可匯入不同形式的資料，建立自架的知識圖譜，並結合向量嵌入、圖形關係與來源追蹤，讓智能體日後重新取回適當上下文。</p>
+<p>它不是一個新的大型語言模型，也不是單純的圖形資料庫。較精確的說法是：Cognee 是位於<strong>資料來源、儲存系統、檢索邏輯與 AI 智能體之間的記憶基礎設施</strong>。</p>
+<div class="flow">資料來源
+  ├─ 文件、PDF、網頁、程式碼
+  ├─ 對話與使用者偏好
+  ├─ 資料庫與組織內部資料
+  └─ 智能體執行結果
+          │
+          ▼
+       Cognee
+  ├─ 內容切分與標準化
+  ├─ 實體／關係抽取
+  ├─ 向量嵌入
+  ├─ 知識圖譜建立
+  ├─ 來源與資料集管理
+  └─ 多策略檢索
+          │
+          ▼
+ Claude Code、Codex、聊天機器人、工作流程智能體</div>
+</section>
+
+<section id="concepts">
+<h2>三、理解 Cognee 前必須掌握的核心概念</h2>
+<div class="grid">
+<div class="card"><h3>1. 實體 Entity</h3><p>可以被辨識與追蹤的對象，例如 Claude Code、Cognee、Spec Kit、GitHub Repository、某位使用者、某份科展報告。</p></div>
+<div class="card"><h3>2. 關係 Relationship</h3><p>描述實體之間具有語意的連結，例如 <code>uses</code>、<code>creates</code>、<code>depends_on</code>、<code>hosted_on</code>、<code>promoted_on</code>。</p></div>
+<div class="card"><h3>3. 向量嵌入 Embedding</h3><p>將文字或資料轉換成數值表示，使系統可以找出語意相近、但字面不完全相同的內容。</p></div>
+<div class="card"><h3>4. 知識圖譜 Knowledge Graph</h3><p>以節點表示實體、以邊表示關係，使系統能沿著關係搜尋、追蹤上下文，並支援多跳推理。</p></div>
+<div class="card"><h3>5. 來源追蹤 Provenance</h3><p>保存資訊來自哪份文件、哪個區塊或哪次匯入，讓回答能回溯證據，而不是只留下無法查證的結論。</p></div>
+<div class="card"><h3>6. 智能體記憶 Agent Memory</h3><p>包含短期工作記憶、長期知識、使用者偏好、任務經驗、決策脈絡，以及可供未來智能體取回的結構化資訊。</p></div>
+</div>
+<p>知識圖譜常用「主詞－關係－受詞」三元組表示。例如：</p>
+<pre><code>(Claude Code)-[uses]-&gt;(Cognee)
+(Cognee)-[has_repository]-&gt;(topoteretes/cognee)
+(topoteretes/cognee)-[hosted_on]-&gt;(GitHub)
+(Cognee)-[builds]-&gt;(Knowledge Graph)
+(Cognee)-[provides]-&gt;(Persistent Agent Memory)</code></pre>
+</section>
+
+<section id="architecture">
+<h2>四、Cognee 的混合儲存架構</h2>
+<p>Cognee 官方架構將關聯式、向量與圖形儲存結合。這是因為沒有單一資料庫能同時最佳化文件管理、語意相似度與關係推理。</p>
+<table>
+<thead><tr><th>儲存層</th><th>主要保存內容</th><th>主要作用</th></tr></thead>
+<tbody>
+<tr><td><strong>關聯式儲存</strong></td><td>文件、資料集、切分區塊、metadata、來源與處理狀態</td><td>管理資料生命週期、資料來源及可追溯性</td></tr>
+<tr><td><strong>向量儲存</strong></td><td>文字區塊、實體或 DataPoint 的嵌入向量</td><td>找出語意相近的內容，即使查詢與原文用字不同</td></tr>
+<tr><td><strong>圖形儲存</strong></td><td>實體、關係、階層、事件及結構</td><td>沿著關係探索、進行結構化搜尋與多跳推理</td></tr>
+</tbody>
+</table>
+<p>檢索時可以採用三種思路：</p>
+<ul>
+<li><strong>向量搜尋：</strong>適合「哪段內容和問題最相似」。</li>
+<li><strong>圖形搜尋：</strong>適合「A 與 B 有什麼關係」或「沿著多個關係找到結果」。</li>
+<li><strong>混合搜尋：</strong>先用語意找到相關節點，再沿著圖譜擴展上下文，通常比只做其中一種更完整。</li>
+</ul>
+</section>
+
+<section id="lifecycle">
+<h2>五、記憶的生命週期：Remember、Recall、Improve、Forget</h2>
+<ol class="steps">
+<li><strong>Remember：寫入記憶。</strong><br>把文字、文件或其他資料交給 Cognee。永久記憶模式會執行資料標準化、切分、實體與關係抽取、知識圖譜建立及後續豐富化；提供 <code>session_id</code> 時則可使用較快速的會話記憶。</li>
+<li><strong>Recall：取回記憶。</strong><br>使用自然語言查詢。系統可自動選擇適當檢索策略，從會話快取、向量索引或永久圖譜中尋找上下文。</li>
+<li><strong>Improve：改善記憶。</strong><br>用於豐富既有圖譜、整併內容或把會話資訊橋接到永久記憶。這代表記憶不是只匯入一次就永遠不變。</li>
+<li><strong>Forget：刪除記憶。</strong><br>依資料集或範圍移除資訊。這對隱私、測試重置、錯誤資料修正及資料保留政策非常重要。</li>
+</ol>
+<div class="callout good"><strong>設計重點：</strong>真正可用的智能體記憶必須同時具備寫入、檢索、更新與刪除；只會新增而不能修正或遺忘，會讓錯誤與過時資訊持續污染回答。</div>
+</section>
+
+<section id="features">
+<h2>六、Cognee 的主要功能</h2>
+<h3>1. 跨會話持久記憶</h3>
+<p>把專案知識、偏好、歷史決策與文件內容放在模型上下文之外。即使智能體重新啟動，也可在下一次任務中重新檢索。</p>
+<h3>2. 自動建立知識圖譜</h3>
+<p>匯入內容後，自動抽取實體、概念與關係，減少完全依靠人工建圖的成本。</p>
+<h3>3. 語意與關係混合檢索</h3>
+<p>向量搜尋負責「相似」，知識圖譜負責「關聯」。兩者組合可提升跨文件與多步問題的處理能力。</p>
+<h3>4. 會話記憶與永久記憶</h3>
+<p>短期工作資訊可以先存進 session memory，較穩定的重要資訊則進入永久圖譜，形成不同保存速度與生命週期的記憶層。</p>
+<h3>5. 本地部署與可替換後端</h3>
+<p>開發階段可使用輕量預設後端；擴充時再替換成生產用關聯式資料庫、向量資料庫與圖形資料庫。實際可用組合需以安裝版本及官方文件為準。</p>
+<h3>6. 多智能體共享知識</h3>
+<p>不同智能體可存取同一記憶基礎設施。例如研究智能體整理文獻、程式智能體讀取技術決策、寫作智能體再使用研究結果。</p>
+<h3>7. 本體與領域語意</h3>
+<p>本體（ontology）可規範領域中的類別與關係，避免「學生」「研究對象」「樣本」等概念被任意混用。Cognee 官方文件亦說明可處理 RDF／IRI 等本體相關需求。</p>
+</section>
+
+<section id="rag">
+<h2>七、Cognee 與一般向量 RAG 的差異</h2>
+<table>
+<thead><tr><th>比較面向</th><th>一般向量 RAG</th><th>Cognee／圖譜式記憶</th></tr></thead>
+<tbody>
+<tr><td>基本單位</td><td>文件切片與嵌入向量</td><td>切片、實體、關係、來源及圖形結構</td></tr>
+<tr><td>主要檢索</td><td>語意相似度</td><td>向量、圖形與混合檢索</td></tr>
+<tr><td>關係表達</td><td>多半隱藏在文字中</td><td>可明確表示為有方向、有類型的邊</td></tr>
+<tr><td>多跳問題</td><td>仰賴一次找回足夠段落</td><td>可沿著多個節點與關係組合答案</td></tr>
+<tr><td>跨會話記憶</td><td>需自行設計資料層與更新策略</td><td>以智能體記憶為核心定位</td></tr>
+<tr><td>建置成本</td><td>較低、較容易除錯</td><td>抽取、消歧、圖譜品質與多後端管理較複雜</td></tr>
+</tbody>
+</table>
+<div class="callout warn"><strong>不要誤解：</strong>知識圖譜不會自動保證回答正確。實體抽取、關係判斷、來源品質、資料更新、檢索參數與提示詞都會影響成果。2025 年以 Cognee 為實驗框架的研究也顯示，切分、圖譜建構、檢索與提示參數需要針對資料集調整，改善並不是在所有評量上完全一致。</div>
+</section>
+
+<section id="scenarios">
+<h2>八、適合使用 Cognee 的場景</h2>
+<div class="grid">
+<div class="card"><h3>長期軟體專案</h3><p>保存架構決策、套件用途、錯誤紀錄、API 相依性、部署方式與技術債，供 Claude Code 或 Codex 在後續開發中取回。</p></div>
+<div class="card"><h3>個人第二大腦</h3><p>整合 Obsidian、工作日誌、研究筆記、會議紀錄與文件，透過概念及關係查詢，而不是只靠檔名或關鍵字。</p></div>
+<div class="card"><h3>教學與科展研究</h3><p>將論文、實驗紀錄、研究目的、變項、樣本、風險與參考資料連結成圖譜，追蹤每項結論的證據。</p></div>
+<div class="card"><h3>企業知識整合</h3><p>連結 CRM、客服、合約、產品規格與營運資料。不過多租戶權限、稽核及法遵必須另外嚴格設計。</p></div>
+<div class="card"><h3>文件與程式碼理解</h3><p>建立模組、函式、設定檔、issue、PR、規格與部署環境的關係，協助回答跨多份文件的問題。</p></div>
+<div class="card"><h3>多智能體協作</h3><p>讓研究、規劃、撰寫與執行智能體共享受控記憶，降低每個智能體重複讀取全部資料的成本。</p></div>
+</div>
+</section>
+
+<section id="graph-example">
+<h2>九、語意關係範例：讓每一條連結都有可理解的意思</h2>
+<p>假設資料中出現以下工作流程：</p>
+<div class="flow">Claude Code ──uses──▶ Spec Kit
+Spec Kit ──creates──▶ Patreon Project
+Patreon Project ──promoted_on──▶ Threads</div>
+<p>圖譜並不是把四個關鍵字排成一條線，而是保存每個節點的類型、每條邊的語意，以及原始證據。例如：</p>
+<pre><code>{
+  "subject": "Claude Code",
+  "predicate": "uses",
+  "object": "Spec Kit",
+  "source": "project-notes.md",
+  "confidence": 0.91,
+  "observed_at": "2026-07-22"
+}</code></pre>
+<p>當使用者詢問「這個 Patreon 專案是如何建立並在哪裡宣傳？」時，系統可沿圖譜反向與正向走訪：</p>
+<div class="flow">Patreon Project
+  ◀──creates── Spec Kit
+  ◀──uses──── Claude Code
+
+Patreon Project
+  ──promoted_on──▶ Threads</div>
+<p>最後回答可整合為：「Claude Code 使用 Spec Kit 建立該 Patreon 專案，之後在 Threads 上推廣。」這類答案可能不是原始文件中的單一句子，而是由多個有來源的關係組合而成。</p>
+</section>
+
+<section id="install">
+<h2>十、安裝與 Python 基本操作</h2>
+<p>依 2026 年 7 月查閱的官方 GitHub README，Cognee Python 版本先決條件為 Python 3.10～3.14。以下示例採官方新版操作概念；套件介面可能更新，實際使用前應再次檢查目前版本文件。</p>
+<h3>步驟 1：建立虛擬環境與安裝</h3>
+<pre><code>python -m venv .venv
+
+# Windows PowerShell
+.venv\Scripts\Activate.ps1
+
+# macOS / Linux
+source .venv/bin/activate
+
+python -m pip install --upgrade pip
+pip install cognee</code></pre>
+<h3>步驟 2：設定模型 API 金鑰</h3>
+<pre><code># .env 範例
+LLM_API_KEY=YOUR_API_KEY</code></pre>
+<p class="small">不同模型供應商需要的環境變數與模型名稱可能不同，應依 Cognee 的 LLM Provider 文件設定。不要把真實金鑰提交到 GitHub。</p>
+<h3>步驟 3：最小可執行範例</h3>
+<pre><code>import asyncio
+import cognee
+
+async def main() -&gt; None:
+    # 測試環境可先清除舊資料；正式環境請勿任意執行
+    await cognee.forget(everything=True)
+
+    source_text = """
+    Claude Code uses Cognee as an external memory layer.
+    Cognee builds a knowledge graph and supports persistent recall.
+    """
+
+    # 寫入永久記憶
+    await cognee.remember(source_text)
+
+    # 使用自然語言查詢
+    results = await cognee.recall(
+        query_text="Claude Code 如何使用 Cognee？"
+    )
+
+    for item in results:
+        text = getattr(item, "text", str(item))
+        print(text)
+
+if __name__ == "__main__":
+    asyncio.run(main())</code></pre>
+<h3>步驟 4：會話記憶示例</h3>
+<pre><code>import asyncio
+import cognee
+
+async def main() -&gt; None:
+    session = "science_project_2026"
+
+    await cognee.remember(
+        "使用者偏好所有研究報告採臺灣繁體中文，並附可查證來源。",
+        session_id=session,
+    )
+
+    results = await cognee.recall(
+        "報告的語言與引用格式偏好是什麼？",
+        session_id=session,
+    )
+
+    for item in results:
+        print(getattr(item, "text", str(item)))
+
+asyncio.run(main())</code></pre>
+<div class="callout warn"><strong>安全提醒：</strong><code>forget(everything=True)</code> 會用於清除系統資料與狀態，適合隔離的測試環境；在正式環境中應以資料集、租戶或特定範圍刪除，並先備份。</div>
+</section>
+
+<section id="claude">
+<h2>十一、Claude Code 搭配 Cognee 的整合概念</h2>
+<p>Cognee 官方 GitHub README 列出 Claude Code 外掛。整合方式可能隨版本調整，因此以下將「穩定的架構概念」與「版本相關的安裝命令」分開看待。</p>
+<h3>概念架構</h3>
+<div class="flow">Claude Code
+  │
+  ├─ 讀取目前程式碼與任務
+  ├─ 呼叫 Cognee 記憶工具
+  │      ├─ remember：保存決策、文件與經驗
+  │      ├─ recall：取得相關專案脈絡
+  │      └─ forget：移除錯誤或敏感記憶
+  │
+  └─ 根據「目前程式碼 + 取回記憶」規劃與修改</div>
+<h3>建議保存的內容</h3>
+<ul>
+<li>專案目標、非功能需求與不允許改動的限制。</li>
+<li>架構決策紀錄，例如為何採用 Supabase、GitHub Pages 或特定框架。</li>
+<li>模組、函式、資料表、API 與部署環境的關係。</li>
+<li>已知錯誤、重現步驟、修正方式與驗證結果。</li>
+<li>使用者長期偏好，例如繁體中文、RWD、不得出現水平捲軸。</li>
+</ul>
+<h3>不應直接保存的內容</h3>
+<ul>
+<li>API key、密碼、cookie、私鑰與存取 token。</li>
+<li>未經去識別化的學生個資、健康資料或其他敏感資訊。</li>
+<li>未確認的推測、一次性的臨時訊息，以及大量無價值終端輸出。</li>
+</ul>
+<h3>給 Claude Code 的工作規則示例</h3>
+<pre><code># Memory workflow
+
+Before modifying the project:
+1. Recall the project goals, architecture decisions, constraints, and known bugs.
+2. Cite which recalled memories affect the plan.
+3. Do not treat recalled content as automatically correct; compare it with the current repository.
+4. After verification, remember only durable decisions and validated fixes.
+5. Never store secrets, tokens, passwords, or personal student data.</code></pre>
+</section>
+
+<section id="design">
+<h2>十二、建立高品質 Cognee Graph 的實務建議</h2>
+<h3>1. 先定義穩定的關係詞彙</h3>
+<p>避免同一意思同時出現 <code>uses</code>、<code>used_by</code>、<code>utilizes</code> 等多種寫法。可以先建立簡單關係表：</p>
+<table>
+<thead><tr><th>關係</th><th>方向</th><th>用途</th></tr></thead>
+<tbody>
+<tr><td><code>uses</code></td><td>工具使用者 → 工具</td><td>Claude Code uses Cognee</td></tr>
+<tr><td><code>creates</code></td><td>建立者／工具 → 產物</td><td>Spec Kit creates Specification</td></tr>
+<tr><td><code>depends_on</code></td><td>模組 → 相依項目</td><td>Frontend depends_on API</td></tr>
+<tr><td><code>hosted_on</code></td><td>資源 → 平台</td><td>Repository hosted_on GitHub</td></tr>
+<tr><td><code>supported_by</code></td><td>主張 → 證據</td><td>Conclusion supported_by Experiment</td></tr>
+</tbody>
+</table>
+<h3>2. 保存時間與版本</h3>
+<p>「專案使用 React」可能在某時正確，未來卻改成別的技術。記憶最好包含 <code>valid_from</code>、<code>valid_to</code>、版本與觀察時間。</p>
+<h3>3. 區分事實、偏好、推論與指令</h3>
+<p>將「官方文件明確記載」「使用者偏好」「AI 推論」「必須遵守的規則」標示為不同類型，可降低把推論當事實的風險。</p>
+<h3>4. 保留來源與信心</h3>
+<p>每個重要關係應盡可能記錄來源文件、段落、建立日期及抽取信心。回答高風險問題時，應優先回到原始證據。</p>
+<h3>5. 設計記憶品質評估</h3>
+<ul>
+<li>正確率：抽取的實體和關係是否忠於原文。</li>
+<li>完整率：重要關係是否遺漏。</li>
+<li>新鮮度：過時內容是否能被更新或失效。</li>
+<li>可追溯性：是否可回到原始來源。</li>
+<li>檢索效果：真正需要的記憶是否排在前面。</li>
+<li>成本與延遲：建圖及查詢是否符合使用情境。</li>
+</ul>
+</section>
+
+<section id="limits">
+<h2>十三、限制、風險與不適用情況</h2>
+<h3>1. 圖譜抽取仍可能出錯</h3>
+<p>LLM 可能錯認實體、建立不存在的關係、忽略否定語句，或把暫時狀態當永久事實。關鍵資料需要 schema、驗證規則及人工抽查。</p>
+<h3>2. 系統複雜度高於單純 RAG</h3>
+<p>需要處理關聯式、向量與圖形儲存，以及模型供應商、嵌入、權限、備份與監控。對資料量小、只需一次問答的專案，普通全文檢索或向量 RAG 可能更合適。</p>
+<h3>3. 記憶污染與提示注入</h3>
+<p>惡意文件可能把指令寫進記憶，日後透過 recall 影響智能體。匯入資料必須標示信任層級，取回內容應視為資料而非系統指令。</p>
+<h3>4. 隱私與刪除責任</h3>
+<p>持久記憶意味著資料保存時間更長。必須設計存取控制、租戶隔離、保存期限、刪除流程、稽核記錄及備份同步刪除政策。</p>
+<h3>5. 評估不能只看回答是否流暢</h3>
+<p>圖譜記憶的成效應測量檢索正確性、來源支持、多跳推理、延遲、成本與錯誤更新。學術研究指出，Graph RAG 的切分、圖譜建構、檢索與提示參數會實質影響結果。</p>
+<div class="callout"><strong>適合採用：</strong>專案長期運作、資料跨多來源、關係本身很重要、需要跨會話記憶或多智能體共享。<br><strong>未必需要：</strong>少量靜態文件、一次性問答、關係推理需求低，或團隊尚無能力維護多種儲存後端。</div>
+</section>
+
+<section id="references">
+<h2>十四、相關參考資料與延伸閱讀</h2>
+<ol class="ref">
+<li>Topoteretes. <em>Cognee: The Open-Source AI Memory Platform for Agents</em>. GitHub repository. <a href="https://github.com/topoteretes/cognee" target="_blank" rel="noopener">https://github.com/topoteretes/cognee</a></li>
+<li>Cognee Documentation. <em>Introduction</em>. <a href="https://docs.cognee.ai/getting-started/introduction" target="_blank" rel="noopener">https://docs.cognee.ai/getting-started/introduction</a></li>
+<li>Cognee Documentation. <em>Quickstart</em>. <a href="https://docs.cognee.ai/getting-started/quickstart" target="_blank" rel="noopener">https://docs.cognee.ai/getting-started/quickstart</a></li>
+<li>Cognee Documentation. <em>Architecture</em>. <a href="https://docs.cognee.ai/core-concepts/architecture" target="_blank" rel="noopener">https://docs.cognee.ai/core-concepts/architecture</a></li>
+<li>Cognee Documentation. <em>Examples Overview</em>. <a href="https://docs.cognee.ai/examples/overview" target="_blank" rel="noopener">https://docs.cognee.ai/examples/overview</a></li>
+<li>Markovic, V., Obradovic, L., Hajdu, L., &amp; Pavlovic, J. (2025). <em>Optimizing the Interface Between Knowledge Graphs and LLMs for Complex Reasoning</em>. arXiv:2505.24478. <a href="https://arxiv.org/abs/2505.24478" target="_blank" rel="noopener">https://arxiv.org/abs/2505.24478</a></li>
+<li>Yang, C., Zhou, C., Xiao, Y., et al. (2026). <em>Graph-based Agent Memory: Taxonomy, Techniques, and Applications</em>. arXiv:2602.05665. <a href="https://arxiv.org/abs/2602.05665" target="_blank" rel="noopener">https://arxiv.org/abs/2602.05665</a></li>
+<li>Hogan, A., Blomqvist, E., Cochez, M., et al. (2020). <em>Knowledge Graphs</em>. arXiv:2003.02320. <a href="https://arxiv.org/abs/2003.02320" target="_blank" rel="noopener">https://arxiv.org/abs/2003.02320</a></li>
+<li>Anokhin, P., Semenov, N., Sorokin, A., et al. (2024). <em>AriGraph: Learning Knowledge Graph World Models with Episodic Memory for LLM Agents</em>. arXiv:2407.04363. <a href="https://arxiv.org/abs/2407.04363" target="_blank" rel="noopener">https://arxiv.org/abs/2407.04363</a></li>
+</ol>
+<p class="small">本文依 2026-07-22 可取得的官方專案、官方文件與研究資料撰寫。Cognee 仍持續更新，安裝指令、外掛名稱、API 參數與支援後端可能變更；正式部署前請以目前版本的官方文件、release notes 與安全公告為準。</p>
+</section>
+
+<div class="footer">
+<strong>結語：</strong>Cognee 的價值不只是「替 AI 保存更多文字」，而是把零散資訊轉換成具有來源、語意和關係的可演化記憶。當資料品質、關係設計、權限管理與評估流程做得完善時，Claude Code、Codex 或其他智能體才有機會從一次性工具，進一步成為能理解長期專案脈絡的協作者。
+</div>
+</article>
+</div>
+</body>
+</html>
