@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="從概念、流程到實作，完整理解冒煙測試（Smoke Testing），含 Web、API、AI 評測與 CI/CD 範例。">
+  <title>冒煙測試完整技術指南｜Smoke Testing</title>
+  <style>
+    :root{
+      --bg:#f6f8fb;--surface:#fff;--text:#172033;--muted:#5c667a;--line:#dfe5ee;
+      --primary:#d65a31;--primary-dark:#a63e1f;--accent:#f4b942;--ok:#18794e;
+      --code:#111827;--code-text:#e5e7eb;--shadow:0 12px 32px rgba(30,41,59,.09);
+      --radius:18px;--max:1120px
+    }
+    [data-theme="dark"]{
+      --bg:#10151f;--surface:#18202d;--text:#edf2f7;--muted:#aab5c5;--line:#334155;
+      --primary:#ff8159;--primary-dark:#ff9b7b;--accent:#ffd166;--ok:#55d69e;
+      --code:#090d14;--code-text:#e8edf5;--shadow:0 12px 32px rgba(0,0,0,.28)
+    }
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:86px}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;line-height:1.82}
+    a{color:var(--primary-dark);text-underline-offset:3px}.wrap{width:min(calc(100% - 32px),var(--max));margin:auto}
+    header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--surface) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+    .nav{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{font-weight:900;letter-spacing:.02em}.brand span{color:var(--primary)}
+    .nav-actions{display:flex;gap:8px}.btn{border:1px solid var(--line);border-radius:999px;padding:9px 14px;background:var(--surface);color:var(--text);cursor:pointer;font:inherit;font-weight:700}
+    .btn:hover{border-color:var(--primary)}.progress{position:absolute;left:0;bottom:-1px;height:3px;width:0;background:linear-gradient(90deg,var(--primary),var(--accent))}
+    .hero{padding:76px 0 54px;background:radial-gradient(circle at 82% 18%,color-mix(in srgb,var(--accent) 26%,transparent),transparent 28%)}
+    .eyebrow{display:inline-flex;padding:6px 12px;border-radius:999px;background:color-mix(in srgb,var(--primary) 13%,transparent);color:var(--primary-dark);font-weight:900}
+    h1{font-size:clamp(2.35rem,6vw,4.9rem);line-height:1.06;letter-spacing:-.045em;margin:20px 0}
+    .lead{font-size:clamp(1.08rem,2vw,1.3rem);max-width:790px;color:var(--muted)}
+    .hero-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:28px;align-items:center}
+    .smoke-card{background:var(--code);color:white;border-radius:28px;padding:26px;box-shadow:var(--shadow);transform:rotate(1deg)}
+    .terminal-dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px;background:#ff5f57}.terminal-dot:nth-child(2){background:#ffbd2e}.terminal-dot:nth-child(3){background:#28c840}
+    .smoke-icon{font-size:5rem;text-align:center;margin:28px 0 12px}.status{color:#6ee7b7;font-family:ui-monospace,monospace}
+    main{padding:30px 0 80px}.layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:34px}
+    aside{align-self:start;position:sticky;top:94px}.toc{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+    .toc strong{display:block;margin-bottom:8px}.toc a{display:block;color:var(--muted);text-decoration:none;padding:5px 0;font-size:.94rem}.toc a:hover{color:var(--primary)}
+    article{min-width:0}.section{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:clamp(22px,4vw,42px);margin-bottom:25px;box-shadow:var(--shadow)}
+    h2{font-size:clamp(1.55rem,3vw,2.15rem);line-height:1.25;margin:0 0 18px}h3{font-size:1.25rem;margin:30px 0 10px}
+    .callout{border-left:5px solid var(--primary);background:color-mix(in srgb,var(--primary) 8%,var(--surface));padding:16px 20px;border-radius:0 13px 13px 0;margin:22px 0}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{border:1px solid var(--line);border-radius:14px;padding:18px}.card h3{margin:0 0 7px}
+    .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:24px 0}.step{position:relative;padding:16px 12px;border-radius:13px;background:color-mix(in srgb,var(--accent) 13%,var(--surface));text-align:center;font-weight:800}.step b{display:block;color:var(--primary);font-size:1.3rem}
+    .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px}table{width:100%;border-collapse:collapse;min-width:680px}th,td{text-align:left;padding:13px 15px;border-bottom:1px solid var(--line);vertical-align:top}th{background:color-mix(in srgb,var(--primary) 9%,var(--surface))}tr:last-child td{border-bottom:0}
+    pre{position:relative;background:var(--code);color:var(--code-text);border-radius:14px;padding:48px 18px 18px;overflow:auto;line-height:1.6;font-size:.89rem}
+    code{font-family:"SFMono-Regular",Consolas,monospace}.copy{position:absolute;right:10px;top:9px;border:1px solid #465063;background:#202938;color:#fff;border-radius:8px;padding:5px 9px;cursor:pointer}
+    :not(pre)>code{padding:.15em .4em;border-radius:5px;background:color-mix(in srgb,var(--primary) 10%,var(--surface));color:var(--primary-dark)}
+    .checklist{list-style:none;padding:0}.checklist li{padding:10px 0 10px 34px;position:relative;border-bottom:1px dashed var(--line)}.checklist li::before{content:"✓";position:absolute;left:3px;color:var(--ok);font-weight:900}
+    details{border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:10px 0}summary{cursor:pointer;font-weight:800}
+    footer{text-align:center;color:var(--muted);padding:30px}
+    @media(max-width:880px){.hero-grid,.layout{grid-template-columns:1fr}aside{position:static}.toc{display:none}.flow{grid-template-columns:1fr 1fr}.flow .step:last-child{grid-column:1/-1}.smoke-card{transform:none}}
+    @media(max-width:600px){.wrap{width:min(calc(100% - 20px),var(--max))}.hero{padding-top:48px}.grid,.flow{grid-template-columns:1fr}.flow .step:last-child{grid-column:auto}.section{padding:21px}.nav .brand{font-size:.92rem}.btn{padding:7px 10px}}
+    @media print{header,aside,.copy{display:none}.hero{padding:20px 0}.layout{display:block}.section{box-shadow:none;break-inside:avoid}body{background:#fff}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <div class="brand"><span>SMOKE</span> TESTING 技術指南</div>
+      <div class="nav-actions">
+        <button class="btn" id="printBtn">列印／存成 PDF</button>
+        <button class="btn" id="themeBtn" aria-label="切換深色模式">🌙</button>
+      </div>
+      <div class="progress" id="progress"></div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow">軟體測試入門到實戰</span>
+        <h1>冒煙測試<br>完整技術指南</h1>
+        <p class="lead">在投入完整測試之前，用最少時間確認最關鍵的功能「活著」。從網站、API、部署流程到 AI 模型評測，建立一套快速、低成本而可信的第一道防線。</p>
+      </div>
+      <div class="smoke-card" aria-label="冒煙測試終端機示意">
+        <span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span>
+        <div class="smoke-icon">💨</div>
+        <code>$ npm run test:smoke</code><br>
+        <span class="status">✓ 5 critical checks passed</span><br>
+        <span class="status">✓ Ready for full test suite</span>
+      </div>
+    </div>
+  </section>
+
+  <main class="wrap layout">
+    <aside>
+      <nav class="toc" aria-label="文章目錄">
+        <strong>文章目錄</strong>
+        <a href="#definition">01 定義與由來</a><a href="#purpose">02 目的與定位</a>
+        <a href="#comparison">03 測試方法比較</a><a href="#scope">04 測試範圍</a>
+        <a href="#process">05 標準流程</a><a href="#examples">06 實作範例</a>
+        <a href="#ai">07 AI 評測案例</a><a href="#cicd">08 CI/CD 自動化</a>
+        <a href="#design">09 案例設計原則</a><a href="#failure">10 失敗處理</a>
+        <a href="#checklist">11 實務檢核表</a><a href="#faq">12 常見問題</a>
+      </nav>
+    </aside>
+
+    <article>
+      <section class="section" id="definition">
+        <h2>01｜什麼是冒煙測試？</h2>
+        <p><strong>冒煙測試（Smoke Testing）</strong>是一種範圍小、速度快、聚焦核心功能的初步測試。它通常在新版本建置完成、程式部署到測試或正式環境之後立即執行，用來回答一個關鍵問題：</p>
+        <div class="callout"><strong>這個版本是否基本可用，值得繼續投入時間做更完整的測試？</strong></div>
+        <p>名稱源自早期硬體工程：設備第一次通電後，先觀察是否冒煙或發生明顯故障。沒有冒煙不代表設備完全正確，卻代表可以繼續做下一階段檢查。軟體工程借用這個概念，先驗證登入、首頁、資料庫連線、核心 API 等最重要路徑。</p>
+        <p>冒煙測試也常稱為 <em>Build Verification Test（BVT，建置驗證測試）</em>。它不是要找出所有錯誤，而是攔截會讓整套系統無法繼續測試的重大問題。</p>
+      </section>
+
+      <section class="section" id="purpose">
+        <h2>02｜冒煙測試的目的與定位</h2>
+        <div class="grid">
+          <div class="card"><h3>快速阻擋壞版本</h3><p>若首頁無法開啟、API 全數回傳 500 或資料庫無法連線，就不必繼續執行耗時的完整測試。</p></div>
+          <div class="card"><h3>降低時間與費用</h3><p>先跑 3～10 個核心案例，可避免直接執行數百項測試，尤其適合會產生雲端或 AI API 費用的流程。</p></div>
+          <div class="card"><h3>建立部署信心</h3><p>確認新版本在目標環境可啟動、設定可讀取、依賴服務可連線，減少「本機正常、上線失敗」。</p></div>
+          <div class="card"><h3>提供清楚閘門</h3><p>冒煙測試通過才進入整合、回歸、效能或使用者驗收測試；失敗則立即停止並修復。</p></div>
+        </div>
+      </section>
+
+      <section class="section" id="comparison">
+        <h2>03｜和其他測試有什麼不同？</h2>
+        <div class="table-wrap"><table>
+          <thead><tr><th>測試類型</th><th>主要問題</th><th>範圍／速度</th><th>常見時機</th></tr></thead>
+          <tbody>
+            <tr><td><strong>冒煙測試</strong></td><td>系統基本上能不能用？</td><td>窄／快</td><td>每次建置或部署後</td></tr>
+            <tr><td>單元測試</td><td>單一函式或元件是否正確？</td><td>小／非常快</td><td>開發與提交程式碼時</td></tr>
+            <tr><td>整合測試</td><td>多個模組合作是否正確？</td><td>中／中等</td><td>功能整合後</td></tr>
+            <tr><td>回歸測試</td><td>修改後是否破壞原有功能？</td><td>廣／較慢</td><td>改版、修錯後</td></tr>
+            <tr><td>健全性測試（Sanity）</td><td>特定修改是否大致合理？</td><td>窄且深入／快</td><td>小幅修改或修補後</td></tr>
+            <tr><td>驗收測試（UAT）</td><td>是否符合使用者與業務需求？</td><td>依情境／較慢</td><td>正式發布前</td></tr>
+          </tbody>
+        </table></div>
+        <p>實務上，Smoke 與 Sanity 有時會被團隊混用。較常見的區分是：<strong>Smoke 檢查整體的關鍵功能是否可運作；Sanity 聚焦某次修改是否合理。</strong></p>
+      </section>
+
+      <section class="section" id="scope">
+        <h2>04｜應該測哪些內容？</h2>
+        <p>好的冒煙測試不是隨機挑幾個案例，而是覆蓋系統的「生命線」。常見範圍包括：</p>
+        <ul>
+          <li>應用程式能否啟動，首頁與主要頁面能否開啟。</li>
+          <li>使用者能否登入、登出，權限是否沒有明顯失效。</li>
+          <li>最重要的業務流程能否走完，例如建立訂單、送出表單、儲存學習紀錄。</li>
+          <li>資料庫、檔案儲存、第三方 API 等關鍵依賴能否連線。</li>
+          <li>正式環境的必要設定是否存在，但不應在輸出中洩漏密鑰。</li>
+          <li>回應狀態碼、資料結構和基本內容是否符合預期。</li>
+        </ul>
+        <div class="callout">判斷原則：如果這項功能壞掉，後續大部分測試是否失去意義？若答案是「是」，它通常應納入冒煙測試。</div>
+      </section>
+
+      <section class="section" id="process">
+        <h2>05｜標準執行流程</h2>
+        <div class="flow">
+          <div class="step"><b>1</b>定義核心路徑</div><div class="step"><b>2</b>準備環境資料</div>
+          <div class="step"><b>3</b>執行少量案例</div><div class="step"><b>4</b>判定通過／失敗</div>
+          <div class="step"><b>5</b>放行完整測試</div>
+        </div>
+        <ol>
+          <li><strong>定義成功條件：</strong>每個案例都要有明確輸入、操作、預期結果、逾時與失敗條件。</li>
+          <li><strong>準備獨立測試資料：</strong>避免使用真實個資；資料應可重建、可清理，並避免案例互相依賴。</li>
+          <li><strong>先檢查環境：</strong>確認服務網址、模型名稱、資料庫連線與必要環境變數，但只記錄是否存在，不輸出秘密值。</li>
+          <li><strong>執行並保留證據：</strong>記錄版本、環境、案例編號、時間、狀態碼、延遲與失敗摘要。</li>
+          <li><strong>設定硬性閘門：</strong>任何關鍵案例失敗，就停止後續完整測試；修復後重新部署並重跑。</li>
+        </ol>
+      </section>
+
+      <section class="section" id="examples">
+        <h2>06｜網站與 API 實作範例</h2>
+        <h3>範例一：使用 Playwright 驗證網站核心流程</h3>
+        <pre><button class="copy">複製</button><code>import { test, expect } from '@playwright/test';
+
+test('首頁可開啟並進入教材', async ({ page }) =&gt; {
+  await page.goto(process.env.BASE_URL);
+  await expect(page).toHaveTitle(/自然科學|教材/);
+  await page.getByRole('link', { name: '開始學習' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+});
+
+test('學習紀錄可以儲存', async ({ page }) =&gt; {
+  await page.goto(`${process.env.BASE_URL}/lesson/refraction`);
+  await page.getByLabel('我的預測').fill('光線方向會改變');
+  await page.getByRole('button', { name: '儲存紀錄' }).click();
+  await expect(page.getByText('儲存成功')).toBeVisible();
+});</code></pre>
+        <h3>範例二：Shell 檢查 API 健康狀態</h3>
+        <pre><button class="copy">複製</button><code>#!/usr/bin/env bash
+set -euo pipefail
+
+BASE_URL="${BASE_URL:?請設定 BASE_URL}"
+
+curl --fail --silent --show-error \
+  --max-time 10 \
+  "$BASE_URL/api/health" |
+  jq -e '.status == "ok"'
+
+echo "Smoke test passed: API is healthy."</code></pre>
+        <p><code>--fail</code> 讓 HTTP 錯誤狀態造成命令失敗，<code>--max-time</code> 避免服務無回應時無限等待，<code>jq -e</code> 則驗證回傳 JSON 的內容，而不只是確認狀態碼。</p>
+      </section>
+
+      <section class="section" id="ai">
+        <h2>07｜AI 模型評測的冒煙測試</h2>
+        <p>AI 評測往往牽涉 API 計費、模型延遲與非決定性輸出，因此更適合先跑冒煙測試。例如完整題庫有 40 題，可先挑 5 題，分別涵蓋簡答、推理、格式限制、拒答與較長輸入。</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>檢查項目</th><th>最低成功條件</th><th>失敗時可能原因</th></tr></thead>
+          <tbody>
+            <tr><td>API 連線</td><td>請求成功並在逾時內回覆</td><td>金鑰、網路、額度或端點錯誤</td></tr>
+            <tr><td>模型設定</td><td>指定模型可用</td><td>模型名稱錯誤、權限不足</td></tr>
+            <tr><td>結構化輸出</td><td>JSON 可解析且欄位齊全</td><td>Schema、提示詞或解析程式問題</td></tr>
+            <tr><td>評分流程</td><td>能產生分數與理由</td><td>評分規準不清或程式映射錯誤</td></tr>
+            <tr><td>安全記錄</td><td>日誌不含 API Key 與個資</td><td>錯誤處理直接印出請求內容</td></tr>
+          </tbody>
+        </table></div>
+        <h3>建議的 5 題選樣策略</h3>
+        <ul>
+          <li>1 題最簡單、最常見的正常案例。</li><li>1 題包含中文字、標點或多行內容。</li>
+          <li>1 題要求固定 JSON 格式。</li><li>1 題接近輸入長度或複雜度上限。</li>
+          <li>1 題測試錯誤輸入、安全拒答或重試機制。</li>
+        </ul>
+        <div class="callout"><strong>重要：</strong>5 題全部成功，只表示評測管線基本可運作，不代表模型品質已獲充分驗證。品質結論仍需完整題庫、重複試驗與統計分析。</div>
+      </section>
+
+      <section class="section" id="cicd">
+        <h2>08｜放進 CI/CD 自動執行</h2>
+        <p>冒煙測試最適合部署完成後自動執行。以下 GitHub Actions 範例會對目標網站執行測試；只有通過時，後續完整測試才會開始。</p>
+        <pre><button class="copy">複製</button><code>name: Post-deploy smoke test
+on:
+  workflow_dispatch:
+  deployment_status:
+
+jobs:
+  smoke:
+    if: github.event_name == 'workflow_dispatch' ||
+        github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:smoke
+        env:
+          BASE_URL: ${{ secrets.PRODUCTION_URL }}
+
+  full-test:
+    needs: smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm test</code></pre>
+        <p>實務上還可加入 Slack／Email 通知、自動保留螢幕截圖與 trace、失敗時停止流量切換，或在藍綠部署中自動回退至上一個穩定版本。</p>
+      </section>
+
+      <section class="section" id="design">
+        <h2>09｜如何設計好的冒煙案例？</h2>
+        <ul>
+          <li><strong>少而關鍵：</strong>通常控制在數分鐘內完成；若要跑一小時，已偏離「快速閘門」的定位。</li>
+          <li><strong>結果穩定：</strong>避免依賴隨機資料、外部網站版面或不固定的時間條件。</li>
+          <li><strong>彼此獨立：</strong>任何案例都能單獨重跑，並自行建立與清理資料。</li>
+          <li><strong>可診斷：</strong>失敗訊息應指出哪個步驟、哪個端點、預期與實際結果，而非只顯示「失敗」。</li>
+          <li><strong>貼近真實：</strong>至少包含一條真正的端到端使用路徑，而不只是所有服務各自回傳 200。</li>
+          <li><strong>持續更新：</strong>當核心功能與風險改變，測試清單也必須調整。</li>
+        </ul>
+        <h3>通過標準範例</h3>
+        <p>核心案例通過率應為 <strong>100%</strong>；健康檢查須在 10 秒內完成；端到端路徑須在 60 秒內完成；不接受未分類錯誤；日誌不得含密鑰、個資或完整敏感輸入。</p>
+      </section>
+
+      <section class="section" id="failure">
+        <h2>10｜測試失敗時怎麼處理？</h2>
+        <ol>
+          <li><strong>先停止放行：</strong>不要在重大故障尚未釐清時繼續跑完整測試或擴大部署。</li>
+          <li><strong>確認是否為測試本身不穩：</strong>檢查選擇器、測試資料、逾時及第三方依賴。</li>
+          <li><strong>收集最小必要證據：</strong>版本編號、環境、時間、狀態碼、錯誤摘要與必要截圖。</li>
+          <li><strong>依影響分級：</strong>服務完全不可用、資料錯誤與安全問題通常列為阻擋發布。</li>
+          <li><strong>修復後從頭重跑：</strong>不要只人工略過失敗步驟，並確認修復沒有造成新問題。</li>
+        </ol>
+        <div class="callout">「重跑就過」不是充分的修復。若案例偶發失敗，應追查不穩定來源；否則團隊久而久之會忽略警報。</div>
+      </section>
+
+      <section class="section" id="checklist">
+        <h2>11｜可直接使用的冒煙測試檢核表</h2>
+        <ul class="checklist">
+          <li>已標記本次測試的版本、環境、執行者與時間。</li>
+          <li>應用程式啟動正常，首頁或入口頁可以開啟。</li>
+          <li>關鍵 API 的狀態碼、回應結構及基本內容正確。</li>
+          <li>登入與必要權限正常，未登入者不能存取受保護內容。</li>
+          <li>最重要的一條端到端使用流程可以完成。</li>
+          <li>資料庫、儲存服務與必要第三方服務可以連線。</li>
+          <li>錯誤訊息可理解，且不洩漏密鑰、個資與內部堆疊資訊。</li>
+          <li>測試資料可以安全建立與清除，不污染正式資料。</li>
+          <li>所有核心案例 100% 通過後，才啟動完整測試。</li>
+          <li>失敗時已有停止、通知、回退與重新測試機制。</li>
+        </ul>
+      </section>
+
+      <section class="section" id="faq">
+        <h2>12｜常見問題與迷思</h2>
+        <details><summary>冒煙測試通過，就代表系統沒有 Bug 嗎？</summary><p>不是。它只證明最基本、最關鍵的功能在當下環境可運作，無法取代完整的功能、回歸、效能、安全與驗收測試。</p></details>
+        <details><summary>應該全部自動化嗎？</summary><p>高頻、穩定、容易判定的案例應優先自動化。介面仍在快速變動或需主觀判斷時，可暫時保留人工檢查，但應有固定腳本和紀錄。</p></details>
+        <details><summary>每次部署都要執行嗎？</summary><p>建議如此，特別是正式環境。即使程式碼沒有改到核心功能，部署設定、環境變數、資料庫遷移或依賴服務仍可能造成問題。</p></details>
+        <details><summary>多少個案例最合適？</summary><p>沒有固定數量。以覆蓋所有生命線且能在數分鐘內完成為原則。小型教材網站可能 3～8 個，大型平台可能數十個，但都應維持快速與穩定。</p></details>
+        <details><summary>能直接對正式環境測試嗎？</summary><p>可以，但必須使用專用測試帳號、可識別且可清理的資料，避免觸發真實付款、寄信或不可逆操作。高風險動作宜用沙盒或替代端點。</p></details>
+      </section>
+
+      <section class="section">
+        <h2>結語｜先確認「能跑」，再證明「跑得對」</h2>
+        <p>冒煙測試的價值，在於用很小的成本提早發現很大的問題。它建立了一個清楚節奏：<strong>部署 → 快速驗證 → 通過閘門 → 完整測試 → 正式放行</strong>。對網站、互動教材、後端 API 或 AI 評測系統而言，這道第一關都能有效減少無效等待、雲端費用與上線風險。</p>
+        <p>最重要的觀念是：冒煙測試不是完整品質保證，而是一個快速可信的「繼續／停止」判斷機制。</p>
+      </section>
+    </article>
+  </main>
+
+  <footer>冒煙測試完整技術指南 · 單一 HTML、RWD 響應式設計</footer>
+  <script>
+    const root=document.documentElement,themeBtn=document.getElementById('themeBtn');
+    const saved=localStorage.getItem('smoke-guide-theme');
+    if(saved) root.dataset.theme=saved;
+    const syncTheme=()=>themeBtn.textContent=root.dataset.theme==='dark'?'☀️':'🌙';
+    syncTheme();
+    themeBtn.addEventListener('click',()=>{
+      root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';
+      localStorage.setItem('smoke-guide-theme',root.dataset.theme);syncTheme();
+    });
+    document.getElementById('printBtn').addEventListener('click',()=>window.print());
+    const progress=document.getElementById('progress');
+    addEventListener('scroll',()=>{
+      const max=document.documentElement.scrollHeight-innerHeight;
+      progress.style.width=(max?scrollY/max*100:0)+'%';
+    },{passive:true});
+    document.querySelectorAll('.copy').forEach(btn=>btn.addEventListener('click',async()=>{
+      const text=btn.nextElementSibling.innerText;
+      await navigator.clipboard.writeText(text);
+      const old=btn.textContent;btn.textContent='已複製';
+      setTimeout(()=>btn.textContent=old,1300);
+    }));
+  </script>
+</body>
+</html>
