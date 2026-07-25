@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="以生活觀察、AI 發散、文獻查證、設備盤點、小型預試與評分矩陣，建立完整的國小科展題目訂定流程。" />
+  <meta name="theme-color" content="#8c4f2b" />
+  <title>如何尋找適合的科展題目｜完整流程與 AI 實作指南</title>
+  <style>
+    :root{
+      --bg:#fffaf3;
+      --paper:#ffffff;
+      --ink:#2e241e;
+      --muted:#6f6259;
+      --brand:#9b552f;
+      --brand-dark:#6f351f;
+      --accent:#e8a85d;
+      --soft:#f7eadb;
+      --line:#ead8c8;
+      --ok:#46725d;
+      --warn:#a16420;
+      --shadow:0 16px 40px rgba(79,45,27,.10);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+      background:linear-gradient(180deg,#fff8ef 0,#fffdf9 44%,#fff9f1 100%);
+      color:var(--ink);
+      line-height:1.8;
+    }
+    a{color:inherit}
+    .topbar{
+      position:sticky;top:0;z-index:30;
+      background:rgba(255,250,243,.9);
+      backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(155,85,47,.14);
+    }
+    .topbar-inner{
+      max-width:1180px;margin:auto;padding:12px 20px;
+      display:flex;align-items:center;justify-content:space-between;gap:16px;
+    }
+    .brand{font-weight:900;letter-spacing:.03em;color:var(--brand-dark)}
+    .nav{display:flex;gap:14px;overflow:auto;white-space:nowrap;font-size:.92rem}
+    .nav a{text-decoration:none;color:var(--muted);padding:7px 10px;border-radius:999px}
+    .nav a:hover{background:var(--soft);color:var(--brand-dark)}
+    .hero{
+      max-width:1180px;margin:0 auto;padding:72px 20px 48px;
+      display:grid;grid-template-columns:1.15fr .85fr;gap:34px;align-items:center;
+    }
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;background:#fff0de;border:1px solid #efd2b2;color:var(--brand-dark);padding:7px 13px;border-radius:999px;font-weight:800;font-size:.9rem}
+    h1{font-size:clamp(2.2rem,5vw,4.5rem);line-height:1.08;margin:20px 0 18px;letter-spacing:-.04em}
+    .lead{font-size:1.14rem;color:var(--muted);max-width:760px}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;padding:12px 18px;border-radius:14px;font-weight:800;border:1px solid var(--brand)}
+    .btn.primary{background:var(--brand);color:white}
+    .btn.secondary{background:white;color:var(--brand-dark)}
+    .hero-card{
+      background:linear-gradient(145deg,#7b4026,#b96d3b);
+      color:#fff;border-radius:30px;padding:28px;box-shadow:var(--shadow);position:relative;overflow:hidden;
+    }
+    .hero-card:before,.hero-card:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.12)}
+    .hero-card:before{width:220px;height:220px;right:-70px;top:-80px}
+    .hero-card:after{width:160px;height:160px;left:-60px;bottom:-65px}
+    .hero-card h2{margin-top:0;font-size:1.6rem;position:relative}
+    .mini-flow{display:grid;gap:10px;position:relative}
+    .mini-step{display:flex;gap:12px;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);padding:11px 13px;border-radius:14px}
+    .mini-step b{display:grid;place-items:center;min-width:30px;height:30px;border-radius:50%;background:#fff;color:var(--brand-dark)}
+    main{max-width:1180px;margin:auto;padding:0 20px 80px}
+    .section{margin-top:54px}
+    .section-head{display:flex;gap:16px;align-items:flex-start;margin-bottom:22px}
+    .section-num{display:grid;place-items:center;min-width:48px;height:48px;background:var(--brand);color:white;border-radius:15px;font-weight:900}
+    h2{font-size:clamp(1.6rem,3vw,2.35rem);line-height:1.25;margin:0}
+    h3{font-size:1.25rem;margin-top:30px;color:var(--brand-dark)}
+    p{margin:10px 0}
+    .muted{color:var(--muted)}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:0 8px 24px rgba(79,45,27,.05)}
+    .card h3{margin-top:0}
+    .icon{font-size:1.8rem}
+    .workflow{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .flow-item{position:relative;background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;min-height:150px}
+    .flow-item b{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--soft);color:var(--brand-dark);margin-bottom:8px}
+    .flow-item:not(:last-child):after{content:"→";position:absolute;right:-13px;top:54px;color:var(--accent);font-size:1.6rem;font-weight:900;z-index:2}
+    table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden}
+    th,td{padding:13px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+    th{background:#f6e6d5;color:var(--brand-dark)}
+    tr:last-child td{border-bottom:0}
+    .table-wrap{overflow:auto;border-radius:18px}
+    .callout{background:#fff2df;border-left:5px solid var(--accent);border-radius:14px;padding:18px 20px;margin:20px 0}
+    .callout strong{color:var(--brand-dark)}
+    .checklist{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
+    .check{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+    pre{position:relative;background:#241b17;color:#f9eadc;padding:20px;border-radius:18px;overflow:auto;white-space:pre-wrap;word-break:break-word;font-family:"SFMono-Regular",Consolas,monospace;line-height:1.7}
+    .copy-btn{position:absolute;top:10px;right:10px;border:0;border-radius:10px;padding:7px 10px;background:#fff;color:#4f2d1b;font-weight:800;cursor:pointer}
+    .score{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:16px}
+    .score div{padding:14px;background:#fff;border:1px solid var(--line);border-radius:14px;text-align:center}
+    .score strong{display:block;font-size:1.3rem;color:var(--brand)}
+    .timeline{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .week{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px}
+    .week ol{padding-left:22px}
+    footer{background:#2a1e18;color:#eaded4;padding:34px 20px;text-align:center}
+    .backtop{position:fixed;right:18px;bottom:18px;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--brand);color:#fff;text-decoration:none;box-shadow:var(--shadow)}
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr;padding-top:44px}
+      .grid,.workflow{grid-template-columns:1fr 1fr}
+      .flow-item:nth-child(2n):after{display:none}
+      .score{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:620px){
+      .topbar-inner{align-items:flex-start;flex-direction:column}
+      .nav{width:100%}
+      .hero{padding:34px 16px}
+      main{padding-left:16px;padding-right:16px}
+      .grid,.workflow,.timeline,.checklist{grid-template-columns:1fr}
+      .flow-item:after{display:none!important}
+      h1{font-size:2.45rem}
+      th,td{min-width:150px}
+      .hero-actions{display:grid}
+    }
+    @media print{
+      .topbar,.hero-actions,.backtop,.copy-btn{display:none}
+      body{background:#fff}
+      .hero{padding-top:20px}
+      .card,.flow-item,.week{box-shadow:none;break-inside:avoid}
+    }
+  </style>
+</head>
+<body id="top">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">科展題目探索指南</div>
+      <nav class="nav" aria-label="頁面導覽">
+        <a href="#overview">總覽</a>
+        <a href="#tools">工具盤點</a>
+        <a href="#steps">八階段流程</a>
+        <a href="#prompts">AI 提示詞</a>
+        <a href="#score">評分矩陣</a>
+        <a href="#plan">兩週計畫</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <span class="eyebrow">🔬 國小科展 × AI × 數位工具</span>
+      <h1>如何找到一個<br>真正適合研究的科展題目？</h1>
+      <p class="lead">從生活觀察開始，透過 AI 發散、文獻查證、設備盤點、小型預試與評分矩陣，把模糊的興趣轉化成「可測量、可控制、可重複」的研究問題。</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#steps">開始閱讀流程</a>
+        <a class="btn secondary" href="#prompts">直接查看提示詞</a>
+      </div>
+    </div>
+    <aside class="hero-card" aria-label="流程摘要">
+      <h2>核心流程</h2>
+      <div class="mini-flow">
+        <div class="mini-step"><b>1</b><span>生活觀察：發現真實現象</span></div>
+        <div class="mini-step"><b>2</b><span>AI 發散：提出可研究問題</span></div>
+        <div class="mini-step"><b>3</b><span>文獻查證：確認前人研究</span></div>
+        <div class="mini-step"><b>4</b><span>小型預試：確認能否量測</span></div>
+        <div class="mini-step"><b>5</b><span>評分定題：選出正式題目</span></div>
+      </div>
+    </aside>
+  </section>
+
+  <main>
+    <section class="section" id="overview">
+      <div class="section-head"><div class="section-num">01</div><div><h2>先理解：科展題目不是一句漂亮標題</h2><p class="muted">真正的科展題目，必須同時具備研究問題、變因、測量方式與可行性。</p></div></div>
+      <div class="callout"><strong>最重要的原則：</strong>不要一開始就問 AI「請幫我想十個科展題目」。先讓學生觀察真實現象，再請 AI 協助拆解問題。</div>
+      <div class="grid">
+        <article class="card"><div class="icon">👀</div><h3>從現象出發</h3><p>題目最好來自學生真的看過、摸過、操作過的現象，而不是只從網路複製。</p></article>
+        <article class="card"><div class="icon">📏</div><h3>可以量化</h3><p>「比較好」「比較穩」太模糊，應轉成距離、時間、角度、溫度、成功率或振幅。</p></article>
+        <article class="card"><div class="icon">🔁</div><h3>可以重複</h3><p>研究必須能多次操作、蒐集數據並比較，而不只是單次展示現象。</p></article>
+      </div>
+    </section>
+
+    <section class="section" id="tools">
+      <div class="section-head"><div class="section-num">02</div><div><h2>盤點目前可用的工具與設備</h2><p class="muted">先確認手邊能做什麼，再決定研究範圍。</p></div></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>類別</th><th>可用工具</th><th>在定題階段的用途</th></tr></thead>
+          <tbody>
+            <tr><td>AI 對話</td><td>ChatGPT、Claude、Gemini</td><td>發想問題、拆解變因、檢查風險與可行性</td></tr>
+            <tr><td>程式與網站</td><td>Codex、Claude Code、HTML、GitHub Pages</td><td>建立題目資料庫、評分表、行動紀錄工具</td></tr>
+            <tr><td>筆記整理</td><td>Obsidian、Google 文件</td><td>建立研究日誌、文獻卡片與會議紀錄</td></tr>
+            <tr><td>資料處理</td><td>Google Sheets、Excel、Python</td><td>預試分析、圖表、平均值與題目評分</td></tr>
+            <tr><td>實驗紀錄</td><td>手機、平板、慢動作、錄音、量測工具</td><td>記錄運動、聲音、時間、角度與自然現象</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="steps">
+      <div class="section-head"><div class="section-num">03</div><div><h2>八階段科展題目訂定流程</h2><p class="muted">從問題池到正式定題，每一階段都留下可查證的紀錄。</p></div></div>
+      <div class="workflow">
+        <div class="flow-item"><b>1</b><h3>生活觀察</h3><p>在校園、家庭、課堂與自然環境中蒐集現象。</p></div>
+        <div class="flow-item"><b>2</b><h3>建立問題池</h3><p>先累積 20～30 個問題，不急著選題。</p></div>
+        <div class="flow-item"><b>3</b><h3>AI 協助發散</h3><p>產生比較性、因果性、機制性與應用性問題。</p></div>
+        <div class="flow-item"><b>4</b><h3>問題具體化</h3><p>確定操縱、應變與控制變因。</p></div>
+        <div class="flow-item"><b>5</b><h3>文獻查證</h3><p>搜尋論文、歷屆科展與官方資料。</p></div>
+        <div class="flow-item"><b>6</b><h3>設備盤點</h3><p>確認材料、時間、工具、安全與季節限制。</p></div>
+        <div class="flow-item"><b>7</b><h3>最小可行預試</h3><p>用少量樣本驗證現象、測量與差異。</p></div>
+        <div class="flow-item"><b>8</b><h3>評分與定題</h3><p>用矩陣評分，選出正式題目與備用題目。</p></div>
+      </div>
+
+      <h3>階段一：從生活現象蒐集問題</h3>
+      <p>學生先記錄「看到了什麼、在哪裡發生、是否重複、哪些條件可能影響、能否測量」。例如：下雨後消渴草果莢容易爆開，就可以延伸成水滴大小、成熟度、爆裂時間與種子彈射距離等問題。</p>
+
+      <h3>階段二：建立問題池</h3>
+      <div class="table-wrap"><table><thead><tr><th>編號</th><th>觀察現象</th><th>研究問題</th><th>操縱變因</th><th>應變變因</th></tr></thead><tbody>
+        <tr><td>01</td><td>果莢遇水爆開</td><td>水滴體積是否影響爆裂時間？</td><td>水滴體積</td><td>爆裂時間</td></tr>
+        <tr><td>02</td><td>紙飛機容易偏轉</td><td>機翼上反角是否影響穩定性？</td><td>機翼角度</td><td>飛行距離、偏移量</td></tr>
+        <tr><td>03</td><td>雨聲筒聲音不同</td><td>填充物粒徑是否影響聲音特徵？</td><td>填充物粒徑</td><td>持續時間、振幅</td></tr>
+      </tbody></table></div>
+
+      <h3>階段三至四：AI 發散並把主題改成研究問題</h3>
+      <div class="callout"><strong>主題：</strong>紙飛機 → <strong>現象：</strong>飛行會偏轉 → <strong>問題：</strong>哪些結構影響穩定性？ → <strong>正式問題：</strong>在紙張、投擲角度與力量固定時，機翼上反角是否影響飛行距離與左右偏移量？</div>
+
+      <h3>階段五：文獻查證</h3>
+      <p>至少搜尋四類資料：學術論文、歷屆科展、政府或博物館資料、國內外科學教育網站。所有 AI 提供的文獻，都必須人工開啟原始來源，確認作者、年份、標題與網址。</p>
+
+      <h3>階段六：設備與限制盤點</h3>
+      <div class="grid">
+        <article class="card"><h3>手機與平板</h3><p>慢動作、縮時、錄音、軌跡、角度、落點與顏色分析。</p></article>
+        <article class="card"><h3>試算表與 Python</h3><p>平均值、標準差、圖表、聲音波形、影像與數據分析。</p></article>
+        <article class="card"><h3>HTML 與 GitHub Pages</h3><p>建立行動紀錄頁面、題目評分器與實驗資料輸入工具。</p></article>
+      </div>
+
+      <h3>階段七：最小可行預試</h3>
+      <p>正式實驗可能有 5 種材料、每組 30 次；預試可先縮成 2 種材料、每組 3～5 次。目的不是得出結論，而是確認現象能否穩定出現、能否量測、材料是否足夠，以及學生是否能操作。</p>
+      <div class="checklist">
+        <div class="check">□ 現象是否穩定出現？</div><div class="check">□ 是否可以量化？</div>
+        <div class="check">□ 各組是否可能產生差異？</div><div class="check">□ 控制變因是否可管理？</div>
+        <div class="check">□ 材料是否容易取得？</div><div class="check">□ 是否符合安全與倫理？</div>
+      </div>
+
+      <h3>階段八：正式定題</h3>
+      <p>評分後除了選出一個正式題目，也應保留一個備用題目。若主題受季節、材料或樣本供應影響，就能快速切換。</p>
+    </section>
+
+    <section class="section" id="prompts">
+      <div class="section-head"><div class="section-num">04</div><div><h2>可直接複製使用的 AI 提示詞</h2><p class="muted">依照研究進度分四輪使用，避免一次要求 AI 完成所有工作。</p></div></div>
+
+      <h3>第一輪：從觀察產生問題</h3>
+      <pre><button class="copy-btn">複製</button>你是一位熟悉臺灣國小科展的自然科教師。
+
+我們觀察到以下現象：
+【貼上學生的觀察紀錄】
+
+請不要直接替我們決定題目，而是：
+1. 提出 10 個可以進一步研究的問題。
+2. 區分描述性、比較性、因果性、機制性與應用性問題。
+3. 每題列出可能的操縱變因、應變變因與控制變因。
+4. 指出哪些題目只是課本實驗的重複。
+5. 評估是否適合國小學生在六個月內完成。</pre>
+
+      <h3>第二輪：拆解變因與測量方法</h3>
+      <pre><button class="copy-btn">複製</button>針對以下研究問題：
+【貼上研究問題】
+
+請列出：
+1. 操縱變因。
+2. 應變變因。
+3. 控制變因。
+4. 可能的干擾變因。
+5. 可使用的測量工具。
+6. 可量化的紀錄方式。
+7. 最可能失敗的三個地方。</pre>
+
+      <h3>第三輪：文獻與創新性查證</h3>
+      <pre><button class="copy-btn">複製</button>以下是我們正在考慮的國小科展研究問題：
+【貼上研究問題】
+
+請協助設計文獻搜尋策略，不要虛構文獻。
+請提供：
+1. 中文關鍵字 10 組。
+2. 英文關鍵字 10 組。
+3. 適合搜尋的資料庫與網站。
+4. 需要確認的科學概念。
+5. 此題是否已有大量相似研究。
+6. 可能的創新空間。
+7. 如何避免只重複前人實驗。
+
+所有文獻最後都必須由人工開啟原始網頁確認。</pre>
+
+      <h3>第四輪：設計最小可行預試</h3>
+      <pre><button class="copy-btn">複製</button>請針對以下候選題目，設計一個 60 至 90 分鐘內可以完成的最小預試：
+【貼上候選題目】
+
+預試只需要確認：
+1. 現象是否存在。
+2. 測量方法是否可行。
+3. 不同條件是否可能產生差異。
+4. 哪些控制變因最重要。
+
+請列出材料、步驟、紀錄表、成功標準與淘汰標準。</pre>
+    </section>
+
+    <section class="section" id="score">
+      <div class="section-head"><div class="section-num">05</div><div><h2>題目評分矩陣</h2><p class="muted">每項可評 1～5 分，再依權重計算總分。</p></div></div>
+      <div class="table-wrap"><table><thead><tr><th>評選項目</th><th>判斷重點</th><th>建議權重</th></tr></thead><tbody>
+        <tr><td>學生興趣</td><td>是否願意長期投入</td><td>15%</td></tr>
+        <tr><td>可測量性</td><td>是否能取得明確數據</td><td>15%</td></tr>
+        <tr><td>可重複性</td><td>是否能多次實驗</td><td>15%</td></tr>
+        <tr><td>現象真實性</td><td>是否確實觀察到</td><td>10%</td></tr>
+        <tr><td>變因清楚度</td><td>操縱與控制變因是否明確</td><td>10%</td></tr>
+        <tr><td>創新性</td><td>是否超越課本驗證</td><td>10%</td></tr>
+        <tr><td>設備可行性</td><td>現有工具是否足夠</td><td>10%</td></tr>
+        <tr><td>材料穩定性</td><td>是否容易取得與保存</td><td>5%</td></tr>
+        <tr><td>安全與倫理</td><td>是否適合學生操作</td><td>5%</td></tr>
+        <tr><td>時程可行性</td><td>期限內是否能完成</td><td>5%</td></tr>
+      </tbody></table></div>
+      <div class="score">
+        <div><strong>1 分</strong>非常不適合</div><div><strong>2 分</strong>困難很多</div><div><strong>3 分</strong>勉強可行</div><div><strong>4 分</strong>大致適合</div><div><strong>5 分</strong>非常適合</div>
+      </div>
+
+      <h3>定題前五項壓力測試</h3>
+      <div class="checklist">
+        <div class="check"><strong>一句話說清楚：</strong>我們想研究＿＿是否影響＿＿。</div>
+        <div class="check"><strong>可以測量：</strong>有距離、時間、角度、溫度或成功率。</div>
+        <div class="check"><strong>可以重複：</strong>不是只展示一次現象。</div>
+        <div class="check"><strong>可以控制：</strong>重要干擾因素能固定或記錄。</div>
+        <div class="check"><strong>可以深入：</strong>能從現象、比較、機制延伸到應用。</div>
+        <div class="check"><strong>可以完成：</strong>符合材料、季節、設備與期限。</div>
+      </div>
+    </section>
+
+    <section class="section" id="plan">
+      <div class="section-head"><div class="section-num">06</div><div><h2>建議實施：兩週定題計畫</h2><p class="muted">把定題本身當成一個小型研究專案。</p></div></div>
+      <div class="timeline">
+        <div class="week"><h3>第一週：發現與篩選</h3><ol><li>校園觀察與拍照</li><li>整理 20～30 個問題</li><li>AI 協助分類與拆解變因</li><li>搜尋歷屆科展與文獻</li><li>選出 3～5 個候選題目</li></ol></div>
+        <div class="week"><h3>第二週：預試與定題</h3><ol><li>每題進行小型預試</li><li>整理初步數據與問題</li><li>使用評分矩陣評選</li><li>進行師生口頭答辯</li><li>確定正式題目與備用題目</li></ol></div>
+      </div>
+      <div class="callout"><strong>最後應產出四份文件：</strong>題目候選清單、文獻查證紀錄、小型預試報告、題目評選與定題說明。</div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><div class="section-num">07</div><div><h2>結語：AI 是研究助理，不是題目決定者</h2></div></div>
+      <p>AI 可以協助擴展想法、整理資料、拆解變因、預測風險與設計預試；但學生仍要負責觀察、操作、測量與判斷，老師則負責查證、縮小範圍、控管安全與研究品質。</p>
+      <div class="callout"><strong>理想分工：</strong>AI 負責協助擴展、整理與檢查；學生負責觀察、操作、測量與判斷；老師負責查證、縮小範圍與控制研究品質。</div>
+    </section>
+  </main>
+
+  <footer>
+    <p>科展題目探索指南｜適合國小自然科、科展社團與教師研習使用</p>
+  </footer>
+  <a class="backtop" href="#top" aria-label="回到頂端">↑</a>
+
+  <script>
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const text = btn.parentElement.innerText.replace('複製','').trim();
+        try {
+          await navigator.clipboard.writeText(text);
+          const old = btn.textContent;
+          btn.textContent = '已複製';
+          setTimeout(() => btn.textContent = old, 1400);
+        } catch (e) {
+          btn.textContent = '請手動複製';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
