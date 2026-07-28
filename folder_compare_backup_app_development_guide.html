@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="AI Agent 開發資料夾比對與安全備份 App 的完整技術指南">
+<title>AI Agent 開發資料夾比對與安全備份 App｜完整技術指南</title>
+<style>
+:root{--bg:#f4f7fb;--surface:#fff;--text:#172033;--muted:#5d6980;--primary:#2457d6;--primary2:#183e9c;--accent:#0f8f7a;--warn:#a85b00;--danger:#b42318;--border:#dce4ef;--code:#101827;--shadow:0 10px 30px rgba(31,49,83,.08);--radius:18px}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);background:radial-gradient(circle at 10% 0%,rgba(36,87,214,.11),transparent 28rem),radial-gradient(circle at 95% 8%,rgba(15,143,122,.09),transparent 25rem),var(--bg);font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;line-height:1.75}a{color:var(--primary)}.hero{padding:72px 24px 54px;color:#fff;background:linear-gradient(130deg,rgba(9,24,60,.96),rgba(24,62,156,.94))}.hero-inner{width:min(1160px,100%);margin:auto;display:grid;grid-template-columns:1.45fr .75fr;gap:34px;align-items:center}.eyebrow{display:inline-flex;padding:7px 12px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(255,255,255,.08);font-size:.92rem;letter-spacing:.06em}h1{margin:18px 0 14px;font-size:clamp(2.15rem,5vw,4.6rem);line-height:1.12;letter-spacing:-.035em}.hero p{max-width:760px;margin:0;color:rgba(255,255,255,.82);font-size:1.08rem}.hero-card{padding:25px;border:1px solid rgba(255,255,255,.18);border-radius:22px;background:rgba(255,255,255,.09);backdrop-filter:blur(12px)}.hero-card strong{display:block;margin-bottom:12px}.hero-card code{display:block;color:#dfe9ff;white-space:pre-wrap}.layout{width:min(1220px,calc(100% - 32px));margin:34px auto 70px;display:grid;grid-template-columns:270px minmax(0,1fr);gap:28px;align-items:start}.toc{position:sticky;top:16px;padding:22px;border:1px solid var(--border);border-radius:var(--radius);background:rgba(255,255,255,.94);box-shadow:var(--shadow)}.toc h2{margin:0 0 14px;font-size:1rem}.toc a{display:block;padding:7px 0;color:var(--muted);text-decoration:none;font-size:.94rem;border-bottom:1px dashed #edf1f6}.toc a:hover{color:var(--primary)}main{min-width:0}section{margin-bottom:24px;padding:clamp(24px,4vw,42px);border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow)}h2{margin:0 0 18px;font-size:clamp(1.55rem,3vw,2.3rem);line-height:1.25}h3{margin:30px 0 10px;font-size:1.25rem;color:var(--primary2)}h4{margin:22px 0 8px;font-size:1.06rem}p{margin:10px 0}ul,ol{padding-left:1.35rem}li{margin:.4rem 0}.lead{font-size:1.12rem;color:#35425a}.callout{margin:20px 0;padding:18px 20px;border-left:5px solid var(--primary);border-radius:12px;background:#eef4fb}.callout.safe{border-left-color:var(--accent);background:#edf9f6}.callout.warn{border-left-color:var(--warn);background:#fff7e8}.callout.danger{border-left-color:var(--danger);background:#fff0ee}.grid-2,.grid-3{display:grid;gap:18px;margin:18px 0}.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}.card{padding:20px;border:1px solid var(--border);border-radius:15px;background:#fbfcfe}.card h3,.card h4{margin-top:0}.table-wrap{overflow-x:auto;border-radius:12px}table{width:100%;margin:20px 0;border-collapse:collapse;font-size:.96rem}th,td{padding:13px 14px;border:1px solid var(--border);text-align:left;vertical-align:top}th{color:#253453;background:#eef3f9}tr:nth-child(even) td{background:#fbfcfe}pre{overflow-x:auto;margin:18px 0;padding:20px;border-radius:14px;color:#e8eef9;background:var(--code);line-height:1.65;font-size:.91rem}code{font-family:"Cascadia Code",Consolas,monospace}:not(pre)>code{padding:.15em .4em;color:#173b8a;border-radius:6px;background:#edf3ff}.flow{display:grid;grid-template-columns:repeat(5,minmax(120px,1fr));gap:10px;margin:20px 0}.flow div{position:relative;padding:16px 12px;border:1px solid var(--border);border-radius:12px;background:#f8faff;text-align:center;font-weight:700}.flow div:not(:last-child)::after{content:"→";position:absolute;top:50%;right:-14px;color:var(--primary);transform:translateY(-50%)}.badge{display:inline-flex;margin:3px 5px 3px 0;padding:5px 9px;border-radius:999px;background:#eaf0ff;color:#244895;font-size:.86rem;font-weight:700}.checklist{padding:0;list-style:none}.checklist li{position:relative;padding-left:28px}.checklist li::before{content:"✓";position:absolute;left:0;color:var(--accent);font-weight:900}.footer{padding:38px 24px;color:#dce6fa;background:#111d36;text-align:center}.small{color:var(--muted);font-size:.92rem}@media(max-width:960px){.hero-inner,.layout{grid-template-columns:1fr}.toc{position:static}.grid-3{grid-template-columns:1fr}.flow{grid-template-columns:1fr}.flow div:not(:last-child)::after{content:"↓";top:auto;right:50%;bottom:-20px;transform:translateX(50%)}}@media(max-width:680px){.hero{padding-top:46px}.grid-2{grid-template-columns:1fr}section{padding:24px 18px}th,td{min-width:145px}}@media print{.toc{display:none}.layout{display:block;width:100%}section{box-shadow:none;break-inside:avoid}.hero{color:#000;background:#fff}.hero p{color:#333}}
+</style></head><body>
+<header class="hero"><div class="hero-inner"><div><span class="eyebrow">Windows 桌面 App × AI Agent × 安全同步</span><h1>Folder Compare &amp; Backup<br>完整開發技術指南</h1><p>從需求分析、MVP、Electron 與 Tauri 架構選擇，到資料夾掃描、SHA-256 精確比對、安全更新、歷史版本、SQLite、測試、封裝與 AI Agent 執行流程，完整說明如何建立一套「先比對、再預覽、最後由使用者決定是否更新」的桌面工具。</p></div><aside class="hero-card"><strong>核心產品流程</strong><code>選擇資料夾 A、B
+↓
+唯讀掃描
+↓
+產生差異結果
+↓
+人工選擇更新方向
+↓
+更新前預覽
+↓
+備份舊版本
+↓
+安全複製與驗證
+↓
+輸出操作報告</code></aside></div></header>
+<div class="layout"><nav class="toc" aria-label="文章目錄"><h2>文章目錄</h2><a href="#overview">1. 專案概述</a><a href="#mvp">2. MVP 與產品範圍</a><a href="#architecture">3. 技術架構選擇</a><a href="#electron">4. Electron 建議架構</a><a href="#tauri">5. Tauri 正式版架構</a><a href="#workflow">6. 系統操作流程</a><a href="#compare">7. 檔案比對邏輯</a><a href="#sync">8. 安全同步設計</a><a href="#data">9. 資料模型與 SQLite</a><a href="#ui">10. UI 與互動設計</a><a href="#security">11. 安全規則</a><a href="#testing">12. 測試策略</a><a href="#agent">13. AI Agent 開發流程</a><a href="#release">14. 打包與發布</a><a href="#roadmap">15. 版本路線圖</a><a href="#acceptance">16. 驗收標準</a></nav><main>
+<section id="overview"><h2>1. 專案概述</h2><p class="lead">本專案要建立一套 Windows 桌面 App，使用者只要指定兩個資料夾，就能先取得完整差異清單，再依照每個檔案的狀態，選擇是否更新，以及由哪一邊更新到另一邊。</p><div class="callout safe"><strong>產品核心原則：</strong>比對與更新必須分成兩個階段。第一次按下「開始比對」時，系統只能讀取資料，不能新增、覆蓋、改名或刪除任何檔案。</div><h3>主要使用情境</h3><div class="grid-3"><div class="card"><h4>教材與外接硬碟</h4><p>比較教師電腦中的教材與外接硬碟備份，找出新增或更新的檔案。</p></div><div class="card"><h4>網站與程式專案</h4><p>比較本機專案、備份目錄或另一台電腦複製下來的版本。</p></div><div class="card"><h4>照片與研究資料</h4><p>比對大量照片、影片、科展記錄、實驗數據與研究文件。</p></div></div><h3>核心功能</h3><ul class="checklist"><li>選擇資料夾 A 與資料夾 B。</li><li>遞迴掃描所有子資料夾。</li><li>依相對路徑、檔案大小、修改時間與 SHA-256 比較。</li><li>顯示 A 較新、B 較新、只有 A、只有 B、完全相同與衝突。</li><li>逐項或批次選擇更新方向。</li><li>更新前產生預覽。</li><li>覆蓋前保留舊版本。</li><li>複製後重新驗證。</li><li>產生 HTML、CSV 或 JSON 報告。</li></ul></section>
+<section id="mvp"><h2>2. MVP：最小可行產品</h2><p>MVP 是 <strong>Minimum Viable Product</strong>，中文通常翻譯為「最小可行產品」。它不是粗糙的半成品，而是以最少但完整的功能，先建立一個可以真正使用、測試與驗證需求的第一版。</p><div class="callout">對本專案而言，MVP 的目標不是立即加入 AI 文件分析、雲端、NAS、排程、鏡像刪除與多語言；而是先把「比較、選擇、預覽、安全更新、驗證」做正確。</div><h3>MVP 必備功能</h3><div class="table-wrap"><table><thead><tr><th>功能</th><th>是否列入 MVP</th><th>理由</th></tr></thead><tbody><tr><td>選擇兩個資料夾</td><td>是</td><td>整個工作流程的入口。</td></tr><tr><td>日期與大小快速比對</td><td>是</td><td>可快速處理大量檔案。</td></tr><tr><td>SHA-256 精確比對</td><td>是，先針對可疑檔案</td><td>避免只靠時間戳記誤判。</td></tr><tr><td>逐項選擇更新方向</td><td>是</td><td>確保使用者掌握決策。</td></tr><tr><td>更新前預覽</td><td>是</td><td>降低誤覆蓋風險。</td></tr><tr><td>歷史版本</td><td>是</td><td>覆蓋錯誤時可以復原。</td></tr><tr><td>預設刪除或鏡像</td><td>否</td><td>風險過高，不適合第一版。</td></tr><tr><td>AI 文件差異摘要</td><td>否</td><td>屬進階功能，核心 App 不應依賴 AI。</td></tr></tbody></table></div><h3>MVP 與原型的差別</h3><p>只有畫面、按鈕無法真正讀取資料夾，屬於 UI 原型；能夠實際掃描、產生差異、安全更新與產生紀錄，才是可用的 MVP。</p></section>
+<section id="architecture"><h2>3. 技術架構選擇</h2><p>本專案可使用 Electron 或 Tauri 2。兩者都能完成需求，差別主要在開發環境、App 體積、記憶體使用、後端語言與打包工具。</p><div class="table-wrap"><table><thead><tr><th>比較項目</th><th>Electron</th><th>Tauri 2</th></tr></thead><tbody><tr><td>主要技術</td><td>React、TypeScript、Node.js</td><td>React、TypeScript、Rust</td></tr><tr><td>Windows 開發環境</td><td>Node.js 即可開始</td><td>需 Rust、MSVC Build Tools、Windows SDK</td></tr><tr><td>安裝檔大小</td><td>通常較大</td><td>通常較小</td></tr><tr><td>記憶體使用</td><td>較高</td><td>較低</td></tr><tr><td>開發速度</td><td>第一版較快</td><td>環境與除錯較複雜</td></tr><tr><td>大量檔案效能</td><td>良好，需適當優化</td><td>通常更具優勢</td></tr><tr><td>適合階段</td><td>快速完成 MVP</td><td>長期正式產品</td></tr></tbody></table></div><div class="callout warn">若目前電腦沒有 Rust 與 MSVC Build Tools，而目標是立即由 AI Agent 建立、啟動、測試與打包，第一版改用 Electron 通常最實際。若未來要正式長期發布，再評估將核心改寫為 Rust 或遷移至 Tauri。</div></section>
+<section id="electron"><h2>4. Electron MVP 建議架構</h2><p>Electron 由主程序、渲染程序與 preload bridge 組成。React 介面不能直接取得完整 Node.js 權限，所有檔案操作都應經過受控 IPC。</p><pre><code>React Renderer
+    ↓  window.folderApi.compare(...)
+Preload Script / contextBridge
+    ↓  ipcRenderer.invoke(...)
+Electron Main Process
+    ↓
+Core Services
+    ├─ scanner
+    ├─ comparator
+    ├─ hash-service
+    ├─ copy-engine
+    ├─ versioning
+    ├─ verifier
+    └─ report-service</code></pre><h3>安全設定</h3><pre><code>new BrowserWindow({
+  webPreferences: {
+    nodeIntegration: false,
+    contextIsolation: true,
+    sandbox: true,
+    preload: path.join(__dirname, "preload.js")
+  }
+});</code></pre><h3>建議目錄</h3><pre><code>folder-compare-backup/
+├─ src/
+│  ├─ main/
+│  │  ├─ main.ts
+│  │  ├─ ipc/
+│  │  └─ services/
+│  ├─ preload/
+│  │  └─ preload.ts
+│  ├─ renderer/
+│  │  ├─ components/
+│  │  ├─ pages/
+│  │  ├─ hooks/
+│  │  └─ types/
+│  └─ shared/
+├─ tests/
+├─ docs/
+├─ package.json
+├─ electron-builder.yml
+└─ README.md</code></pre><h3>IPC 白名單</h3><p>前端只能呼叫特定功能，例如選擇資料夾、開始比對、計算雜湊、預覽更新與執行同步。不可提供可執行任意 shell 指令的 API。</p></section>
+<section id="tauri"><h2>5. Tauri 正式版架構</h2><p>若安裝 Rust 與 Windows C++ Build Tools，可以維持 Tauri 2＋React＋TypeScript＋Rust 的原始規格。React 負責介面，Rust 負責掃描、雜湊、複製、版本備份與驗證。</p><pre><code>React / TypeScript
+    ↓ invoke()
+Tauri Commands
+    ↓
+Rust Services
+    ├─ scanner.rs
+    ├─ comparator.rs
+    ├─ hash.rs
+    ├─ copy_engine.rs
+    ├─ versioning.rs
+    └─ verifier.rs
+    ↓
+Windows File System / SQLite</code></pre><h3>適合採用 Tauri 的情況</h3><ul><li>計畫將 App 正式提供給其他教師或公開發布。</li><li>重視安裝檔大小、記憶體與長時間執行效率。</li><li>會處理數萬到數十萬個檔案。</li><li>願意投入 Rust、Cargo、MSVC 與 Windows SDK 的建置環境。</li></ul></section>
+<section id="workflow"><h2>6. 系統操作流程</h2><div class="flow"><div>選擇資料夾</div><div>唯讀掃描</div><div>產生差異</div><div>人工選擇</div><div>安全更新</div></div><h3>完整流程</h3><ol><li>使用者指定資料夾 A 與資料夾 B。</li><li>系統檢查兩個路徑不能相同或互為子資料夾。</li><li>遞迴掃描兩邊檔案，建立相對路徑索引。</li><li>先以修改時間與檔案大小快速比較。</li><li>對可疑檔案計算 SHA-256。</li><li>將結果分類並顯示摘要。</li><li>使用者逐項或批次選擇操作。</li><li>系統顯示更新預覽、檔案數量與總容量。</li><li>覆蓋前將舊檔放入歷史版本。</li><li>將來源檔寫入暫存檔，驗證後再取代正式檔案。</li><li>產生結果與錯誤報告。</li></ol></section>
+<section id="compare"><h2>7. 檔案比對邏輯</h2><h3>以相對路徑作為比對鍵</h3><pre><code>資料夾 A：D:\教材\自然\植物\葉片.docx
+資料夾 B：E:\備份\自然\植物\葉片.docx
+
+共同比對鍵：自然\植物\葉片.docx</code></pre><h3>狀態分類</h3><div class="table-wrap"><table><thead><tr><th>狀態</th><th>判斷方式</th><th>預設建議</th></tr></thead><tbody><tr><td>identical</td><td>大小與時間相同，或 SHA-256 相同</td><td>不處理</td></tr><tr><td>only_in_a</td><td>只有資料夾 A 有檔案</td><td>A → B</td></tr><tr><td>only_in_b</td><td>只有資料夾 B 有檔案</td><td>B → A</td></tr><tr><td>a_newer</td><td>A 修改時間較晚</td><td>A → B</td></tr><tr><td>b_newer</td><td>B 修改時間較晚</td><td>B → A</td></tr><tr><td>same_time_different_size</td><td>時間相同但大小不同</td><td>暫停，精確比對</td></tr><tr><td>same_size_different_content</td><td>大小相同但 SHA-256 不同</td><td>人工判斷</td></tr><tr><td>conflict</td><td>兩邊自上次同步後都修改</td><td>不得自動處理</td></tr><tr><td>unreadable</td><td>權限、鎖定或其他錯誤</td><td>略過並記錄</td></tr></tbody></table></div><h3>時間容許差</h3><p>FAT、NTFS、外接硬碟與雲端同步資料夾的時間精度可能不同，因此應提供 <code>timestampToleranceSeconds</code>，例如預設 2 秒。時間差在容許範圍內時，再比較大小或雜湊。</p><h3>SHA-256 精確比對</h3><p>雜湊應採串流方式讀取，不可將大型影片整個載入記憶體。第一版可先對時間或大小有疑問的項目計算，避免所有檔案都計算而拖慢掃描。</p></section>
+<section id="sync"><h2>8. 安全同步設計</h2><div class="callout danger">檔案同步最大的風險不是「比對不準」，而是錯誤覆蓋、批次誤刪、來源在比對後發生變化，或複製中斷造成目的檔損壞。因此同步引擎必須採用防破壞設計。</div><h3>安全更新六步驟</h3><ol><li>重新確認來源檔案仍存在，且 metadata 未改變。</li><li>檢查目的磁碟空間與寫入權限。</li><li>將目的端舊檔備份到歷史版本資料夾。</li><li>把來源檔複製到目的端暫存檔。</li><li>比較來源與暫存檔的大小及 SHA-256。</li><li>驗證成功後，才用暫存檔取代正式目的檔。</li></ol><pre><code>來源：report.docx
+暫存：report.docx.fcb-temp-550e8400
+舊版：.history/2026-07-28_193000/report.docx
+正式：report.docx</code></pre><h3>保留雙版本</h3><pre><code>科展計畫書__from-A__2026-07-28_193000.docx
+科展計畫書__from-B__2026-07-28_193000.docx</code></pre><h3>取消操作</h3><p>使用者取消時，已完成項目保留；正在複製的暫存檔應清除；未開始項目標記為取消；不可刪除原有目的檔。</p></section>
+<section id="data"><h2>9. 資料模型與 SQLite</h2><h3>FileEntry</h3><pre><code>type FileEntry = {
+  absolutePath: string;
+  relativePath: string;
+  fileName: string;
+  extension?: string;
+  size: number;
+  modifiedAt: string;
+  hash?: string;
+  readable: boolean;
+  error?: string;
+};</code></pre><h3>DiffEntry</h3><pre><code>type DiffEntry = {
+  relativePath: string;
+  fileA?: FileEntry;
+  fileB?: FileEntry;
+  status: DiffStatus;
+  suggestedAction: SyncAction;
+  selectedAction: SyncAction;
+  selected: boolean;
+  reason: string;
+  riskLevel: "low" | "medium" | "high";
+};</code></pre><h3>SQLite 建議資料表</h3><p>至少建立 <code>folder_pairs</code>、<code>compare_jobs</code>、<code>diff_entries</code>、<code>sync_jobs</code>、<code>sync_items</code> 與 <code>snapshots</code>。</p><pre><code>CREATE TABLE folder_pairs (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  folder_a TEXT NOT NULL,
+  folder_b TEXT NOT NULL,
+  settings_json TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);</code></pre><p>Snapshot 可用於第二版雙向同步：記錄上次同步時 A、B 兩邊的雜湊與修改時間，才能判斷是否為真正的雙方修改衝突。</p></section>
+<section id="ui"><h2>10. UI 與互動設計</h2><h3>主畫面四大區域</h3><div class="grid-2"><div class="card"><h4>資料夾選擇</h4><p>資料夾 A、B、交換按鈕、最近使用與常用配對。</p></div><div class="card"><h4>比對設定</h4><p>快速／精確比對、時間容許差、隱藏檔與排除規則。</p></div><div class="card"><h4>比對結果</h4><p>摘要、搜尋、篩選、排序、虛擬化表格與狀態標示。</p></div><div class="card"><h4>更新與報告</h4><p>批次選擇、更新預覽、進度、取消、歷史版本與匯出。</p></div></div><h3>結果表格建議欄位</h3><p>勾選、狀態、相對路徑、檔名、A 大小、B 大小、A 修改時間、B 修改時間、雜湊結果、建議動作、選擇動作與風險等級。</p><h3>批次操作</h3><span class="badge">全部使用較新版本</span><span class="badge">全部 A → B</span><span class="badge">全部 B → A</span><span class="badge">只處理新增檔案</span><span class="badge">衝突全部略過</span><span class="badge">清除全部選擇</span><p class="small">批次操作不得直接套用到高風險衝突；顏色必須搭配圖示與文字，不能只依賴顏色傳達狀態。</p></section>
+<section id="security"><h2>11. 安全規則</h2><ul class="checklist"><li>比對階段永遠唯讀。</li><li>第一版預設不提供刪除。</li><li>衝突項目預設動作必須是「不處理」。</li><li>A、B 相同或互為子資料夾時阻擋執行。</li><li>歷史版本目錄不得位於同步掃描範圍內。</li><li>來源在比對後若改變，該項目必須重新比對。</li><li>大量覆蓋或異常變更必須額外警告。</li><li>錯誤不可靜默忽略。</li><li>Renderer 不可直接取得 Node.js 或完整檔案系統權限。</li><li>不得把使用者檔案內容上傳至外部 AI 服務。</li></ul><h3>大量異常保護</h3><ul><li>超過 1,000 個檔案將被更新。</li><li>超過 20% 檔案將被覆蓋。</li><li>超過 10 GB 資料將被複製。</li><li>大量檔案突然變成 0 bytes。</li><li>來源或目的磁碟代號與上次不同。</li></ul></section>
+<section id="testing"><h2>12. 測試策略</h2><h3>單元測試</h3><p>測試相對路徑、時間容許差、大小比較、雜湊比較、狀態分類、排除規則、歷史版本路徑與錯誤轉換。</p><h3>整合測試情境</h3><div class="grid-2"><div class="card"><h4>一般情境</h4><ul><li>完全相同</li><li>只有 A／只有 B</li><li>A 較新／B 較新</li><li>相同大小但內容不同</li><li>空資料夾與 Unicode 中文檔名</li></ul></div><div class="card"><h4>異常情境</h4><ul><li>權限不足</li><li>檔案被鎖定</li><li>磁碟空間不足</li><li>複製中斷與使用者取消</li><li>SHA-256 驗證失敗</li></ul></div></div><h3>效能測試</h3><p>應至少測試 1,000、10,000 與 100,000 個檔案。結果表格必須採虛擬化顯示；雜湊與複製採串流；並限制 hash 與 copy 的同時工作數。</p></section>
+<section id="agent"><h2>13. AI Agent 開發流程</h2><p>AI Agent 可以負責規劃、寫程式、執行測試、修正錯誤與產生文件，但不應自行決定高風險同步操作。</p><h3>建議先建立的專案文件</h3><div class="grid-3"><div class="card"><h4>AGENTS.md</h4><p>說明安全規則、工具限制與開發慣例。</p></div><div class="card"><h4>ARCHITECTURE.md</h4><p>說明前後端模組、IPC、資料流與同步核心。</p></div><div class="card"><h4>PLAN／TASKS.md</h4><p>把開發階段拆成可執行、可測試的小任務。</p></div></div><h3>分階段開發順序</h3><ol><li>初始化 Electron 或 Tauri 專案。</li><li>完成資料夾選擇與唯讀掃描。</li><li>完成快速比對與結果表格。</li><li>加入 SHA-256 精確比對。</li><li>加入逐項與批次操作。</li><li>完成更新預覽。</li><li>完成歷史版本與暫存檔安全複製。</li><li>完成更新後驗證、取消與錯誤處理。</li><li>加入 SQLite、歷史紀錄與報告。</li><li>打包 Windows 安裝檔。</li></ol><div class="callout">每一階段完成後，AI Agent 都應回報：完成項目、修改檔案、測試方法、測試結果、已知限制與下一步。不可一次寫完整專案卻從未啟動或測試。</div></section>
+<section id="release"><h2>14. 打包與發布</h2><h3>Electron</h3><pre><code>npm run build
+npm run dist</code></pre><h3>Tauri</h3><pre><code>npm run tauri build</code></pre><h3>正式交付檔案</h3><pre><code>FolderCompareBackup-Setup.exe
+FolderCompareBackup.msi（若支援）
+README.md
+AGENTS.md
+ARCHITECTURE.md
+SECURITY.md
+TESTING.md
+USER_GUIDE.md
+CHANGELOG.md
+LICENSE
+原始碼
+測試報告</code></pre><p>發布前應在乾淨的 Windows 11 環境測試安裝、啟動、中文路徑、外接硬碟、權限錯誤與解除安裝。</p></section>
+<section id="roadmap"><h2>15. 版本路線圖</h2><div class="grid-3"><div class="card"><h4>1.0 MVP</h4><p>資料夾選擇、快速比對、可疑檔案雜湊、人工選擇、安全更新、歷史版本與報告。</p></div><div class="card"><h4>2.0 進階同步</h4><p>同步快照、真正雙向同步、衝突辨識、排程、NAS、Robocopy 大型傳輸模式。</p></div><div class="card"><h4>3.0 智慧分析</h4><p>AI 文件差異摘要、自然語言排除規則、智慧報告、多語言與雲端整合。</p></div></div><div class="callout warn">AI 功能必須可關閉；沒有 API Key 或網路時，資料夾比較、同步、版本備份與報告仍應完整可用。</div></section>
+<section id="acceptance"><h2>16. 驗收標準</h2><h3>功能驗收</h3><ul class="checklist"><li>可選擇兩個資料夾並掃描子資料夾。</li><li>可正確分類相同、單邊存在、A 較新、B 較新與衝突。</li><li>可對可疑檔案執行 SHA-256。</li><li>可逐項與批次選擇更新方向。</li><li>執行前有完整預覽。</li><li>覆蓋前有歷史版本。</li><li>複製後有大小與 SHA-256 驗證。</li><li>可取消掃描與同步。</li><li>可輸出 HTML、CSV、JSON 報告。</li></ul><h3>安全驗收</h3><ul class="checklist"><li>比對階段不修改任何檔案。</li><li>預設沒有刪除行為。</li><li>衝突不自動覆蓋。</li><li>來源變動會要求重新比對。</li><li>複製或驗證失敗不破壞正式目的檔。</li><li>所有錯誤都有結構化紀錄。</li></ul><div class="callout safe">當 App 能夠在 Windows 11 真實安裝、選擇兩個資料夾、正確比對、安全更新、通過測試並提供完整文件時，才可以視為第一版完成。</div></section>
+</main></div><footer class="footer"><strong>Folder Compare &amp; Backup</strong><br>AI Agent 輔助開發資料夾比對、安全同步與版本備份 App 技術文章</footer></body></html>
