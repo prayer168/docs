@@ -1,0 +1,2704 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI 專案知識工作流的需求、架構、技能建置、提示詞、模板、腳本、驗證與使用完整技術文章。">
+  <title>AI 專案知識工作流：從想法到知識重用的技能建置實錄</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f5f4ef;
+      --paper: #fffefa;
+      --ink: #1d2925;
+      --muted: #66736e;
+      --line: #d9ddd8;
+      --brand: #176b57;
+      --brand-2: #d99432;
+      --soft: #e6f1ed;
+      --soft-2: #fff1d8;
+      --code: #13211d;
+      --code-ink: #e8f5ef;
+      --shadow: 0 18px 50px rgba(23, 44, 37, .10);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #101815;
+        --paper: #17221e;
+        --ink: #edf5f1;
+        --muted: #a9b7b1;
+        --line: #34443e;
+        --brand: #65c9aa;
+        --brand-2: #edb761;
+        --soft: #1d382f;
+        --soft-2: #3a2d19;
+        --code: #09110e;
+        --code-ink: #e8f5ef;
+        --shadow: none;
+      }
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--brand) 14%, transparent), transparent 34rem),
+        var(--bg);
+      color: var(--ink);
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+      line-height: 1.78;
+    }
+    a { color: var(--brand); }
+    .layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 920px);
+      gap: 34px;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 34px 24px 80px;
+    }
+    aside {
+      position: sticky;
+      top: 22px;
+      align-self: start;
+      max-height: calc(100vh - 44px);
+      overflow: auto;
+      padding: 22px 18px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: color-mix(in srgb, var(--paper) 92%, transparent);
+      backdrop-filter: blur(12px);
+    }
+    aside .brand { display: flex; gap: 12px; align-items: center; margin-bottom: 18px; }
+    .bear {
+      width: 42px; height: 42px; display: grid; place-items: center;
+      border-radius: 14px; background: var(--ink); color: var(--paper); font-size: 23px;
+    }
+    aside b { font-size: .95rem; }
+    aside small { display: block; color: var(--muted); line-height: 1.4; }
+    nav a {
+      display: block; padding: 7px 9px; margin: 2px 0; border-radius: 9px;
+      text-decoration: none; color: var(--muted); font-size: .9rem;
+    }
+    nav a:hover { background: var(--soft); color: var(--ink); }
+    main { min-width: 0; }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 56px clamp(26px, 6vw, 68px);
+      border-radius: 30px;
+      background: linear-gradient(135deg, #143c32, #176b57 58%, #268f73);
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+    .hero::after {
+      content: "AI × KNOWLEDGE × PROJECT";
+      position: absolute; right: -26px; bottom: 8px;
+      font-size: clamp(2rem, 8vw, 5.5rem); font-weight: 800; opacity: .055;
+      white-space: nowrap; letter-spacing: -.04em;
+    }
+    .eyebrow { margin: 0 0 10px; color: #bceadb; font-size: .85rem; letter-spacing: .13em; text-transform: uppercase; }
+    h1 { margin: 0; max-width: 760px; font-size: clamp(2.2rem, 6vw, 4.35rem); line-height: 1.08; letter-spacing: -.045em; }
+    .lead { max-width: 720px; font-size: 1.16rem; color: #ddf4ec; }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 24px; }
+    .chip { padding: 5px 10px; border: 1px solid rgba(255,255,255,.28); border-radius: 99px; font-size: .8rem; }
+    section {
+      margin-top: 28px;
+      padding: clamp(24px, 5vw, 48px);
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    h2 { margin: 0 0 18px; font-size: clamp(1.7rem, 4vw, 2.45rem); line-height: 1.2; letter-spacing: -.025em; }
+    h3 { margin: 30px 0 10px; font-size: 1.25rem; }
+    h4 { margin-bottom: 6px; }
+    .section-kicker { color: var(--brand); font-weight: 700; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; }
+    .callout {
+      padding: 18px 20px;
+      border-left: 5px solid var(--brand-2);
+      border-radius: 0 14px 14px 0;
+      background: var(--soft-2);
+    }
+    .grid { display: grid; gap: 14px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card { padding: 18px; border: 1px solid var(--line); border-radius: 16px; background: color-mix(in srgb, var(--paper) 86%, var(--soft)); }
+    .card b { display: block; margin-bottom: 5px; }
+    .card p { margin: 0; color: var(--muted); font-size: .92rem; }
+    .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 22px; }
+    .metric { padding: 16px; border-radius: 15px; background: var(--soft); }
+    .metric strong { display: block; font-size: 1.55rem; color: var(--brand); }
+    .metric span { color: var(--muted); font-size: .8rem; }
+    .flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 24px 0; }
+    .flow div { position: relative; padding: 14px 10px; border-radius: 13px; text-align: center; background: var(--soft); font-size: .88rem; font-weight: 700; }
+    .flow div:not(:last-child)::after { content: "→"; position: absolute; right: -12px; color: var(--brand); }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: .92rem; }
+    th, td { padding: 11px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+    th { color: var(--brand); background: var(--soft); }
+    code { font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace; }
+    p code, li code, td code { padding: 2px 5px; border-radius: 5px; background: var(--soft); color: var(--ink); }
+    .formula { overflow-wrap: anywhere; padding: 15px 17px; border-radius: 12px; background: var(--code); color: var(--code-ink); }
+    .prompt-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 18px; padding: 0; list-style: none; }
+    .prompt-list li { display: flex; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--line); }
+    .prompt-list small { display: block; color: var(--muted); }
+    .prompt-no { flex: 0 0 30px; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 9px; background: var(--soft); color: var(--brand); font-weight: 800; }
+    .source-file { margin: 12px 0; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+    .source-file summary { cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 16px; background: var(--soft); }
+    .source-file summary small { display: block; color: var(--muted); font-weight: 400; }
+    .source-file summary::-webkit-details-marker { display: none; }
+    .source-toolbar { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; color: var(--muted); background: var(--code); border-bottom: 1px solid #2b4239; font-size: .8rem; }
+    .copy-button { cursor: pointer; padding: 5px 10px; border: 1px solid #567066; border-radius: 7px; background: transparent; color: var(--code-ink); }
+    pre { margin: 0; padding: 18px; max-height: 620px; overflow: auto; background: var(--code); color: var(--code-ink); font-size: .8rem; line-height: 1.55; white-space: pre; }
+    .timeline { border-left: 3px solid var(--brand); margin: 22px 0 0 10px; padding-left: 24px; }
+    .timeline article { position: relative; padding: 0 0 22px; }
+    .timeline article::before { content: ""; position: absolute; left: -32px; top: 7px; width: 13px; height: 13px; border-radius: 50%; background: var(--brand); box-shadow: 0 0 0 5px var(--soft); }
+    .timeline h4 { margin: 0; }
+    .timeline p { margin: 5px 0 0; color: var(--muted); }
+    footer { padding: 34px 6px; color: var(--muted); text-align: center; font-size: .85rem; }
+    @media (max-width: 920px) {
+      .layout { display: block; padding: 16px; }
+      aside { position: relative; top: 0; max-height: none; margin-bottom: 18px; }
+      nav { display: flex; overflow-x: auto; gap: 3px; }
+      nav a { white-space: nowrap; }
+      .grid, .metrics { grid-template-columns: repeat(2, 1fr); }
+      .flow { grid-template-columns: repeat(2, 1fr); }
+      .flow div::after { display: none; }
+    }
+    @media (max-width: 560px) {
+      .hero { padding: 38px 24px; border-radius: 22px; }
+      section { padding: 24px 18px; border-radius: 20px; }
+      .grid, .metrics, .prompt-list, .flow { grid-template-columns: 1fr; }
+      th, td { padding: 9px 8px; }
+      .table-wrap { overflow-x: auto; }
+    }
+    @media print {
+      body { background: #fff; color: #111; }
+      .layout { display: block; max-width: none; padding: 0; }
+      aside, .copy-button { display: none; }
+      .hero, section { box-shadow: none; break-inside: avoid; }
+      .hero { background: #174d40 !important; print-color-adjust: exact; }
+      details:not([open]) > *:not(summary) { display: block; }
+      pre { max-height: none; white-space: pre-wrap; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside>
+      <div class="brand"><div class="bear">🐻</div><div><b>黑熊老師專案系統</b><small>技術建置完整實錄</small></div></div>
+      <nav aria-label="文章目錄">
+        <a href="#abstract">摘要</a>
+        <a href="#problem">問題與目標</a>
+        <a href="#architecture">系統架構</a>
+        <a href="#standards">標準與規則</a>
+        <a href="#workflow">九階段流程</a>
+        <a href="#skill">技能設計</a>
+        <a href="#prompts">提示詞庫</a>
+        <a href="#templates">模板與腳本</a>
+        <a href="#build">建置與測試</a>
+        <a href="#usage">使用方式</a>
+        <a href="#sources">完整原始內容</a>
+      </nav>
+    </aside>
+
+    <main>
+      <header class="hero">
+        <p class="eyebrow">Technical Article · v1.0 · 2026-08-24</p>
+        <h1>AI 專案知識工作流</h1>
+        <p class="lead">把教學靈感、科展研究、AI 生成、數位教材與程式開發，轉化為可追蹤、可查證、可備份、可發布、可再次利用的長期知識資產。</p>
+        <div class="meta-row">
+          <span class="chip">Obsidian 知識核心</span>
+          <span class="chip">Notion／Linear 任務</span>
+          <span class="chip">Drive 成果檔案</span>
+          <span class="chip">GitHub 程式版本</span>
+          <span class="chip">Science Portal 發布</span>
+        </div>
+      </header>
+
+      <section id="abstract">
+        <p class="section-kicker">Abstract</p>
+        <h2>這不是多裝一套工具，而是建立一個專案作業系統</h2>
+        <p>這套工作流源自一個很實際的需求：AI 可以迅速產生教案、科展建議、圖片、簡報、文件與程式，但若每次生成後只留在對話裡，成果會逐漸失去版本、來源、脈絡與後續價值。因此，系統的目標不是把資料全部塞進同一個平台，而是替每種資料指定唯一正式位置，並用統一編號、欄位、檔名、版本、證據與隱私規則把它們串起來。</p>
+        <div class="metrics">
+          <div class="metric"><strong>9</strong><span>工作階段</span></div>
+          <div class="metric"><strong>G0–G8</strong><span>品質閘門</span></div>
+          <div class="metric"><strong>28</strong><span>可重用提示詞</span></div>
+          <div class="metric"><strong>23</strong><span>技能內容檔案</span></div>
+        </div>
+        <p class="callout"><b>核心觀念：</b>AI 是協作者，不是唯一記憶；同步是可用性，不等於備份；生成速度不能取代來源查證與人類判斷。</p>
+      </section>
+
+      <section id="problem">
+        <p class="section-kicker">01 · Problem framing</p>
+        <h2>從零散成果走向可重用知識</h2>
+        <div class="grid">
+          <div class="card"><b>成果四散</b><p>提示詞留在對話、檔案留在 Drive、程式在 GitHub、想法在 Obsidian，彼此缺乏索引。</p></div>
+          <div class="card"><b>版本失控</b><p>常出現 final、最新版、最終版2，無法確定哪一份才是正式成果。</p></div>
+          <div class="card"><b>來源斷裂</b><p>報告、簡報與網站引用不同版本數據，結論無法回溯至原始證據。</p></div>
+          <div class="card"><b>AI 假完整</b><p>文字看似完美，但可能把推論當事實、補造數據或掩蓋研究限制。</p></div>
+          <div class="card"><b>隱私風險</b><p>學生姓名、照片、成績、帳密或同意書可能誤入公開知識庫與 GitHub。</p></div>
+          <div class="card"><b>專案結束即失憶</b><p>沒有回顧、錯誤紀錄與可重用模組，下一次仍然從零開始。</p></div>
+        </div>
+        <h3>設計目標</h3>
+        <ol>
+          <li>讓任何長期工作都能從原始想法建立正式 Project ID。</li>
+          <li>讓不同平台各自保存最適合的內容，並以連結與欄位互相對應。</li>
+          <li>讓 AI 讀得懂專案結構，也知道不能越過的隱私、證據與發布界線。</li>
+          <li>讓每個成果都有可驗證的來源、版本、位置與人類審查紀錄。</li>
+          <li>讓結案後的提示詞、模板、程式與錯誤經驗可以再次使用。</li>
+        </ol>
+      </section>
+
+      <section id="architecture">
+        <p class="section-kicker">02 · Architecture</p>
+        <h2>分層架構與單一正式來源</h2>
+        <div class="flow" aria-label="專案資訊流">
+          <div>想法／素材</div><div>Obsidian 知識</div><div>任務與執行</div><div>成果與版本</div><div>發布與回顧</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>平台</th><th>正式責任</th><th>不應成為</th></tr></thead>
+            <tbody>
+              <tr><td><b>Obsidian</b></td><td>問題、來源、決策、提示詞、AI 紀錄、實驗日誌、反思與結案</td><td>大型 PPTX、影片或唯一備份</td></tr>
+              <tr><td><b>Notion／Linear</b></td><td>任務、負責人、期限、相依性、狀態與驗收條件</td><td>兩套同時維護的任務來源</td></tr>
+              <tr><td><b>Google Drive</b></td><td>DOCX、PPTX、PDF、CSV、照片、影片、原始資料與正式成品</td><td>程式碼唯一版本</td></tr>
+              <tr><td><b>GitHub</b></td><td>程式碼、測試、技術文件、Actions、Pages 與 Release</td><td>學生個資、密碼或未匿名化數據</td></tr>
+              <tr><td><b>Science Portal</b></td><td>已驗證教材、互動網站、正式下載與公開說明</td><td>草稿、未查證主張或敏感資料</td></tr>
+              <tr><td><b>AI</b></td><td>分類、規劃、摘要、檢查、初稿、程式、查詢與回顧</td><td>唯一保存位置或最終決策者</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="callout">Notion 與 Linear 在這套架構中是互斥的主要任務來源。若原本已使用 Linear，就不應再要求同一批任務同時更新到 Notion。</p>
+      </section>
+
+      <section id="standards">
+        <p class="section-kicker">03 · Standards</p>
+        <h2>統一編號、欄位、檔名與版本</h2>
+        <h3>識別編號</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>對象</th><th>格式</th><th>範例</th></tr></thead>
+          <tbody>
+            <tr><td>專案</td><td><code>{TYPE}-{YEAR}-{SEQUENCE}</code></td><td><code>SF-2026-004</code></td></tr>
+            <tr><td>任務</td><td><code>{PROJECT_ID}-T{NNN}</code></td><td><code>SF-2026-004-T001</code></td></tr>
+            <tr><td>來源</td><td><code>{PROJECT_ID}-S{NNN}</code></td><td><code>SF-2026-004-S001</code></td></tr>
+            <tr><td>決策</td><td><code>{PROJECT_ID}-D{NNN}</code></td><td><code>SF-2026-004-D001</code></td></tr>
+            <tr><td>實驗</td><td><code>{PROJECT_ID}-E{NN}</code></td><td><code>SF-2026-004-E01</code></td></tr>
+            <tr><td>成果</td><td><code>{PROJECT_ID}-A{NNN}</code></td><td><code>SF-2026-004-A001</code></td></tr>
+          </tbody>
+        </table></div>
+        <h3>檔名公式</h3>
+        <p class="formula"><code>{PROJECT_ID}__{ARTIFACT_TYPE}__{SLUG}__{STATUS}__v{VERSION}__{YYYYMMDD}.{EXT}</code></p>
+        <p>例如：<code>SF-2026-004__experiment-data__flower-count__clean__v1.0__20261002.csv</code>。正式跨平台檔名使用 ASCII、小寫英文、數字、連字號與雙底線；中文標題保留在文件內容與 metadata 中。</p>
+        <h3>版本語意</h3>
+        <div class="grid">
+          <div class="card"><b>v0.1–v0.2</b><p>想法與問題定義</p></div>
+          <div class="card"><b>v0.5</b><p>內部試跑</p></div>
+          <div class="card"><b>v0.9</b><p>發布候選</p></div>
+          <div class="card"><b>v1.0</b><p>首次正式發布</p></div>
+          <div class="card"><b>v1.x</b><p>小修正或相容新增</p></div>
+          <div class="card"><b>v2.0</b><p>架構或研究設計重大改版</p></div>
+        </div>
+      </section>
+
+      <section id="workflow">
+        <p class="section-kicker">04 · Workflow</p>
+        <h2>九階段與九道品質閘門</h2>
+        <div class="timeline">
+          <article><h4>Stage 0｜初始化 → G0</h4><p>決定模式、專案編號、任務平台、隱私、AI 權限、正式位置與下一步。</p></article>
+          <article><h4>Stage 1｜收件</h4><p>保存原始想法，分離已知事實、現場觀察、假設與待查證問題。</p></article>
+          <article><h4>Stage 2｜定義 → G1</h4><p>建立專案章程、核心問題、範圍、排除範圍、成果與客觀成功條件。</p></article>
+          <article><h4>Stage 3｜研究 → G2</h4><p>建立 Source ID、查核發布日期與適用性，記錄來源能與不能支持的主張。</p></article>
+          <article><h4>Stage 4｜設計 → G3</h4><p>依科展、教材或程式類型定義變因／需求、資料欄位、任務、風險與備案。</p></article>
+          <article><h4>Stage 5｜執行</h4><p>保留原始資料、方法版本、偏差、失敗與決策，只更新唯一任務來源。</p></article>
+          <article><h4>Stage 6｜分析 → G4／G5</h4><p>鎖定 raw、建立 clean／anon，保留修正紀錄，避免把相關寫成因果。</p></article>
+          <article><h4>Stage 7｜製作</h4><p>為報告、簡報、圖片、影片、程式與教材建立 Artifact ID、檔名與版本。</p></article>
+          <article><h4>Stage 8｜驗證發布 → G6／G7</h4><p>執行來源、數據、隱私、跨成果一致性、技術與人工審查。</p></article>
+          <article><h4>Stage 9｜封存重用 → G8</h4><p>完成回顧、備份、未完成任務處理，提取可重用提示詞、模板與程式。</p></article>
+        </div>
+      </section>
+
+      <section id="skill">
+        <p class="section-kicker">05 · Skill design</p>
+        <h2>把工作流封裝成可漸進載入的技能</h2>
+        <p>技能採三層結構：只有名稱與描述會常駐；觸發後才載入精簡的核心規則；進入特定階段時再讀取 references、templates 或執行腳本。這能避免每次處理一個小任務都載入整份長篇 SOP。</p>
+        <div class="grid">
+          <div class="card"><b>SKILL.md</b><p>115 行核心路由：模式判斷、平台分工、九階段、外部寫入界線與交付格式。</p></div>
+          <div class="card"><b>references/</b><p>欄位、平台權責、檔名版本、隱私證據、完整流程、提示詞與測試案例。</p></div>
+          <div class="card"><b>assets/</b><p>專案首頁、章程、來源、決策、實驗、AI 紀錄、回顧、資料字典與成果清單。</p></div>
+          <div class="card"><b>scripts/</b><p>專案初始化、欄位驗證、檔名驗證與成果 manifest 建立。</p></div>
+          <div class="card"><b>agents/openai.yaml</b><p>顯示名稱、簡介、預設呼叫提示詞與隱含觸發設定。</p></div>
+          <div class="card"><b>安全性</b><p>只規劃與實際建立分離；外部平台不可在未授權時寫入或假裝已完成。</p></div>
+        </div>
+      </section>
+
+      <section id="prompts">
+        <p class="section-kicker">06 · Prompt system</p>
+        <h2>28 組提示詞不是問句集合，而是可追蹤的作業介面</h2>
+        <p>每一組提示詞都共用專案編號、階段、隱私與任務平台等上下文，並強制 AI 說明資料來源、缺漏、人工確認處、Artifact ID、檔名、版本與正式位置。完整逐字提示詞收錄於本頁後方的 <code>references/prompt-library.md</code>。</p>
+        <ul class="prompt-list">
+          <li><span class="prompt-no">1</span><span><b>新專案收件</b><small>New-project intake</small></span></li>
+<li><span class="prompt-no">2</span><span><b>既有專案盤點</b><small>Existing-project intake</small></span></li>
+<li><span class="prompt-no">3</span><span><b>專案章程</b><small>Project charter</small></span></li>
+<li><span class="prompt-no">4</span><span><b>問題澄清</b><small>Problem clarification</small></span></li>
+<li><span class="prompt-no">5</span><span><b>研究問題組</b><small>Research question set</small></span></li>
+<li><span class="prompt-no">6</span><span><b>資料來源搜尋計畫</b><small>Source search plan</small></span></li>
+<li><span class="prompt-no">7</span><span><b>來源矩陣</b><small>Source matrix</small></span></li>
+<li><span class="prompt-no">8</span><span><b>證據審查</b><small>Evidence review</small></span></li>
+<li><span class="prompt-no">9</span><span><b>科學探究設計</b><small>Science inquiry design</small></span></li>
+<li><span class="prompt-no">10</span><span><b>控制變因審查</b><small>Control-variable review</small></span></li>
+<li><span class="prompt-no">11</span><span><b>教材設計</b><small>Teaching-material design</small></span></li>
+<li><span class="prompt-no">12</span><span><b>軟體需求規格</b><small>Software requirements</small></span></li>
+<li><span class="prompt-no">13</span><span><b>任務拆解</b><small>Task breakdown</small></span></li>
+<li><span class="prompt-no">14</span><span><b>決策紀錄</b><small>Decision record</small></span></li>
+<li><span class="prompt-no">15</span><span><b>工作時段紀錄</b><small>Session log</small></span></li>
+<li><span class="prompt-no">16</span><span><b>每週檢查</b><small>Weekly review</small></span></li>
+<li><span class="prompt-no">17</span><span><b>AI 使用紀錄</b><small>AI-use log</small></span></li>
+<li><span class="prompt-no">18</span><span><b>資料品質稽核</b><small>Data-quality audit</small></span></li>
+<li><span class="prompt-no">19</span><span><b>資料清理計畫</b><small>Cleaning plan</small></span></li>
+<li><span class="prompt-no">20</span><span><b>資料分析</b><small>Analysis</small></span></li>
+<li><span class="prompt-no">21</span><span><b>文件／簡報／媒體製作簡報</b><small>Document/slides/media brief</small></span></li>
+<li><span class="prompt-no">22</span><span><b>程式實作規格</b><small>Code implementation brief</small></span></li>
+<li><span class="prompt-no">23</span><span><b>跨成果一致性查核</b><small>Cross-artifact consistency</small></span></li>
+<li><span class="prompt-no">24</span><span><b>隱私與秘密資訊查核</b><small>Privacy and secret review</small></span></li>
+<li><span class="prompt-no">25</span><span><b>版本發布紀錄</b><small>Release record</small></span></li>
+<li><span class="prompt-no">26</span><span><b>Science Portal 發布內容</b><small>Portal entry</small></span></li>
+<li><span class="prompt-no">27</span><span><b>專案結案回顧</b><small>Retrospective</small></span></li>
+<li><span class="prompt-no">28</span><span><b>歷史專案查詢</b><small>Historical retrieval</small></span></li>
+        </ul>
+        <h3>共用防幻覺區塊的關鍵要求</h3>
+        <ul>
+          <li>不得捏造來源、網址、數據、觀察、成果或外部操作。</li>
+          <li>分開呈現已查證事實、直接觀察、推論、假設與建議。</li>
+          <li>缺漏值不可自動填零，原始資料不可覆寫，離群值不可直接刪除。</li>
+          <li>每次結尾回報當前閘門、已完成、缺漏／未查證與唯一下一步。</li>
+        </ul>
+      </section>
+
+      <section id="templates">
+        <p class="section-kicker">07 · Reusable resources</p>
+        <h2>模板與自動化工具</h2>
+        <h3>九份模板</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>模板</th><th>目的</th></tr></thead>
+          <tbody>
+            <tr><td>project-home</td><td>全平台總索引與專案狀態首頁</td></tr>
+            <tr><td>project-charter</td><td>問題、範圍、成果、限制、倫理與核准</td></tr>
+            <tr><td>source-note</td><td>來源能支持／不能支持什麼，以及適用限制</td></tr>
+            <tr><td>decision-record</td><td>保存選項、證據、理由、影響與可逆性</td></tr>
+            <tr><td>experiment-log</td><td>實驗條件、方法偏差、觀察、推論與 raw 連結</td></tr>
+            <tr><td>ai-log</td><td>記錄 AI 輸入摘要、採用／拒絕、人工修改與風險</td></tr>
+            <tr><td>project-retrospective</td><td>結案、失敗、可重用知識與下一版</td></tr>
+            <tr><td>data-dictionary</td><td>欄位、型別、單位、缺漏、隱私與來源</td></tr>
+            <tr><td>artifact-manifest</td><td>成果 ID、版本、狀態、正式位置與來源資料</td></tr>
+          </tbody>
+        </table></div>
+        <h3>四支安全腳本</h3>
+        <div class="grid">
+          <div class="card"><b>init_project.py</b><p>支援 dry-run，建立標準資料夾、專案首頁與成果清單；遇到既有目標即停止。</p></div>
+          <div class="card"><b>validate_project.py</b><p>檢查必要 metadata、Project ID、列舉狀態、版本與雙任務來源衝突。</p></div>
+          <div class="card"><b>validate_filename.py</b><p>攔截空白、中文正式檔名與 final／最新版等失控命名。</p></div>
+          <div class="card"><b>build_artifact_manifest.py</b><p>唯讀掃描檔名與路徑，預設略過 private／restricted，不覆寫既有 manifest。</p></div>
+        </div>
+      </section>
+
+      <section id="build">
+        <p class="section-kicker">08 · Build & verification</p>
+        <h2>建置過程：從需求文件到可安裝技能</h2>
+        <div class="timeline">
+          <article><h4>1. 需求收斂</h4><p>把「數位教材、科展、AI 生成、程式與教學」抽象成共同的專案生命週期，而不是為每種工作另做一套流程。</p></article>
+          <article><h4>2. 架構決策</h4><p>確立 Obsidian 為知識核心、Notion／Linear 為任務、Drive 為二進位成果、GitHub 為程式與版本、Portal 為公開入口。</p></article>
+          <article><h4>3. 技能初始化</h4><p>建立核心技能、介面 metadata、references、assets 與 scripts，並移除不必要的 README、安裝指南與重複說明。</p></article>
+          <article><h4>4. 漸進式揭露</h4><p>將詳細規格放入 references，將可複製模板放入 assets，讓 SKILL.md 保持精簡。</p></article>
+          <article><h4>5. 腳本實作</h4><p>所有會影響檔案的腳本都採明確路徑、無預設根目錄、乾跑、防覆寫與唯讀優先。</p></article>
+          <article><h4>6. 發現並修正問題</h4><p>首次乾跑發現專案類型只接受代碼，隨即加入 <code>science-fair</code> 等友善別名；同時把初始化檔名調整為正式規格，使 manifest 警告由 2 降為 0。</p></article>
+          <article><h4>7. 代表性測試</h4><p>完成合法／非法 metadata、正確／錯誤檔名、dry-run、重複建立、防覆寫、成果清單與命令介面測試。</p></article>
+          <article><h4>8. 安裝驗證</h4><p>確認技能結構、介面、模板、參考文件與四支腳本都存在且能正常載入，正式驗證通過。</p></article>
+        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>測試</th><th>預期</th><th>結果</th></tr></thead>
+          <tbody>
+            <tr><td>專案 dry-run</td><td>列出預定建立內容，不寫檔</td><td>通過</td></tr>
+            <tr><td>正式初始化</td><td>建立合規資料夾與檔名</td><td>通過</td></tr>
+            <tr><td>重複目標</td><td>停止且不覆寫</td><td>通過</td></tr>
+            <tr><td>metadata 驗證</td><td>合格通過、缺欄位失敗</td><td>通過</td></tr>
+            <tr><td>檔名驗證</td><td>合規通過、final／中文檔名失敗</td><td>通過</td></tr>
+            <tr><td>manifest</td><td>唯讀盤點、0 命名警告、不覆寫</td><td>通過</td></tr>
+            <tr><td>技能完整性</td><td>frontmatter、結構與引用有效</td><td>通過</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <section id="usage">
+        <p class="section-kicker">09 · Usage</p>
+        <h2>技能功能與實際使用方式</h2>
+        <h3>新專案</h3>
+        <div class="formula"><code>請使用 $manage-ai-project-workflow，把「蝶園受到太陽能板遮蔽，金露花只長葉不開花」建立成國小科展專案。沿用 Linear；目前只規劃，不寫入外部平台。請建立 Project ID、專案首頁、第一階段任務、資料夾、檔名與下一個行動。</code></div>
+        <h3>既有專案盤點</h3>
+        <div class="formula"><code>請使用 $manage-ai-project-workflow，唯讀盤點現有 Obsidian、Drive 與 GitHub 資料，找出正式版本、重複檔案、缺欄位、命名問題與隱私風險。不要移動、刪除、重新命名或發布。</code></div>
+        <h3>每週檢查</h3>
+        <div class="formula"><code>請使用 $manage-ai-project-workflow，整理 SF-2026-004 本週完成、阻塞、未查證主張、檔名與版本問題，並提出下週三個優先任務與唯一 next_action。</code></div>
+        <h3>結案</h3>
+        <div class="formula"><code>請使用 $manage-ai-project-workflow，對 APP-2026-006 執行來源、數據、隱私、技術與跨成果一致性查核，產生 Release 草稿、專案回顧、備份檢查與可重用知識清單；未成功執行的發布不可宣稱已完成。</code></div>
+        <p class="callout"><b>最重要的操作習慣：</b>在提示詞中明確寫「只規劃」「建立本機檔案」或「允許寫入指定平台」，讓 AI 的權限與工作範圍始終清楚。</p>
+      </section>
+
+      <section id="sources">
+        <p class="section-kicker">Appendix · Complete generated content</p>
+        <h2>技能全部原始內容</h2>
+        <p>以下逐檔收錄技能目前的完整內容，共 23 個檔案、約 1,927 行。點擊檔名即可展開；<code>SKILL.md</code> 與完整提示詞庫預設展開。這些附錄包括介面設定、全部規格、28 組提示詞、九份模板、四支 Python 腳本與技能圖示原始碼。</p>
+        
+    <details class="source-file" open>
+      <summary>
+        <span><b>SKILL.md</b><small>115 行 · MD</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-1">複製</button>
+      </div>
+      <pre id="source-1"><code>---
+name: manage-ai-project-workflow
+description: Build, organize, validate, publish, archive, and retrieve long-running AI-assisted projects with unified IDs, metadata, filenames, versions, tasks, evidence, privacy, backups, and reusable knowledge across Obsidian, Notion or Linear, Google Drive, GitHub, and Science Portal. Use when a user starts or restructures a teaching, science-fair, research, content-generation, media, software, website, workshop, or other multi-stage project; requests a project ID, folder structure, task breakdown, progress review, artifact/version check, weekly report, release, retrospective, cross-platform inventory, or mentions an existing project ID such as SF-2026-004. Do not trigger the full workflow for a one-off factual question, tiny text edit, or single image unless the user says the work will continue, needs collaboration/versioning, or should enter the project system.
+---
+
+# Manage AI Project Workflow
+
+## Goal
+
+Turn a raw idea or scattered existing work into a traceable project from intake through reuse. Keep one authoritative location per data type, preserve evidence and raw data, and let AI assist without becoming the only store or final decision-maker.
+
+## Choose the operating mode
+
+1. Detect whether the user wants:
+   - **Plan only**: propose IDs, metadata, structures, tasks, filenames, and templates without writing files or external systems.
+   - **Create locally**: create project files only in the user-approved local destination.
+   - **Connect externally**: write to an external platform only when explicitly requested and the relevant tool is available.
+   - **Audit**: inventory an existing project without reorganizing or overwriting it.
+   - **Review, publish, archive, or retrieve**: run only the relevant stage and its gates.
+2. Ask only for missing choices that materially alter the result: title/type, intended outputs, task manager, privacy, and whether writes are authorized.
+3. Infer safe defaults when possible and label them. Prefer an existing task manager. Treat Notion and Linear as mutually exclusive authoritative task stores unless the user explicitly requests otherwise.
+
+## Enforce the invariants
+
+- Assign one Project ID and keep it stable.
+- Assign IDs to tasks, sources, decisions, experiments, artifacts, and issues when created.
+- Keep one authoritative location per information type; link instead of duplicating complete content.
+- Separate verified facts, direct observations, inferences, hypotheses, and recommendations.
+- Never fabricate sources, URLs, data, observations, experiments, results, files, or external writes.
+- State `目前證據不足` when evidence is inadequate.
+- Never overwrite raw data, convert missing values to zero, or remove outliers without a documented decision.
+- Give every formal artifact a version and compliant filename.
+- Give every task an objective acceptance criterion.
+- Keep one explicit `next_action`.
+- Require human review before public release.
+- Treat synchronization as availability, not backup.
+- Never expose restricted data or secrets to AI, GitHub, or public portals.
+
+## Route information to its owner
+
+- Use **Obsidian** for project knowledge, sources, decisions, prompts, AI logs, experiment logs, reflections, and retrospectives.
+- Use **Notion or Linear** for project/task status, owners, dates, dependencies, and acceptance criteria.
+- Use **Google Drive** for office documents, datasets, photos, audio, video, raw records, and release files.
+- Use **GitHub** for code, tests, skills, technical documentation, automation, Pages, and releases.
+- Use **Science Portal** for verified public entry points and downloads.
+- Use **AI** to classify, plan, check, draft, summarize, and retrieve; never use it as the sole store.
+
+Read [platform-ownership.md](references/platform-ownership.md) when assigning locations or auditing duplicates.
+
+## Run the workflow
+
+1. **Intake**: preserve the raw idea and separate what is observed from what is assumed.
+2. **Define**: assign the Project ID, create the project charter, scope, outputs, success criteria, privacy, and next action.
+3. **Research**: create Source IDs, verify claims, record applicability and limits, and list evidence gaps.
+4. **Design**: define experiments, requirements, data fields, tasks, acceptance criteria, risks, and fallback plans.
+5. **Execute**: preserve raw records, log deviations, update tasks, and link artifacts.
+6. **Analyze**: validate and clean data without mutating raw inputs; separate description from inference.
+7. **Create**: produce documents, media, code, teaching materials, and release candidates with traceable versions.
+8. **Verify and publish**: check sources, privacy, data, cross-artifact consistency, technical behavior, and permissions before release.
+9. **Archive and reuse**: create a retrospective, close or transfer unfinished work, make backups, and extract reusable knowledge.
+
+Read [workflow-stages.md](references/workflow-stages.md) for gates and deliverables. Run only the current stage; do not dump the whole SOP unless the user asks.
+
+## Create IDs and metadata
+
+Use [project-schema.md](references/project-schema.md) to choose the project type, generate IDs, and validate enumerated fields. Keep the same Project ID in Obsidian, task manager, Drive folder, GitHub documentation, artifact names, and portal metadata.
+
+## Name and version artifacts
+
+Use [naming-versioning.md](references/naming-versioning.md). Prefer:
+
+`{PROJECT_ID}__{ARTIFACT_TYPE}__{SLUG}__{STATUS}__v{VERSION}__{YYYYMMDD}.{EXT}`
+
+Never use names such as `final-final`, `最新版`, or `真的最終版`. Preserve raw files and create a new clean or release artifact.
+
+## Protect privacy and evidence
+
+Read [privacy-evidence.md](references/privacy-evidence.md) before handling student data, consent forms, faces, grades, administrative records, credentials, research claims, raw data, or public release. Anonymize before AI processing. Keep restricted material outside the AI-readable public vault.
+
+## Use templates and scripts
+
+- Copy only the needed template from `assets/`; do not fill absent facts with invented values.
+- Use `scripts/init_project.py` only after the user authorizes local creation and chooses an explicit output root. Run `--dry-run` first when the target already contains work or scope is uncertain.
+- Use `scripts/validate_project.py` to validate a project-home Markdown file or JSON metadata.
+- Use `scripts/validate_filename.py` to check one filename or scan a directory.
+- Use `scripts/build_artifact_manifest.py` to produce a read-only inventory; do not scan restricted locations without authorization.
+- Read [prompt-library.md](references/prompt-library.md) only for the requested stage.
+
+## Handle external systems
+
+- Never claim an external page, repository, folder, release, deployment, or URL exists unless the corresponding tool call succeeded.
+- If a connector is unavailable, produce an import-ready template or action list with blank URL fields.
+- Before external writes, resolve exact targets, permissions, visibility, and whether the action is within the user&#x27;s request.
+- Do not publish, message, invite, change permissions, or move official data when the user requested only planning or review.
+
+## Audit existing projects
+
+1. Inventory without moving or renaming.
+2. Identify authoritative copies, duplicates, stale versions, noncompliant names, missing metadata, sensitive content, and broken links.
+3. Propose a reversible migration plan.
+4. Ask before material moves, renames, deletions, permission changes, or publication.
+
+## Complete the handoff
+
+End project-workflow responses with:
+
+- Project ID
+- Current stage and gate status
+- Completed
+- Missing or unverified
+- Next action
+- Recommended authoritative location
+- Recommended artifact name and version
+
+Use [test-scenarios.md](references/test-scenarios.md) when evaluating or revising the skill.
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" >
+      <summary>
+        <span><b>agents/openai.yaml</b><small>13 行 · YAML</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-2">複製</button>
+      </div>
+      <pre id="source-2"><code>interface:
+  display_name: AI 專案知識工作流
+  short_description: 統一管理 AI 專案的知識、任務、版本、查核與發布
+  default_prompt: 請使用 $manage-ai-project-workflow，將我的想法建立成具備統一編號、欄位、檔名、版本、隱私、查核、發布與結案流程的完整專案。
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" >
+      <summary>
+        <span><b>assets/ai-log-template.md</b><small>30 行 · MD</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-3">複製</button>
+      </div>
+      <pre id="source-3"><code>---
+project_id: &quot;{{PROJECT_ID}}&quot;
+date: &quot;{{DATE}}&quot;
+ai_tool:
+model_if_known:
+purpose:
+privacy_reviewed: false
+source_check: pending
+artifact_link:
+---
+
+# AI 使用紀錄
+
+## 輸入摘要
+
+## 輸出摘要
+
+## 接受採用的內容
+
+## 拒絕或未採用的內容
+
+## 人工修改
+
+## 發現的錯誤或風險
+
+## 來源查核
+
+## 是否需要對外揭露
+
+## 相關成果
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" >
+      <summary>
+        <span><b>assets/artifact-manifest-template.csv</b><small>1 行 · CSV</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-4">複製</button>
+      </div>
+      <pre id="source-4"><code>artifact_id,project_id,name,artifact_type,version,status,canonical_location,path_or_url,privacy,created,verified_date,reviewer,source_data,checksum
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" >
+      <summary>
+        <span><b>assets/data-dictionary-template.csv</b><small>4 行 · CSV</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-5">複製</button>
+      </div>
+      <pre id="source-5"><code>field_name,display_name,data_type,unit,required,missing_value,allowed_values,description,privacy,source
+record_id,紀錄編號,text,,yes,NA,,每筆紀錄的唯一識別碼,internal,
+date,日期,date,,yes,NA,YYYY-MM-DD,觀察或產生日期,internal,
+notes,備註,text,,no,,,&quot;異常、方法變動或補充說明&quot;,internal,
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" >
+      <summary>
+        <span><b>assets/decision-record-template.md</b><small>30 行 · MD</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-6">複製</button>
+      </div>
+      <pre id="source-6"><code>---
+decision_id: &quot;{{DECISION_ID}}&quot;
+project_id: &quot;{{PROJECT_ID}}&quot;
+date: &quot;{{DATE}}&quot;
+status: active
+owner: &quot;{{OWNER}}&quot;
+review_date:
+supersedes:
+superseded_by:
+---
+
+# 決策：{{DECISION_TITLE}}
+
+## 背景
+
+## 需要決定的問題
+
+## 選項
+
+## 使用的證據
+
+## 最終決策
+
+## 理由
+
+## 影響與代價
+
+## 是否可逆
+
+## 重新檢討條件
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" >
+      <summary>
+        <span><b>assets/experiment-log-template.md</b><small>39 行 · MD</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-7">複製</button>
+      </div>
+      <pre id="source-7"><code>---
+experiment_id: &quot;{{EXPERIMENT_ID}}&quot;
+project_id: &quot;{{PROJECT_ID}}&quot;
+date: &quot;{{DATE}}&quot;
+research_question:
+hypothesis:
+independent_variable:
+dependent_variable:
+controlled_variables: []
+procedure_version:
+participants_anonymized: true
+raw_data_link:
+photo_link:
+privacy: internal
+---
+
+# 實驗或探究紀錄
+
+## 今日目標
+
+## 材料與條件
+
+## 實際操作
+
+## 與 SOP 的偏差
+
+## 直接觀察
+
+## 原始資料位置
+
+## 異常與缺漏
+
+## 初步推論
+
+## 不可下的結論
+
+## 今日決策
+
+## 下一個行動
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" >
+      <summary>
+        <span><b>assets/icon.svg</b><small>7 行 · SVG</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-8">複製</button>
+      </div>
+      <pre id="source-8"><code>&lt;svg width=&quot;24&quot; height=&quot;24&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+&lt;path d=&quot;M13 10.5H17.5C18.2082 10.5 18.8247 10.6416 19.3496 10.9248C19.8829 11.2081 20.2919 11.6171 20.5752 12.1504C20.8584 12.6753 21 13.2918 21 14V16H19V14C19 13.5333 18.8663 13.1671 18.5996 12.9004C18.3329 12.6337 17.9667 12.5 17.5 12.5H13V16H11V12.5H6.5C6.04167 12.5 5.67539 12.6337 5.40039 12.9004C5.13372 13.1671 5 13.5333 5 14V16H3V14C3 13.2918 3.14161 12.6753 3.4248 12.1504C3.70814 11.6171 4.1127 11.2081 4.6377 10.9248C5.17098 10.6416 5.79177 10.5 6.5 10.5H11V8H13V10.5Z&quot; fill=&quot;#3C5CD8&quot;/&gt;
+&lt;path d=&quot;M9.0125 2.5125C8.67083 2.85417 8.5 3.35 8.5 4V6.5C8.5 7.15 8.67083 7.64583 9.0125 7.9875C9.35417 8.32917 9.85 8.5 10.5 8.5H13.5C14.15 8.5 14.6458 8.32917 14.9875 7.9875C15.3292 7.64583 15.5 7.15 15.5 6.5V4C15.5 3.35 15.3292 2.85417 14.9875 2.5125C14.6458 2.17083 14.15 2 13.5 2H10.5C9.85 2 9.35417 2.17083 9.0125 2.5125Z&quot; fill=&quot;#6582F1&quot;/&gt;
+&lt;path d=&quot;M9.02337 16.0125C8.6817 16.3542 8.51086 16.85 8.51086 17.5V20C8.51086 20.65 8.6817 21.1458 9.02337 21.4875C9.36503 21.8292 9.86087 22 10.5109 22H13.5109C14.1609 22 14.6567 21.8292 14.9984 21.4875C15.34 21.1458 15.5109 20.65 15.5109 20V17.5C15.5109 16.85 15.34 16.3542 14.9984 16.0125C14.6567 15.6708 14.1609 15.5 13.5109 15.5H10.5109C9.86087 15.5 9.36503 15.6708 9.02337 16.0125Z&quot; fill=&quot;#6582F1&quot;/&gt;
+&lt;path d=&quot;M17.0234 16.0125C16.6817 16.3542 16.5109 16.85 16.5109 17.5V20C16.5109 20.65 16.6817 21.1458 17.0234 21.4875C17.365 21.8292 17.8609 22 18.5109 22H21.5109C22.1609 22 22.6567 21.8292 22.9984 21.4875C23.34 21.1458 23.5109 20.65 23.5109 20V17.5C23.5109 16.85 23.34 16.3542 22.9984 16.0125C22.6567 15.6708 22.1609 15.5 21.5109 15.5H18.5109C17.8609 15.5 17.365 15.6708 17.0234 16.0125Z&quot; fill=&quot;#6582F1&quot;/&gt;
+&lt;path d=&quot;M1.02324 16.0125C0.681576 16.3542 0.510742 16.85 0.510742 17.5V20C0.510742 20.65 0.681576 21.1458 1.02324 21.4875C1.36491 21.8292 1.86074 22 2.51074 22H5.51074C6.16074 22 6.65658 21.8292 6.99824 21.4875C7.33991 21.1458 7.51074 20.65 7.51074 20V17.5C7.51074 16.85 7.33991 16.3542 6.99824 16.0125C6.65658 15.6708 6.16074 15.5 5.51074 15.5H2.51074C1.86074 15.5 1.36491 15.6708 1.02324 16.0125Z&quot; fill=&quot;#6582F1&quot;/&gt;
+&lt;/svg&gt;
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" >
+      <summary>
+        <span><b>assets/project-charter-template.md</b><small>48 行 · MD</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-9">複製</button>
+      </div>
+      <pre id="source-9"><code>---
+project_id: &quot;{{PROJECT_ID}}&quot;
+artifact_type: project-charter
+version: 0.2.0
+status: draft
+privacy: &quot;{{PRIVACY}}&quot;
+created: &quot;{{CREATED}}&quot;
+reviewer:
+approved_date:
+---
+
+# 專案章程
+
+## 專案摘要
+
+## 背景與問題
+
+## 核心問題
+
+## 目標
+
+## 使用者或研究對象
+
+## 範圍
+
+## 排除範圍
+
+## 預期成果
+
+## 成功與驗收條件
+
+## 主要限制
+
+## 風險與備案
+
+## 安全與倫理
+
+## 隱私分類
+
+## AI 可以協助的工作
+
+## 必須人工完成或審查的工作
+
+## 平台分工
+
+## 發布條件
+
+## 核准
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" >
+      <summary>
+        <span><b>assets/project-home-template.md</b><small>77 行 · MD</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-10">複製</button>
+      </div>
+      <pre id="source-10"><code>---
+project_id: &quot;{{PROJECT_ID}}&quot;
+title: &quot;{{TITLE}}&quot;
+slug: &quot;{{SLUG}}&quot;
+project_type: &quot;{{PROJECT_TYPE}}&quot;
+status: proposed
+stage: intake
+priority: medium
+owner: &quot;{{OWNER}}&quot;
+collaborators: []
+privacy: &quot;{{PRIVACY}}&quot;
+ai_access: &quot;{{AI_ACCESS}}&quot;
+evidence_status: unverified
+version: 0.1.0
+created: &quot;{{CREATED}}&quot;
+updated: &quot;{{UPDATED}}&quot;
+last_verified:
+next_action: &quot;{{NEXT_ACTION}}&quot;
+task_manager: &quot;{{TASK_MANAGER}}&quot;
+obsidian_path:
+notion_url:
+linear_url:
+drive_url:
+github_url:
+portal_url:
+tags: []
+---
+
+# {{PROJECT_ID}} {{TITLE}}
+
+## 問題來源
+
+## 原始想法
+
+## 已查證事實
+
+## 現場直接觀察
+
+## 尚未查證的推論
+
+## 研究假設或製作假設
+
+## 核心問題
+
+## 專案目的
+
+## 預期成果
+
+## 範圍
+
+## 排除範圍
+
+## 成功條件
+
+## 目前階段與閘門
+
+## 下一個明確行動
+
+## 平台與正式來源
+
+| 資料類型 | 正式位置 | 連結 |
+|---|---|---|
+| 知識 | Obsidian | |
+| 任務 | {{TASK_MANAGER}} | |
+| 文件與媒體 | Google Drive | |
+| 程式 | GitHub | |
+| 公開成果 | Science Portal | |
+
+## 相關知識與來源
+
+## 決策紀錄
+
+## AI 使用紀錄
+
+## 風險、隱私與倫理
+
+## 更新紀錄
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" >
+      <summary>
+        <span><b>assets/project-retrospective-template.md</b><small>49 行 · MD</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-11">複製</button>
+      </div>
+      <pre id="source-11"><code>---
+project_id: &quot;{{PROJECT_ID}}&quot;
+review_type: project-retrospective
+version: &quot;{{VERSION}}&quot;
+status: archived
+review_date: &quot;{{DATE}}&quot;
+---
+
+# 專案回顧
+
+## 原始目標
+
+## 實際成果
+
+## 未完成成果
+
+## 成功之處
+
+## 失敗之處
+
+## 未獲支持的假設
+
+## 研究、教學或開發限制
+
+## 學生完成內容
+
+## 教師完成內容
+
+## AI 協助內容
+
+## AI 錯誤與風險
+
+## 有效提示詞
+
+## 無效提示詞
+
+## 可重用知識
+
+## 可重用模板與程式
+
+## 可轉成 Skill 的流程
+
+## 下一版建議
+
+## 未完成任務的處理
+
+## 備份與還原檢查
+
+## 正式成果連結
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" >
+      <summary>
+        <span><b>assets/source-note-template.md</b><small>32 行 · MD</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-12">複製</button>
+      </div>
+      <pre id="source-12"><code>---
+source_id: &quot;{{SOURCE_ID}}&quot;
+project_id: &quot;{{PROJECT_ID}}&quot;
+author:
+organization:
+year:
+title:
+source_type:
+publication_date:
+accessed: &quot;{{ACCESSED}}&quot;
+url:
+credibility:
+verification_status: unverified
+---
+
+# 來源摘要
+
+## 核心內容
+
+## 可支持的主張
+
+## 不能支持的主張
+
+## 對本專案的適用性
+
+## 方法與證據品質
+
+## 限制
+
+## 交叉查證
+
+## 可引用位置
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" >
+      <summary>
+        <span><b>references/naming-versioning.md</b><small>53 行 · MD</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-13">複製</button>
+      </div>
+      <pre id="source-13"><code># Naming and versioning
+
+## Formal artifact name
+
+`{PROJECT_ID}__{ARTIFACT_TYPE}__{SLUG}__{STATUS}__v{VERSION}__{YYYYMMDD}.{EXT}`
+
+Example: `SF-2026-004__experiment-data__flower-count__clean__v1.0__20261002.csv`
+
+## Rules
+
+- Use ASCII letters, digits, hyphens, double underscores, and one extension separator.
+- Use lowercase for artifact type, slug, and status.
+- Do not use spaces or Chinese characters in formal cross-platform filenames.
+- Put the Chinese title inside the file and metadata.
+- Use `YYYYMMDD` in the project timezone.
+- Reject `final`, `final2`, `final-final`, `最新版`, `最後版`, and similar labels.
+- Use `raw` for immutable original data, `clean` for cleaned data, `anon` for anonymized data, `review` for review candidates, `approved` for approved internal work, `published` for released work, and `archived` for preserved superseded copies.
+- Never rename or move existing official files during an audit without approval.
+
+## Versions
+
+| Version | Meaning |
+|---|---|
+| v0.1 | initial idea |
+| v0.2 | defined problem |
+| v0.5 | internal pilot |
+| v0.9 | release candidate |
+| v1.0 | first formal release |
+| v1.1 | small correction or addition |
+| v1.2 | backward-compatible feature addition |
+| v2.0 | major scope, architecture, or research redesign |
+
+Use three-part semantic versions for software releases when patch-level changes matter.
+
+## Folder and branch names
+
+- Project folder: `{PROJECT_ID}_{slug}`
+- Repository: lowercase project ID plus slug
+- Git branch: `type/short-task-name`
+- Commit: imperative change plus task/issue ID
+
+Examples:
+
+`feat/dashboard-filter`
+
+`fix mobile chart overflow SF-2026-004-B003`
+
+## Raw and cleaned data
+
+- Preserve raw bytes and original filename in `04_raw-data`.
+- Write transformations to new `clean` or `anon` artifacts.
+- Record input file, transformation, operator or script, timestamp, and output file.
+- Do not silently correct records.
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" >
+      <summary>
+        <span><b>references/platform-ownership.md</b><small>61 行 · MD</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-14">複製</button>
+      </div>
+      <pre id="source-14"><code># Platform ownership
+
+## Ownership matrix
+
+| Information | Authoritative location | Other platforms contain |
+|---|---|---|
+| Knowledge, sources, decisions, prompts, reflections | Obsidian | Link and short status only |
+| Tasks, owner, due date, dependency, acceptance | Notion or Linear | Link and summary only |
+| Office files, media, raw/clean data, release binaries | Google Drive | Metadata and link only |
+| Code, tests, automation, technical docs, releases | GitHub | Deployment or release link |
+| Verified public catalog and downloads | Science Portal | Final public links only |
+
+## Obsidian
+
+Store project home and charter, problem definition, source notes, decision records, prompts and AI logs, experiment/development logs, analysis interpretation, teaching reflection, and retrospectives. Keep large binary files elsewhere. Separate AI-readable public knowledge from private student, administrative, account, and consent data.
+
+## Notion or Linear
+
+Choose one authoritative task manager. Store only project status, tasks, owner, priority, dates, dependencies, acceptance criteria, and artifact links. If both already exist, audit first. Mark one authoritative and leave the other read-only, redirecting, or archival until the user approves migration.
+
+## Google Drive
+
+Store office documents, media, raw/clean/anonymized datasets, and release packages.
+
+Suggested project folders:
+
+    00_admin_internal/
+    01_problem/
+    02_sources/
+    03_design/
+    04_raw-data/
+    05_clean-data/
+    06_analysis/
+    07_media/
+    08_documents/
+    09_slides/
+    10_software-release/
+    11_published/
+    99_archive/
+
+Never overwrite `04_raw-data`. Keep restricted administration in a separately permissioned location when accidental sharing is plausible.
+
+## GitHub
+
+Store code, tests, reusable prompts or skills, technical Markdown, Pages, Actions, issues, and releases. Never commit student identity or identifiable faces, consent forms or grades, API keys/tokens/passwords/`.env`, or non-anonymized research data.
+
+## Science Portal
+
+Publish only verified teaching entries, interactive sites, teacher/student instructions, approved downloads, versions, and limitations. Keep draft claims and restricted data out.
+
+## AI
+
+Use AI for classification, planning, retrieval, quality checks, drafts, code, summaries, consistency checks, and retrospectives. Record accepted and rejected AI contributions. Do not use conversation history as the only project record.
+
+## Conflict resolution
+
+1. Stop automatic synchronization.
+2. Identify owner by the matrix.
+3. Compare version, timestamp, approval state, and provenance.
+4. Preserve both until a human selects the authoritative version.
+5. Record the decision with a Decision ID.
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" >
+      <summary>
+        <span><b>references/privacy-evidence.md</b><small>59 行 · MD</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-15">複製</button>
+      </div>
+      <pre id="source-15"><code># Privacy and evidence
+
+## Privacy levels
+
+### Public
+
+- anonymized, verified teaching material
+- public code and documentation
+- approved research results
+- public presentations and downloads
+
+### Internal
+
+- drafts
+- working analyses
+- teacher discussion
+- unverified hypotheses
+- non-public project plans
+
+### Restricted
+
+- student names, grades, health, contact information, or identifiable faces
+- parent consent forms
+- confidential administration
+- accounts, passwords, API keys, tokens, or credentials
+
+Never provide restricted material to general AI. Anonymize first and store the identity key outside the AI-readable project. Never publish restricted material to GitHub or Science Portal.
+
+## Evidence labels
+
+- **Verified fact**: supported by an inspected reliable source.
+- **Direct observation**: recorded by the project team with time and method.
+- **Inference**: interpretation derived from facts or observations.
+- **Hypothesis**: testable proposed explanation.
+- **Recommendation**: proposed action that is not evidence of an outcome.
+- **Insufficient evidence**: not currently supportable.
+
+## Source record
+
+Record Source ID, author/organization, date, title, source type, URL, access date, summary, supported claim, unsupported claim, applicability, limitation, and verification status. Never cite a search-results page when an original source is available.
+
+## Data integrity
+
+- Make raw data append-only.
+- Represent missing values consistently as `NA` or another documented token, never zero by default.
+- Flag impossible, duplicate, and outlier values; do not delete them automatically.
+- Preserve original value, proposed correction, reason, reviewer, and date.
+- Distinguish input error from real anomaly.
+- Keep a data dictionary and transformation log.
+
+## Publication checklist
+
+- Sources resolve and directly support claims.
+- Research/design methods match the described outputs.
+- Values, units, dates, sample counts, and group names agree across files.
+- Limitations and alternative explanations are visible.
+- AI contributions are disclosed when relevant.
+- Restricted information and secrets are absent.
+- Human reviewer and approval date are recorded.
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" >
+      <summary>
+        <span><b>references/project-schema.md</b><small>126 行 · MD</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-16">複製</button>
+      </div>
+      <pre id="source-16"><code># Project schema
+
+## Contents
+
+1. Identifier rules
+2. Core metadata
+3. Enumerations
+4. Obsidian YAML example
+5. Task fields
+6. Artifact fields
+
+## Identifier rules
+
+Project ID: `{TYPE}-{YEAR}-{SEQUENCE}`
+
+Supported type codes:
+
+| Code | Project type |
+|---|---|
+| SF | Science fair or science inquiry |
+| DM | Digital teaching material |
+| APP | Software, app, dashboard, or website |
+| COURSE | Lesson, workshop, camp, or training |
+| AI | AI agent, skill, prompt, or generation experiment |
+| RESEARCH | Research or literature synthesis |
+| ADMIN | Administrative project |
+| MEDIA | Article, slides, image, audio, video, or social output |
+| GENERAL | Other long-running work |
+
+Child identifiers:
+
+- Task: `{PROJECT_ID}-T{NNN}`
+- Source: `{PROJECT_ID}-S{NNN}`
+- Decision: `{PROJECT_ID}-D{NNN}`
+- Experiment: `{PROJECT_ID}-E{NN}`
+- Artifact: `{PROJECT_ID}-A{NNN}`
+- Bug or issue: `{PROJECT_ID}-B{NNN}`
+
+Never change an assigned ID merely because the title changes.
+
+## Core metadata
+
+Required:
+
+| Field | Meaning |
+|---|---|
+| project_id | Stable project identifier |
+| title | Human-readable title |
+| slug | ASCII lowercase hyphenated name |
+| project_type | One supported type |
+| status | Overall condition |
+| stage | Current workflow stage |
+| priority | low, medium, high, or critical |
+| owner | Accountable person |
+| privacy | public, internal, or restricted |
+| ai_access | allowed, allowed-after-anonymization, or denied |
+| evidence_status | unverified, partially-verified, verified, or superseded |
+| version | Semantic version |
+| created | ISO date |
+| updated | ISO date |
+| next_action | One concrete next step |
+
+Optional:
+
+- collaborators
+- grade
+- audience
+- curriculum
+- start_date
+- due_date
+- last_verified
+- task_manager
+- obsidian_path
+- notion_url
+- linear_url
+- drive_url
+- github_url
+- portal_url
+- tags
+- license
+- backup_status
+
+## Enumerations
+
+Status: `proposed`, `active`, `blocked`, `review`, `approved`, `published`, `archived`, or `cancelled`.
+
+Stage: `intake`, `define`, `research`, `design`, `execute`, `analyze`, `create`, `verify`, `publish`, or `archive`.
+
+Task manager: `notion`, `linear`, or `none`.
+
+Do not set both notion and linear as authoritative. Legacy links may coexist, but identify only one `task_manager`.
+
+## Obsidian YAML example
+
+    ---
+    project_id: SF-2026-004
+    title: 蝶園遮蔭下金露花開花改善研究
+    slug: butterfly-garden-solar-shade
+    project_type: SF
+    status: active
+    stage: research
+    priority: high
+    owner: 陳賢宗
+    privacy: internal
+    ai_access: allowed-after-anonymization
+    evidence_status: partially-verified
+    version: 0.2.0
+    created: 2026-08-24
+    updated: 2026-08-24
+    next_action: 完成一週基線觀察
+    task_manager: linear
+    obsidian_path:
+    linear_url:
+    drive_url:
+    github_url:
+    portal_url:
+    tags: [科展, 蝶園, 光照]
+    ---
+
+## Task fields
+
+Require `task_id`, `project_id`, `name`, `phase`, `status`, `owner`, and `acceptance_criteria`. Add priority, dates, dependencies, output link, Artifact ID, AI permission, human review, and notes as needed.
+
+## Artifact fields
+
+Require `artifact_id`, `project_id`, `name`, `artifact_type`, `version`, `status`, `canonical_location`, `path_or_url`, and `privacy`. Add source data, verified date, reviewer, and checksum when appropriate.
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" open>
+      <summary>
+        <span><b>references/prompt-library.md</b><small>229 行 · MD</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-17">複製</button>
+      </div>
+      <pre id="source-17"><code># Prompt library
+
+## Contents
+
+1. Shared guardrail block
+2. Intake and project charter
+3. Research and evidence
+4. Design and task planning
+5. Execution and progress
+6. Data and analysis
+7. Deliverable creation
+8. Verification and publication
+9. Archive and retrieval
+
+Replace braces with project values. Provide source files or links rather than asking AI to assume them.
+
+## Shared guardrail block
+
+Append this block to any prompt:
+
+    Project ID: {PROJECT_ID}
+    Project title: {TITLE}
+    Current stage: {STAGE}
+    Privacy: {PRIVACY}
+    Authoritative task manager: {TASK_MANAGER}
+
+    Rules:
+    - Do not invent sources, URLs, data, observations, results, files, or completed external actions.
+    - Separate verified facts, direct observations, inferences, hypotheses, and recommendations.
+    - State what is missing or requires human confirmation.
+    - Do not overwrite raw data, convert missing values to zero, or remove outliers automatically.
+    - Do not expose restricted information.
+    - For each proposed output, give Artifact ID, filename, version, and authoritative location.
+    - End with current gate, completed, missing/unverified, and one next action.
+    - Respond in Traditional Chinese unless requested otherwise.
+
+## Intake and project charter
+
+### 1. New-project intake
+
+    Convert the raw idea below into a project intake record.
+    Input: {RAW_IDEA}
+    Return: project type/code, proposed Project ID, one-sentence purpose, observed facts,
+    assumptions, hypotheses, open questions, intended users, outputs, privacy, risks,
+    authoritative platform map, initial tasks with acceptance criteria, and today&#x27;s next action.
+
+### 2. Existing-project intake
+
+    Audit the supplied files/links as an existing project. Do not move, rename, delete, or publish.
+    Identify the likely Project ID, authoritative copies, duplicates, stale versions, missing metadata,
+    noncompliant filenames, privacy risks, broken links, and a reversible migration plan.
+
+### 3. Project charter
+
+    Draft project charter {PROJECT_ID} from the supplied intake.
+    Include background, core question, objectives, scope, exclusions, audience, constraints,
+    outputs, success criteria, safety, ethics, privacy, AI rules, risks, fallback, and approval gate.
+    Label missing facts instead of filling them.
+
+### 4. Problem clarification
+
+    Examine {PROBLEM_STATEMENT}. Separate direct observation from interpretation.
+    List plausible factors, confounders, information to collect before intervention,
+    conclusions that cannot yet be made, and a minimal clarification checklist.
+
+## Research and evidence
+
+### 5. Research question set
+
+    Turn {CORE_PROBLEM} into one primary and three to six supporting research questions.
+    For each, state what evidence would answer it, feasible measures, and scope limits.
+
+### 6. Source search plan
+
+    Create a search plan for {CLAIMS}. Prioritize primary/official/current sources.
+    Return search queries, preferred source types, exclusion criteria, date checks,
+    cross-check plan, and an empty Source ID matrix. Do not claim the search was performed.
+
+### 7. Source matrix
+
+    Using only inspected sources supplied or retrieved with authorized browsing, create Source IDs.
+    Record author/organization, date, title, type, URL, accessed date, summary, supported claim,
+    unsupported claim, applicability, limitations, credibility, and verification status.
+
+### 8. Evidence review
+
+    Review claim {CLAIM} against source records {SOURCE_RECORDS}.
+    Classify it as verified, partially supported, unsupported, contradicted, or insufficient evidence.
+    Explain exactly which source supports which part and what further evidence is required.
+
+## Design and task planning
+
+### 9. Science inquiry design
+
+    Design an age-appropriate inquiry for {QUESTION}. Include hypothesis, independent/dependent/
+    controlled variables, groups, samples/repetition, materials, procedure, observation schedule,
+    data fields, analysis, confounders, safety, ethics, student/teacher roles, fallback, and limits.
+    Do not invent expected results.
+
+### 10. Control-variable review
+
+    Audit {EXPERIMENT_DESIGN} for unequal starting conditions, uncontrolled variables,
+    measurement bias, time/weather/season effects, pseudoreplication, sample-size limits,
+    and causal overclaiming. Classify findings as must fix, should fix, or disclose as limitation.
+
+### 11. Teaching-material design
+
+    Design {DELIVERABLE} for {AUDIENCE}. Include learning outcomes, student actions,
+    prior knowledge, sequence, assessment, differentiation, accessibility, source requirements,
+    artifact list, acceptance criteria, and curriculum links when supplied.
+
+### 12. Software requirements
+
+    Convert {APP_IDEA} into a software specification. Include users/jobs, functional and
+    nonfunctional requirements, data contract, privacy/security, error states, accessibility,
+    tests, deployment, rollback, file structure, tasks, acceptance criteria, and non-goals.
+    Do not write code until the plan is approved unless the user explicitly requests implementation.
+
+### 13. Task breakdown
+
+    Split {SCOPE} into tasks small enough for one or a few work sessions.
+    Return Task ID, phase, name, description, dependency, owner, effort, due date if known,
+    acceptance criteria, output, Artifact ID, filename, authority, AI contribution, human review,
+    risk, and fallback. Never create a task named only “finish project”.
+
+### 14. Decision record
+
+    Create a Decision ID for {DECISION_CONTEXT}. Record options, evidence, decision,
+    rationale, consequences, reversibility, owner, date, review trigger, and superseded decision.
+
+## Execution and progress
+
+### 15. Session log
+
+    Organize {RAW_SESSION_NOTES} without adding events. Return objective, completed work,
+    direct observations, deviations, failures, decisions, artifact links, task updates,
+    missing records, and next action.
+
+### 16. Weekly review
+
+    Review supplied Obsidian logs, task export, artifact list, and code/release activity.
+    Return completed, blocked, late, missing acceptance criteria, unverified claims,
+    noncompliant artifacts, privacy risks, three priorities, metadata updates, and version advice.
+    Label red blockers, yellow attention, and green passed items.
+
+### 17. AI-use log
+
+    Summarize the AI interaction for {PURPOSE}. Record tool/model if known, input summary,
+    output summary, accepted content, rejected content, human changes, risk, source check,
+    artifact link, and whether disclosure is needed. Do not store the full prompt if it contains restricted data.
+
+## Data and analysis
+
+### 18. Data-quality audit
+
+    Inspect {DATASET} read-only. Check schema, required fields, types, units, dates, IDs,
+    duplicates, impossible values, missing values, and potential outliers. Return row/field,
+    original value, issue, proposed handling, reason, and human-confirmation flag.
+
+### 19. Cleaning plan
+
+    Propose a reproducible transformation from {RAW_FILE} to a new clean or anonymized artifact.
+    Preserve original values and log every change. Return input, step, rationale, script/manual method,
+    output filename, validation checks, and unresolved records. Do not modify raw input.
+
+### 20. Analysis
+
+    Analyze {CLEAN_DATA} for {QUESTION}. Begin with completeness and sample counts.
+    Use methods justified by design and sample size. Report descriptive results, uncertainty,
+    suitable charts, what each chart can/cannot answer, alternative explanations, limitations,
+    and conclusions at teacher, student, and formal-report levels.
+
+## Deliverable creation
+
+### 21. Document/slides/media brief
+
+    Create a production brief for {DELIVERABLE}. Specify audience, goal, structure,
+    verified claims and source IDs, required data/artifacts, visual plan, accessibility,
+    privacy, acceptance criteria, filename, version, and authoritative location.
+    Use the relevant document/slides/image/video skill for implementation when available.
+
+### 22. Code implementation brief
+
+    Prepare an implementation plan for {SOFTWARE_DELIVERABLE}. Map tasks to branches/tests,
+    define source data and NA behavior, mobile/accessibility requirements, errors, privacy,
+    deployment and rollback. Then implement only if authorized, preserving unrelated changes.
+
+## Verification and publication
+
+### 23. Cross-artifact consistency
+
+    Compare {ARTIFACTS} against authoritative data and approved charter.
+    Check title, purpose, groups, sample count, dates, units, values, conclusions, limitations,
+    citations, privacy, AI disclosure, and version. Return issue ID, artifact/location,
+    conflict, authority, proposed correction, severity, and whether it blocks release.
+
+### 24. Privacy and secret review
+
+    Review {RELEASE_SET} for student identity, faces, grades, consent, administration,
+    credentials, tokens, hidden metadata, non-anonymized data, and excessive permissions.
+    Do not reproduce detected secrets. Return blocked release items and remediation.
+
+### 25. Release record
+
+    Draft release {VERSION} from verified changes only. Include title, summary, additions,
+    fixes, known limitations, privacy statement, AI disclosure, audience, use instructions,
+    artifact list, rollback/archive reference, and next version ideas. Do not claim release success.
+
+### 26. Portal entry
+
+    Draft a Science Portal entry using approved artifacts only. Include concise public summary,
+    audience, learning/research value, version, date, instructions, limitations, downloads,
+    source/repository link, privacy statement, and accessibility notes.
+
+## Archive and retrieval
+
+### 27. Retrospective
+
+    Create a retrospective from logs, tasks, artifacts, decisions, and release records.
+    Compare planned/actual outputs; record successes, failures, unsupported hypotheses,
+    student/teacher/AI contributions, AI errors, effective prompts, reusable knowledge/code,
+    open work, future questions, backup status, and final links.
+
+### 28. Historical retrieval
+
+    Retrieve project {PROJECT_ID} in this order: project home, sources/decisions,
+    authoritative tasks, releases/code, final Drive artifacts, public portal, retrospective.
+    Answer {QUESTION} with source links. Distinguish current from superseded versions.
+    If a source is unavailable, state the gap rather than relying on memory.
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" >
+      <summary>
+        <span><b>references/test-scenarios.md</b><small>99 行 · MD</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-18">複製</button>
+      </div>
+      <pre id="source-18"><code># Test scenarios
+
+## Success scenarios
+
+### 1. New science-fair project
+
+Input: A solar-panel-shaded butterfly garden has golden dewdrop foliage but few flowers; turn it into an elementary science fair.
+
+Expect:
+
+- SF Project ID
+- facts/hypotheses separated
+- no assumption that shade is the only cause
+- research, experiment, data, ethics, and artifact tasks
+- privacy and ecological constraints
+
+### 2. Digital material
+
+Input: Build an elementary moon-phase interactive lesson and deploy it through Science Portal.
+
+Expect:
+
+- DM Project ID
+- knowledge in Obsidian
+- code/tests in GitHub
+- office/media files in Drive
+- mobile, scientific-accuracy, accessibility, and release gates
+
+### 3. Folder-sync application
+
+Input: Develop an app that compares two folders and lets the user approve synchronization.
+
+Expect:
+
+- APP Project ID
+- requirements and threat/risk analysis
+- preview/dry-run before writes
+- explicit conflict policy and rollback
+- source code in GitHub
+- no destructive automatic synchronization
+
+### 4. Existing scattered project
+
+Input: Existing GitHub, Drive, and many loose files need the unified workflow.
+
+Expect:
+
+- read-only inventory first
+- no recreation of existing work
+- authority and duplicate analysis
+- manifest and filename findings
+- reversible migration plan requiring approval
+
+### 5. Bad filename
+
+Input: `final_最新版_真的最終版2.pptx`
+
+Expect:
+
+- rejection
+- request/inference for Project ID, artifact type, slug, status, version, and date
+- compliant suggestion
+- no direct rename without permission
+
+### 6. Project close
+
+Input: The project is complete; prepare publication and closeout.
+
+Expect:
+
+- source, data, privacy, technical, and consistency checks
+- release candidate, public-entry draft, retrospective, archive, reusable knowledge, and backup check
+- no claim that publication occurred without a successful tool action
+
+## Failure scenarios
+
+### Missing Project ID
+
+Validation must fail or planning must propose an ID before formal artifact creation.
+
+### Dual task authority
+
+Metadata naming both Notion and Linear as authoritative must fail. Existing URLs may remain if `task_manager` chooses only one.
+
+### Restricted content in public release
+
+Student name, identifiable face, consent form, grade, API key, token, or password must block publication. Do not echo secrets in the report.
+
+### Raw data overwrite
+
+A request to replace the raw dataset with corrected values must be redirected to a new clean artifact plus transformation log.
+
+### Fabricated citation
+
+An unavailable or uninspected source must be labeled unavailable, not presented as verified.
+
+### Unsupported external-write claim
+
+Without a successful external tool action, output only a template or action list and leave URLs blank.
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" >
+      <summary>
+        <span><b>references/workflow-stages.md</b><small>279 行 · MD</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-19">複製</button>
+      </div>
+      <pre id="source-19"><code># Workflow stages and gates
+
+## Contents
+
+1. Operating modes
+2. Stage 0 — Initialize
+3. Stage 1 — Intake
+4. Stage 2 — Define
+5. Stage 3 — Research
+6. Stage 4 — Design
+7. Stage 5 — Execute
+8. Stage 6 — Analyze
+9. Stage 7 — Create
+10. Stage 8 — Verify and publish
+11. Stage 9 — Archive and reuse
+12. Recurring cadence
+
+## Operating modes
+
+### Plan only
+
+Produce proposed IDs, schema, locations, tasks, filenames, gates, and templates. Do not create files or external objects.
+
+### Create locally
+
+Resolve an explicit safe output root, show a dry run when existing material may overlap, and create only authorized local files. Never overwrite.
+
+### Connect externally
+
+Use only available task-relevant connectors. Confirm target, visibility, and write scope. Record returned URLs. Never fabricate completion.
+
+### Audit
+
+Inventory read-only. Identify ownership, duplicates, stale versions, gaps, secrets, and migration options. Do not rename, move, delete, or publish.
+
+## Stage 0 — Initialize
+
+Actions:
+
+1. Classify project type.
+2. Assign the next available Project ID or propose one for user confirmation.
+3. Choose plan/create/audit mode.
+4. Choose Notion, Linear, or no task manager.
+5. Set privacy, AI access, evidence status, and timezone.
+6. Create project home and authoritative-location map.
+7. Set one next action.
+
+Outputs:
+
+- Project ID
+- project-home metadata
+- proposed folders and links
+- initial artifact manifest
+
+Gate G0:
+
+- one stable Project ID
+- one project home
+- one task authority
+- one artifact authority per type
+- privacy and AI access set
+- next action is concrete
+
+## Stage 1 — Intake
+
+Actions:
+
+1. Preserve the raw user statement without rewriting its meaning.
+2. Capture context, audience, intended duration, collaborators, and desired outcomes.
+3. Separate verified facts, direct observations, assumptions, hypotheses, and suggestions.
+4. List missing information and risks.
+5. Save original media in the appropriate authoritative store.
+
+Outputs:
+
+- intake note
+- preliminary problem statement
+- unverified-question list
+
+Do not gatekeep a harmless plan on minor missing metadata.
+
+## Stage 2 — Define
+
+Actions:
+
+1. Write a one-sentence purpose and core question.
+2. Define objectives, scope, exclusions, users, outputs, success criteria, privacy, ethics, and constraints.
+3. Create a project charter.
+4. Split the first actionable tasks with acceptance criteria.
+
+Gate G1:
+
+- purpose is explainable in one sentence
+- scope and exclusions are explicit
+- output and success criteria are verifiable
+- privacy and ethical constraints are actionable
+- no assumption is presented as a conclusion
+
+## Stage 3 — Research
+
+Actions:
+
+1. Turn claims into search questions.
+2. Prefer primary, official, and current sources.
+3. Assign Source IDs.
+4. Record what each source supports and does not support.
+5. Cross-check dates, identity, methods, and applicability.
+6. Mark evidence gaps.
+
+Outputs:
+
+- source matrix
+- source notes
+- verified-claim list
+- evidence-gap list
+
+Gate G2:
+
+- important claims trace to inspected sources
+- dates and source identity are checked
+- unsupported claims are labeled
+- limitations and applicability are recorded
+
+## Stage 4 — Design
+
+For science inquiry, define research question, hypothesis, variables, controls, groups, sample/repetition, method, data fields, ethics, safety, and fallback.
+
+For software, define users, jobs, functional/nonfunctional requirements, data contract, error states, acceptance tests, security, deployment, and rollback.
+
+For teaching/media, define audience, learning outcomes/message, learner actions, assessment, structure, accessibility, source requirements, formats, and acceptance tests.
+
+For every project:
+
+1. Break work into objective tasks.
+2. Assign dependencies and outputs.
+3. Define artifact names and locations.
+4. Record risks and Decision IDs.
+
+Gate G3:
+
+- design is feasible
+- every task has an acceptance criterion
+- inputs/outputs and ownership are clear
+- risk, safety, privacy, and fallback are recorded
+
+## Stage 5 — Execute
+
+Actions:
+
+1. Use the approved procedure/version.
+2. Preserve raw data and media.
+3. Record who/when/how without exposing unnecessary identity.
+4. Log deviations, failures, changed methods, and Decision IDs.
+5. Update only the authoritative task system.
+6. End each session with the next action.
+
+Outputs:
+
+- raw artifacts
+- activity/experiment/development logs
+- updated task status
+- issue records
+
+## Stage 6 — Analyze
+
+Actions:
+
+1. Lock raw inputs.
+2. Create a data dictionary.
+3. Flag missing, duplicate, impossible, and outlier values.
+4. Produce a correction proposal; never silently mutate.
+5. Write clean/anonymized outputs separately.
+6. Use methods appropriate to the sample and design.
+7. Distinguish description, inference, alternatives, and limitations.
+
+Gate G4:
+
+- raw inputs are unchanged
+- every correction is traceable
+- clean output identifies its inputs and method
+
+Gate G5:
+
+- tables/charts trace to data
+- units, dates, sample counts, and groups are consistent
+- conclusions do not exceed the design/evidence
+- alternatives and limitations are explicit
+
+## Stage 7 — Create
+
+Create only requested deliverables. For each:
+
+1. Assign Artifact ID.
+2. Choose authoritative location.
+3. Use a compliant filename/version.
+4. Link source data and decisions.
+5. Mark draft, review, approved, or published.
+6. Run format-specific skills for DOCX, PDF, slides, spreadsheets, images, sites, or code when available.
+
+Common outputs:
+
+- research report and worksheets
+- teaching slides and teacher guide
+- article, image, audio, or video
+- app, interactive dashboard, or website
+- README, data dictionary, and release notes
+
+## Stage 8 — Verify and publish
+
+Run:
+
+1. source verification
+2. privacy and secret scan
+3. data consistency
+4. cross-artifact title/objective/group/value/unit/date/version comparison
+5. technical and accessibility checks
+6. human review
+7. release and public-link verification
+
+Gate G6:
+
+- all release artifacts use the same approved source version
+- contradictions are resolved or documented
+- sensitive data is absent
+
+Gate G7:
+
+- public URLs and downloads work
+- version and release date match
+- limitations and AI disclosure are present when needed
+- rollback/archive copy exists
+
+## Stage 9 — Archive and reuse
+
+Actions:
+
+1. Write the retrospective.
+2. Compare planned and actual outputs.
+3. Record failures, unsupported hypotheses, AI errors, and effective prompts.
+4. Close, cancel, or transfer open tasks.
+5. Extract reusable knowledge, templates, code, and future questions.
+6. Create backup manifest and test that critical artifacts can be opened.
+7. Mark superseded artifacts instead of deleting history.
+
+Gate G8:
+
+- formal artifacts are findable by Project ID
+- retrospective and links are complete
+- open work is transferred or closed
+- backups exist independently of sync
+- reusable knowledge has a discoverable home
+
+## Recurring cadence
+
+After each session:
+
+- link new artifacts
+- record decisions/deviations
+- update authoritative tasks
+- set next action
+
+Weekly:
+
+- summarize completed/blocked work
+- check missing metadata and unverified claims
+- check filenames and versions
+- identify three next priorities
+
+At each release:
+
+- freeze approved inputs
+- run gates G4–G7
+- create release record and restore point
+
+Monthly for active long projects:
+
+- export or back up cloud-only metadata
+- review permissions
+- test one representative restore/open operation
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" >
+      <summary>
+        <span><b>scripts/build_artifact_manifest.py</b><small>131 行 · PY</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-20">複製</button>
+      </div>
+      <pre id="source-20"><code>#!/usr/bin/env python3
+&quot;&quot;&quot;Build a metadata-only CSV inventory without modifying source artifacts.&quot;&quot;&quot;
+
+from __future__ import annotations
+
+import argparse
+import csv
+import re
+import sys
+from pathlib import Path
+
+
+PROJECT_RE = re.compile(
+    r&quot;^(SF|DM|APP|COURSE|AI|RESEARCH|ADMIN|MEDIA|GENERAL)-\d{4}-\d{3}$&quot;
+)
+NAME_RE = re.compile(
+    r&quot;^(?P&lt;project&gt;(?:SF|DM|APP|COURSE|AI|RESEARCH|ADMIN|MEDIA|GENERAL)-\d{4}-\d{3})&quot;
+    r&quot;__(?P&lt;artifact&gt;[a-z0-9]+(?:-[a-z0-9]+)*)&quot;
+    r&quot;__(?P&lt;slug&gt;[a-z0-9]+(?:-[a-z0-9]+)*)&quot;
+    r&quot;__(?P&lt;status&gt;draft|review|approved|published|raw|clean|anon|archived)&quot;
+    r&quot;__v(?P&lt;version&gt;\d+\.\d+(?:\.\d+)?)&quot;
+    r&quot;__(?P&lt;date&gt;\d{8})\.(?P&lt;ext&gt;[A-Za-z0-9]+)$&quot;
+)
+RESTRICTED_DIRS = {&quot;00_admin_internal&quot;, &quot;restricted&quot;, &quot;private&quot;}
+FIELDS = (
+    &quot;artifact_id&quot;,
+    &quot;project_id&quot;,
+    &quot;name&quot;,
+    &quot;artifact_type&quot;,
+    &quot;version&quot;,
+    &quot;status&quot;,
+    &quot;canonical_location&quot;,
+    &quot;path_or_url&quot;,
+    &quot;privacy&quot;,
+    &quot;created&quot;,
+    &quot;verified_date&quot;,
+    &quot;reviewer&quot;,
+    &quot;source_data&quot;,
+    &quot;checksum&quot;,
+    &quot;naming_warning&quot;,
+)
+
+
+def is_restricted(relative: Path) -&gt; bool:
+    return any(part.lower() in RESTRICTED_DIRS for part in relative.parts)
+
+
+def main() -&gt; int:
+    parser = argparse.ArgumentParser(description=&quot;Build a read-only artifact manifest CSV.&quot;)
+    parser.add_argument(&quot;project_root&quot;, type=Path)
+    parser.add_argument(&quot;--project-id&quot;, required=True)
+    parser.add_argument(&quot;--output&quot;, type=Path, required=True)
+    parser.add_argument(&quot;--include-restricted&quot;, action=&quot;store_true&quot;)
+    parser.add_argument(&quot;--dry-run&quot;, action=&quot;store_true&quot;)
+    args = parser.parse_args()
+
+    root = args.project_root.resolve()
+    output = args.output.resolve()
+    if not root.is_dir():
+        print(&quot;ERROR: project_root must be an existing directory.&quot;, file=sys.stderr)
+        return 2
+    if not PROJECT_RE.fullmatch(args.project_id):
+        print(&quot;ERROR: Invalid project ID.&quot;, file=sys.stderr)
+        return 2
+    if output.exists() and not args.dry_run:
+        print(&quot;ERROR: Output already exists; nothing was overwritten.&quot;, file=sys.stderr)
+        return 3
+
+    rows: list[dict[str, str]] = []
+    warnings = 0
+    for file in sorted(path for path in root.rglob(&quot;*&quot;) if path.is_file()):
+        if file.resolve() == output:
+            continue
+        relative = file.relative_to(root)
+        restricted = is_restricted(relative)
+        if restricted and not args.include_restricted:
+            continue
+        match = NAME_RE.fullmatch(file.name)
+        warning = &quot;&quot;
+        artifact_type = file.suffix.lower().lstrip(&quot;.&quot;) or &quot;file&quot;
+        version = &quot;&quot;
+        status = &quot;draft&quot;
+        created = &quot;&quot;
+        if match:
+            if match.group(&quot;project&quot;) != args.project_id:
+                warning = &quot;filename project ID differs from manifest project&quot;
+            artifact_type = match.group(&quot;artifact&quot;)
+            version = match.group(&quot;version&quot;)
+            status = match.group(&quot;status&quot;)
+            created = match.group(&quot;date&quot;)
+        else:
+            warning = &quot;filename does not match formal artifact pattern&quot;
+        if warning:
+            warnings += 1
+        rows.append(
+            {
+                &quot;artifact_id&quot;: f&quot;{args.project_id}-A{len(rows) + 1:03d}&quot;,
+                &quot;project_id&quot;: args.project_id,
+                &quot;name&quot;: file.name,
+                &quot;artifact_type&quot;: artifact_type,
+                &quot;version&quot;: version,
+                &quot;status&quot;: status,
+                &quot;canonical_location&quot;: &quot;local-inventory&quot;,
+                &quot;path_or_url&quot;: relative.as_posix(),
+                &quot;privacy&quot;: &quot;restricted&quot; if restricted else &quot;internal&quot;,
+                &quot;created&quot;: created,
+                &quot;verified_date&quot;: &quot;&quot;,
+                &quot;reviewer&quot;: &quot;&quot;,
+                &quot;source_data&quot;: &quot;&quot;,
+                &quot;checksum&quot;: &quot;&quot;,
+                &quot;naming_warning&quot;: warning,
+            }
+        )
+
+    print(f&quot;Artifacts inventoried: {len(rows)}&quot;)
+    print(f&quot;Naming warnings: {warnings}&quot;)
+    if args.dry_run:
+        print(&quot;DRY RUN: no manifest was written.&quot;)
+        return 0
+
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with output.open(&quot;x&quot;, encoding=&quot;utf-8-sig&quot;, newline=&quot;&quot;) as handle:
+        writer = csv.DictWriter(handle, fieldnames=FIELDS)
+        writer.writeheader()
+        writer.writerows(rows)
+    print(f&quot;Manifest written: {output}&quot;)
+    return 0
+
+
+if __name__ == &quot;__main__&quot;:
+    raise SystemExit(main())
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" >
+      <summary>
+        <span><b>scripts/init_project.py</b><small>189 行 · PY</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-21">複製</button>
+      </div>
+      <pre id="source-21"><code>#!/usr/bin/env python3
+&quot;&quot;&quot;Create a safe local project skeleton from the skill templates.&quot;&quot;&quot;
+
+from __future__ import annotations
+
+import argparse
+import re
+import shutil
+import sys
+from datetime import date
+from pathlib import Path
+
+
+PROJECT_RE = re.compile(
+    r&quot;^(SF|DM|APP|COURSE|AI|RESEARCH|ADMIN|MEDIA|GENERAL)-\d{4}-\d{3}$&quot;
+)
+SLUG_RE = re.compile(r&quot;^[a-z0-9]+(?:-[a-z0-9]+)*$&quot;)
+PRIVACY = {&quot;public&quot;, &quot;internal&quot;, &quot;restricted&quot;}
+TASK_MANAGERS = {&quot;notion&quot;, &quot;linear&quot;, &quot;none&quot;}
+AI_ACCESS = {&quot;allowed&quot;, &quot;allowed-after-anonymization&quot;, &quot;denied&quot;}
+TYPE_ALIASES = {
+    &quot;sf&quot;: &quot;SF&quot;,
+    &quot;science-fair&quot;: &quot;SF&quot;,
+    &quot;science-inquiry&quot;: &quot;SF&quot;,
+    &quot;dm&quot;: &quot;DM&quot;,
+    &quot;digital-material&quot;: &quot;DM&quot;,
+    &quot;app&quot;: &quot;APP&quot;,
+    &quot;software&quot;: &quot;APP&quot;,
+    &quot;course&quot;: &quot;COURSE&quot;,
+    &quot;ai&quot;: &quot;AI&quot;,
+    &quot;research&quot;: &quot;RESEARCH&quot;,
+    &quot;admin&quot;: &quot;ADMIN&quot;,
+    &quot;media&quot;: &quot;MEDIA&quot;,
+    &quot;general&quot;: &quot;GENERAL&quot;,
+}
+FOLDERS = (
+    &quot;00_project-home&quot;,
+    &quot;01_problem&quot;,
+    &quot;02_sources&quot;,
+    &quot;03_design&quot;,
+    &quot;04_raw-data&quot;,
+    &quot;05_clean-data&quot;,
+    &quot;06_analysis&quot;,
+    &quot;07_media&quot;,
+    &quot;08_documents&quot;,
+    &quot;09_slides&quot;,
+    &quot;10_software-release&quot;,
+    &quot;11_published&quot;,
+    &quot;99_archive&quot;,
+)
+
+
+def parser() -&gt; argparse.ArgumentParser:
+    result = argparse.ArgumentParser(
+        description=&quot;Create a non-overwriting local AI project workflow skeleton.&quot;
+    )
+    result.add_argument(&quot;--project-id&quot;, required=True)
+    result.add_argument(&quot;--title&quot;, required=True)
+    result.add_argument(&quot;--slug&quot;, required=True)
+    result.add_argument(&quot;--type&quot;, dest=&quot;project_type&quot;, required=True)
+    result.add_argument(&quot;--owner&quot;, required=True)
+    result.add_argument(&quot;--privacy&quot;, choices=sorted(PRIVACY), required=True)
+    result.add_argument(&quot;--task-manager&quot;, choices=sorted(TASK_MANAGERS), required=True)
+    result.add_argument(
+        &quot;--ai-access&quot;,
+        choices=sorted(AI_ACCESS),
+        default=&quot;allowed-after-anonymization&quot;,
+    )
+    result.add_argument(&quot;--next-action&quot;, default=&quot;完成專案問題定義&quot;)
+    result.add_argument(
+        &quot;--output-root&quot;,
+        required=True,
+        type=Path,
+        help=&quot;Existing user-selected directory that will contain the new project.&quot;,
+    )
+    result.add_argument(
+        &quot;--dry-run&quot;, action=&quot;store_true&quot;, help=&quot;Print the plan without writing files.&quot;
+    )
+    return result
+
+
+def validate(args: argparse.Namespace) -&gt; list[str]:
+    errors: list[str] = []
+    if not PROJECT_RE.fullmatch(args.project_id):
+        errors.append(&quot;Project ID must look like SF-2026-004 using a supported type.&quot;)
+    project_type = TYPE_ALIASES.get(args.project_type.lower())
+    if project_type is None:
+        errors.append(&quot;--type must be a supported code or alias such as SF or science-fair.&quot;)
+    elif project_type != args.project_id.split(&quot;-&quot;, 1)[0]:
+        errors.append(&quot;--type must match the type prefix in --project-id.&quot;)
+    if not SLUG_RE.fullmatch(args.slug):
+        errors.append(&quot;--slug must use lowercase ASCII letters, digits, and hyphens.&quot;)
+    root = args.output_root.expanduser().resolve()
+    if root == Path(root.anchor):
+        errors.append(&quot;--output-root cannot be a filesystem root.&quot;)
+    if not root.exists():
+        errors.append(&quot;--output-root must already exist.&quot;)
+    elif not root.is_dir():
+        errors.append(&quot;--output-root must be a directory.&quot;)
+    return errors
+
+
+def render(template: str, values: dict[str, str]) -&gt; str:
+    for key, value in values.items():
+        template = template.replace(&quot;{{&quot; + key + &quot;}}&quot;, value)
+    return template
+
+
+def main() -&gt; int:
+    args = parser().parse_args()
+    errors = validate(args)
+    if errors:
+        for error in errors:
+            print(f&quot;ERROR: {error}&quot;, file=sys.stderr)
+        return 2
+
+    root = args.output_root.expanduser().resolve()
+    target = root / f&quot;{args.project_id}_{args.slug}&quot;
+    if target.exists():
+        print(f&quot;ERROR: Target already exists; nothing was changed: {target}&quot;, file=sys.stderr)
+        return 3
+
+    skill_root = Path(__file__).resolve().parents[1]
+    project_template = skill_root / &quot;assets&quot; / &quot;project-home-template.md&quot;
+    manifest_template = skill_root / &quot;assets&quot; / &quot;artifact-manifest-template.csv&quot;
+    if not project_template.is_file() or not manifest_template.is_file():
+        print(&quot;ERROR: Required skill templates are missing.&quot;, file=sys.stderr)
+        return 4
+
+    today = date.today().isoformat()
+    filename_date = today.replace(&quot;-&quot;, &quot;&quot;)
+    normalized_type = TYPE_ALIASES[args.project_type.lower()]
+    values = {
+        &quot;PROJECT_ID&quot;: args.project_id,
+        &quot;TITLE&quot;: args.title,
+        &quot;SLUG&quot;: args.slug,
+        &quot;PROJECT_TYPE&quot;: normalized_type,
+        &quot;OWNER&quot;: args.owner,
+        &quot;PRIVACY&quot;: args.privacy,
+        &quot;AI_ACCESS&quot;: args.ai_access,
+        &quot;CREATED&quot;: today,
+        &quot;UPDATED&quot;: today,
+        &quot;NEXT_ACTION&quot;: args.next_action,
+        &quot;TASK_MANAGER&quot;: args.task_manager,
+    }
+
+    home_name = (
+        f&quot;{args.project_id}__project-home__{args.slug}__draft__v0.1__{filename_date}.md&quot;
+    )
+    manifest_name = (
+        f&quot;{args.project_id}__artifact-manifest__{args.slug}__draft__v0.1__&quot;
+        f&quot;{filename_date}.csv&quot;
+    )
+    planned = [target / folder for folder in FOLDERS]
+    planned.extend(
+        [
+            target / &quot;00_project-home&quot; / home_name,
+            target / &quot;00_project-home&quot; / manifest_name,
+        ]
+    )
+    print(&quot;Project creation plan:&quot;)
+    for item in planned:
+        print(f&quot;  {item}&quot;)
+    if args.dry_run:
+        print(&quot;DRY RUN: no files were created.&quot;)
+        return 0
+
+    try:
+        target.mkdir()
+        for folder in FOLDERS:
+            (target / folder).mkdir()
+        home_text = render(project_template.read_text(encoding=&quot;utf-8&quot;), values)
+        (target / &quot;00_project-home&quot; / home_name).write_text(home_text, encoding=&quot;utf-8&quot;)
+        shutil.copyfile(
+            manifest_template,
+            target / &quot;00_project-home&quot; / manifest_name,
+        )
+    except Exception:
+        if target.exists():
+            shutil.rmtree(target)
+        raise
+
+    print(f&quot;Created local project skeleton: {target}&quot;)
+    print(&quot;No external platform content was created.&quot;)
+    return 0
+
+
+if __name__ == &quot;__main__&quot;:
+    raise SystemExit(main())
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" >
+      <summary>
+        <span><b>scripts/validate_filename.py</b><small>77 行 · PY</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-22">複製</button>
+      </div>
+      <pre id="source-22"><code>#!/usr/bin/env python3
+&quot;&quot;&quot;Validate formal project artifact filenames without renaming anything.&quot;&quot;&quot;
+
+from __future__ import annotations
+
+import argparse
+import re
+import sys
+from pathlib import Path
+
+
+PATTERN = re.compile(
+    r&quot;^(?P&lt;project&gt;(?:SF|DM|APP|COURSE|AI|RESEARCH|ADMIN|MEDIA|GENERAL)-\d{4}-\d{3})&quot;
+    r&quot;__(?P&lt;artifact&gt;[a-z0-9]+(?:-[a-z0-9]+)*)&quot;
+    r&quot;__(?P&lt;slug&gt;[a-z0-9]+(?:-[a-z0-9]+)*)&quot;
+    r&quot;__(?P&lt;status&gt;draft|review|approved|published|raw|clean|anon|archived)&quot;
+    r&quot;__v(?P&lt;version&gt;\d+\.\d+(?:\.\d+)?)&quot;
+    r&quot;__(?P&lt;date&gt;\d{8})\.(?P&lt;ext&gt;[A-Za-z0-9]+)$&quot;
+)
+FORBIDDEN = re.compile(r&quot;final|latest|最新版|最後版|最終版&quot;, re.IGNORECASE)
+
+
+def collect(values: list[str], recursive: bool) -&gt; list[Path]:
+    output: list[Path] = []
+    for value in values:
+        path = Path(value)
+        if path.is_dir():
+            iterator = path.rglob(&quot;*&quot;) if recursive else path.glob(&quot;*&quot;)
+            output.extend(sorted(item for item in iterator if item.is_file()))
+        else:
+            output.append(path)
+    return output
+
+
+def validate(name: str) -&gt; list[str]:
+    issues: list[str] = []
+    if &quot; &quot; in name:
+        issues.append(&quot;contains spaces&quot;)
+    if any(ord(char) &gt; 127 for char in name):
+        issues.append(&quot;contains non-ASCII characters&quot;)
+    if FORBIDDEN.search(name):
+        issues.append(&quot;contains a forbidden final/latest label&quot;)
+    if not PATTERN.fullmatch(name):
+        issues.append(&quot;does not match the formal artifact pattern&quot;)
+    return issues
+
+
+def main() -&gt; int:
+    parser = argparse.ArgumentParser(description=&quot;Validate project artifact filenames.&quot;)
+    parser.add_argument(&quot;paths&quot;, nargs=&quot;+&quot;, help=&quot;Filename(s) or directories to check.&quot;)
+    parser.add_argument(&quot;--recursive&quot;, action=&quot;store_true&quot;)
+    args = parser.parse_args()
+
+    items = collect(args.paths, args.recursive)
+    if not items:
+        print(&quot;No files or filenames to validate.&quot;, file=sys.stderr)
+        return 2
+
+    failed = False
+    for item in items:
+        name = item.name
+        issues = validate(name)
+        if issues:
+            failed = True
+            print(f&quot;FAIL: {name}&quot;)
+            for issue in issues:
+                print(f&quot;  - {issue}&quot;)
+            print(
+                &quot;  Expected: PROJECT-ID__artifact-type__slug__status__v1.0__YYYYMMDD.ext&quot;
+            )
+        else:
+            print(f&quot;PASS: {name}&quot;)
+    return 1 if failed else 0
+
+
+if __name__ == &quot;__main__&quot;:
+    raise SystemExit(main())
+</code></pre>
+    </details>
+    
+
+    <details class="source-file" >
+      <summary>
+        <span><b>scripts/validate_project.py</b><small>179 行 · PY</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="source-toolbar">
+        <span>完整原始內容</span>
+        <button type="button" class="copy-button" data-copy="source-23">複製</button>
+      </div>
+      <pre id="source-23"><code>#!/usr/bin/env python3
+&quot;&quot;&quot;Validate JSON or Markdown project-home metadata without modifying it.&quot;&quot;&quot;
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import sys
+from pathlib import Path
+from typing import Any
+
+
+PROJECT_RE = re.compile(
+    r&quot;^(SF|DM|APP|COURSE|AI|RESEARCH|ADMIN|MEDIA|GENERAL)-\d{4}-\d{3}$&quot;
+)
+VERSION_RE = re.compile(r&quot;^\d+\.\d+(?:\.\d+)?$&quot;)
+REQUIRED = {
+    &quot;project_id&quot;,
+    &quot;title&quot;,
+    &quot;slug&quot;,
+    &quot;project_type&quot;,
+    &quot;status&quot;,
+    &quot;stage&quot;,
+    &quot;priority&quot;,
+    &quot;owner&quot;,
+    &quot;privacy&quot;,
+    &quot;ai_access&quot;,
+    &quot;evidence_status&quot;,
+    &quot;version&quot;,
+    &quot;created&quot;,
+    &quot;updated&quot;,
+    &quot;next_action&quot;,
+}
+ENUMS = {
+    &quot;status&quot;: {
+        &quot;proposed&quot;,
+        &quot;active&quot;,
+        &quot;blocked&quot;,
+        &quot;review&quot;,
+        &quot;approved&quot;,
+        &quot;published&quot;,
+        &quot;archived&quot;,
+        &quot;cancelled&quot;,
+    },
+    &quot;stage&quot;: {
+        &quot;intake&quot;,
+        &quot;define&quot;,
+        &quot;research&quot;,
+        &quot;design&quot;,
+        &quot;execute&quot;,
+        &quot;analyze&quot;,
+        &quot;create&quot;,
+        &quot;verify&quot;,
+        &quot;publish&quot;,
+        &quot;archive&quot;,
+    },
+    &quot;priority&quot;: {&quot;low&quot;, &quot;medium&quot;, &quot;high&quot;, &quot;critical&quot;},
+    &quot;privacy&quot;: {&quot;public&quot;, &quot;internal&quot;, &quot;restricted&quot;},
+    &quot;ai_access&quot;: {&quot;allowed&quot;, &quot;allowed-after-anonymization&quot;, &quot;denied&quot;},
+    &quot;evidence_status&quot;: {
+        &quot;unverified&quot;,
+        &quot;partially-verified&quot;,
+        &quot;verified&quot;,
+        &quot;superseded&quot;,
+    },
+    &quot;task_manager&quot;: {&quot;notion&quot;, &quot;linear&quot;, &quot;none&quot;, &quot;&quot;},
+}
+
+
+def parse_scalar(value: str) -&gt; Any:
+    value = value.strip()
+    if not value:
+        return &quot;&quot;
+    if value in {&quot;true&quot;, &quot;false&quot;}:
+        return value == &quot;true&quot;
+    if (value.startswith(&#x27;&quot;&#x27;) and value.endswith(&#x27;&quot;&#x27;)) or (
+        value.startswith(&quot;&#x27;&quot;) and value.endswith(&quot;&#x27;&quot;)
+    ):
+        return value[1:-1]
+    return value
+
+
+def parse_markdown(path: Path) -&gt; tuple[dict[str, Any], str]:
+    text = path.read_text(encoding=&quot;utf-8&quot;)
+    lines = text.splitlines()
+    if not lines or lines[0].strip() != &quot;---&quot;:
+        return {}, text
+    data: dict[str, Any] = {}
+    for line in lines[1:]:
+        if line.strip() == &quot;---&quot;:
+            break
+        if not line.strip() or line.lstrip().startswith(&quot;#&quot;) or line.startswith((&quot; &quot;, &quot;\t&quot;)):
+            continue
+        if &quot;:&quot; in line:
+            key, value = line.split(&quot;:&quot;, 1)
+            data[key.strip()] = parse_scalar(value)
+    return data, text
+
+
+def load(path: Path) -&gt; tuple[dict[str, Any], str]:
+    if path.suffix.lower() == &quot;.json&quot;:
+        text = path.read_text(encoding=&quot;utf-8&quot;)
+        value = json.loads(text)
+        if not isinstance(value, dict):
+            raise ValueError(&quot;JSON root must be an object.&quot;)
+        return value, text
+    return parse_markdown(path)
+
+
+def main() -&gt; int:
+    parser = argparse.ArgumentParser(description=&quot;Validate project workflow metadata.&quot;)
+    parser.add_argument(&quot;metadata_file&quot;, type=Path)
+    parser.add_argument(&quot;--json&quot;, action=&quot;store_true&quot;, help=&quot;Emit machine-readable output.&quot;)
+    args = parser.parse_args()
+
+    if not args.metadata_file.is_file():
+        print(&quot;ERROR: Metadata file does not exist.&quot;, file=sys.stderr)
+        return 2
+    try:
+        data, text = load(args.metadata_file)
+    except Exception as exc:
+        print(f&quot;ERROR: Could not parse metadata: {exc}&quot;, file=sys.stderr)
+        return 2
+
+    errors: list[str] = []
+    warnings: list[str] = []
+    for field in sorted(REQUIRED):
+        if field not in data or data[field] == &quot;&quot; or data[field] is None:
+            errors.append(f&quot;Missing required field: {field}&quot;)
+
+    project_id = str(data.get(&quot;project_id&quot;, &quot;&quot;))
+    if project_id and not PROJECT_RE.fullmatch(project_id):
+        errors.append(&quot;Invalid project_id format or type.&quot;)
+    if project_id and data.get(&quot;project_type&quot;):
+        if str(data[&quot;project_type&quot;]).upper() != project_id.split(&quot;-&quot;, 1)[0]:
+            errors.append(&quot;project_type does not match project_id prefix.&quot;)
+
+    slug = str(data.get(&quot;slug&quot;, &quot;&quot;))
+    if slug and not re.fullmatch(r&quot;[a-z0-9]+(?:-[a-z0-9]+)*&quot;, slug):
+        errors.append(&quot;slug must use lowercase ASCII letters, digits, and hyphens.&quot;)
+    version = str(data.get(&quot;version&quot;, &quot;&quot;))
+    if version and not VERSION_RE.fullmatch(version):
+        errors.append(&quot;version must look like 1.0 or 1.0.0 without a leading v.&quot;)
+
+    for field, allowed in ENUMS.items():
+        if field in data and str(data[field]) not in allowed:
+            errors.append(f&quot;Invalid {field}: {data[field]}&quot;)
+
+    manager = str(data.get(&quot;task_manager&quot;, &quot;&quot;))
+    if manager == &quot;notion&quot; and data.get(&quot;linear_authoritative&quot;) is True:
+        errors.append(&quot;Notion and Linear cannot both be authoritative.&quot;)
+    if manager == &quot;linear&quot; and data.get(&quot;notion_authoritative&quot;) is True:
+        errors.append(&quot;Notion and Linear cannot both be authoritative.&quot;)
+    if &quot;,&quot; in manager or &quot;+&quot; in manager:
+        errors.append(&quot;task_manager must contain only one authoritative system.&quot;)
+
+    if str(data.get(&quot;privacy&quot;, &quot;&quot;)) == &quot;public&quot;:
+        restricted_markers = (
+            r&quot;(?im)^\s*(api[_ -]?key|password|token)\s*:\s*\S+&quot;,
+            r&quot;(?im)^\s*(student[_ -]?name|學生姓名)\s*:\s*\S+&quot;,
+        )
+        if any(re.search(pattern, text) for pattern in restricted_markers):
+            warnings.append(&quot;Public metadata may contain restricted information; review manually.&quot;)
+
+    result = {&quot;errors&quot;: errors, &quot;warnings&quot;: warnings, &quot;passed&quot;: not errors}
+    if args.json:
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+    else:
+        for item in errors:
+            print(f&quot;ERROR: {item}&quot;)
+        for item in warnings:
+            print(f&quot;WARNING: {item}&quot;)
+        print(&quot;PASS&quot; if not errors else &quot;FAIL&quot;)
+    return 0 if not errors else 1
+
+
+if __name__ == &quot;__main__&quot;:
+    raise SystemExit(main())
+</code></pre>
+    </details>
+    
+      </section>
+
+      <footer>
+        AI 專案知識工作流技術文章 · 生成日期 2026-08-24<br>
+        用於教學、科展、AI 生成、數位教材、程式開發與長期知識管理。
+      </footer>
+    </main>
+  </div>
+  <script>
+    document.querySelectorAll(".copy-button").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const target = document.getElementById(button.dataset.copy);
+        if (!target) return;
+        const previous = button.textContent;
+        try {
+          await navigator.clipboard.writeText(target.innerText);
+          button.textContent = "已複製";
+        } catch {
+          const range = document.createRange();
+          range.selectNodeContents(target);
+          const selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+          button.textContent = "已選取";
+        }
+        setTimeout(() => button.textContent = previous, 1400);
+      });
+    });
+  </script>
+</body>
+</html>
