@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ChatGPT 桌面版跨裝置同步架構技術白皮書：Chat、Work、Codex 的同步邏輯、四層架構與黑熊老師 AI 工作系統。">
+  <title>ChatGPT 桌面版跨裝置同步架構｜技術白皮書</title>
+  <style>
+    :root{--navy:#102967;--blue:#2759da;--sky:#eef4ff;--ink:#182236;--muted:#5e6b80;--line:#d9e1ee;--paper:#fff;--bg:#f4f7fb;--good:#116b58;--shadow:0 18px 48px rgba(16,41,103,.1)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:linear-gradient(180deg,#eaf1ff 0,#f7f9fc 28rem,var(--bg));font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;line-height:1.8}a{color:var(--blue)}
+    .hero{color:#fff;background:linear-gradient(135deg,#102967,#2253d9 64%,#5a9bf1);padding:72px 24px 64px}.hero-inner{max-width:1080px;margin:auto}.eyebrow{display:inline-block;padding:7px 14px;border:1px solid rgba(255,255,255,.55);border-radius:999px;font-weight:700}.hero h1{font-size:clamp(2.25rem,6vw,4.4rem);line-height:1.12;letter-spacing:-.04em;margin:24px 0 12px}.subtitle{font-size:clamp(1.05rem,2.4vw,1.45rem);font-weight:750;margin:0 0 18px;max-width:900px}.hero .lead{max-width:850px;font-size:1.05rem;color:#eef5ff}.meta{display:flex;gap:12px 22px;flex-wrap:wrap;margin-top:24px;color:#eaf2ff}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}.button{display:inline-flex;align-items:center;padding:10px 16px;border-radius:999px;background:#fff;color:var(--navy);font-weight:800;text-decoration:none;border:0;cursor:pointer;font:inherit}.button.secondary{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.55)}
+    .shell{display:grid;grid-template-columns:250px minmax(0,820px);gap:30px;max-width:1150px;margin:34px auto 80px;padding:0 22px}.toc{position:sticky;top:18px;align-self:start;max-height:calc(100vh - 36px);overflow:auto;background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}.toc strong{display:block;margin-bottom:8px}.toc a{display:block;color:#43516a;text-decoration:none;padding:7px 9px;border-radius:9px;font-size:.93rem}.toc a:hover{background:var(--sky);color:var(--navy)}main{min-width:0}.card{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:clamp(22px,4vw,38px);margin-bottom:22px;box-shadow:var(--shadow)}h2{font-size:clamp(1.45rem,3vw,2rem);line-height:1.3;margin:0 0 18px;color:var(--navy);padding-left:14px;border-left:6px solid var(--blue)}h3{font-size:1.2rem;line-height:1.45;margin:28px 0 8px;color:#213b73}p{margin:.7em 0}.summary{font-size:1.08rem}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px}.metric{background:var(--sky);border:1px solid #ccdaf6;border-radius:16px;padding:18px}.metric b{display:block;color:var(--blue);font-size:1.8rem;line-height:1}.metric span{display:block;margin-top:8px;color:#40506a;font-size:.9rem}.note{background:#eef9f5;border:1px solid #bfe5d7;color:#164d41;padding:16px 18px;border-radius:14px;margin:18px 0}.quote{font-size:1.15rem;font-weight:800;color:var(--navy);padding:18px 20px;background:var(--sky);border-radius:14px;border-left:5px solid var(--blue)}ul,ol{padding-left:1.35em}li{margin:.35em 0}.table-wrap{overflow:auto;margin:18px 0}table{width:100%;border-collapse:collapse;min-width:700px;font-size:.94rem}th,td{padding:12px 13px;border:1px solid #cfd8e6;text-align:left;vertical-align:top}th{background:#e7edf6;color:#17233a}tr:nth-child(even) td{background:#f8fafc}.layers{display:grid;gap:12px;margin:18px 0}.layer{display:grid;grid-template-columns:155px 1fr;border:1px solid var(--line);border-radius:16px;overflow:hidden}.layer b{display:grid;place-items:center;text-align:center;padding:16px;color:#fff;background:var(--blue)}.layer:nth-child(2) b{background:#237a78}.layer:nth-child(3) b{background:#7553a6}.layer:nth-child(4) b{background:#a4543b}.layer div{padding:16px;background:#fbfcff}.work-system{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.system-box{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fafcff}.system-box b{color:var(--navy);display:block;margin-bottom:5px}.formula{font-size:1.08rem;font-weight:800;text-align:center;color:#fff;background:linear-gradient(135deg,var(--navy),var(--blue));border-radius:16px;padding:20px}.sources{font-size:.93rem;word-break:break-word}.footer{text-align:center;color:var(--muted);max-width:900px;margin:0 auto;padding:0 24px 44px}
+    @media(max-width:900px){.shell{grid-template-columns:1fr}.toc{position:relative;top:auto;max-height:none}.metrics{grid-template-columns:repeat(2,1fr)}}@media(max-width:620px){.hero{padding-top:48px}.metrics,.work-system{grid-template-columns:1fr}.layer{grid-template-columns:1fr}.card{border-radius:16px}.meta{display:block}.meta span{display:block;margin:5px 0}}@media print{body{background:#fff}.hero{background:#fff;color:var(--ink);padding:30px 0}.hero .lead,.meta{color:var(--ink)}.actions,.toc{display:none}.shell{display:block;margin:0;max-width:none;padding:0}.card{box-shadow:none;break-inside:avoid;border-color:#bbb}.footer{display:none}}
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <span class="eyebrow">正式技術白皮書版</span>
+      <h1>ChatGPT 桌面版跨裝置同步架構</h1>
+      <p class="subtitle">Chat / Work / Codex 的同步邏輯、四層架構與黑熊老師 AI 工作系統</p>
+      <p class="lead">本白皮書聚焦新版 ChatGPT 桌面版在多裝置、多工作模式下的資料同步邏輯，釐清哪些內容會同步、哪些不會同步，以及應如何搭配 Google Drive、GitHub 與本機環境，建立可長期維運的 AI 工作流程。</p>
+      <div class="meta"><span>撰寫：ChatGPT 協作整理</span><span>版本：V1.0</span><span>日期：2026-09-26</span><span>對象：教育工作者、研究者、知識工作者、開發者</span></div>
+      <div class="actions"><a class="button" href="#abstract">開始閱讀</a><button class="button secondary" onclick="window.print()">列印／另存 PDF</button></div>
+    </div>
+  </header>
+  <div class="shell">
+    <aside class="toc" aria-label="文章目錄">
+      <strong>內容目錄</strong>
+      <a href="#abstract">摘要</a><a href="#background">一、問題背景與研究範圍</a><a href="#roles">二、角色定位</a><a href="#comparison">三、同步比較表</a><a href="#layers">四、四層架構圖</a><a href="#blackbear">五、黑熊老師 AI 工作架構</a><a href="#advice">六、實務導入建議</a><a href="#conclusion">七、結論與執行要點</a><a href="#sources">附錄：主要官方依據</a>
+    </aside>
+    <main>
+      <section class="card" id="abstract">
+        <h2>摘要</h2>
+        <p class="summary">新版 ChatGPT 桌面版已不再只是單純的聊天視窗，而是逐步形成由 Chat、Work、Codex 所構成的 AI 工作平台。對多裝置使用者而言，最大的挑戰不是功能數量，而是如何正確理解「同步」的邊界：Chat 同步的是對話與上下文；Cloud Work 同步的是雲端工作任務；Codex 依賴本機專案與版本控制；本機檔案與硬體環境則不會因登入 ChatGPT 而自動搬移到其他電腦。</p>
+        <p>因此，本白皮書主張採用「四層架構」思維：以 ChatGPT 承載 AI 工作上下文、以 Google Drive 承載文件同步、以 GitHub 承載程式版本控制、以本機電腦承載實際執行環境。這種分工方式，對於需要在學校、家中與筆電之間切換的教師與開發者，尤其重要。</p>
+        <div class="metrics"><div class="metric"><b>4 層</b><span>AI 上下文／文件雲／程式版本控制／本機執行</span></div><div class="metric"><b>3 模式</b><span>Chat、Work、Codex 的角色與歷史紀錄分工不同</span></div><div class="metric"><b>2 類 Work</b><span>Cloud Work 可跨裝置續作，Local Work 仍依賴原始電腦</span></div><div class="metric"><b>1 原則</b><span>把「AI 上下文同步」與「檔案同步」徹底分開思考</span></div></div>
+        <div class="note"><b>官方依據說明：</b>本文依據 OpenAI Help Center 截至 2026-09-26 可取得的官方資訊撰寫，重點包括 ChatGPT Work and Codex 與 ChatGPT Release Notes。</div>
+      </section>
+      <section class="card" id="background">
+        <h2>一、問題背景與研究範圍</h2>
+        <p>當使用者同時在學校桌機、家裡電腦、筆記型電腦與手機上使用 ChatGPT 時，最常見的直覺是：「既然我登入的是同一個帳號，所有東西應該都會同步。」這個直覺只對了一半。真正會同步的，主要是由 OpenAI 雲端管理的對話、部分工作上下文，以及屬於 Cloud Work 的任務狀態；不會自動同步的，則是使用者本機資料夾、硬體、終端機與本機開發環境。</p>
+        <p>因此，本白皮書不只是回答「會不會同步」，而是回答更重要的問題：<b>不同類型的資料應該由誰來同步？</b>只要角色分工一旦清楚，ChatGPT、Google Drive、GitHub 與本機作業系統就不再是彼此重疊的工具，而會逐步形成一套穩定的 AI 工作架構。</p>
+      </section>
+      <section class="card" id="roles">
+        <h2>二、Chat / Work / Codex 的角色定位</h2>
+        <h3>1. Chat：對話與思考層</h3><p>Chat 適合快速問答、寫作、規劃與推理，是最接近傳統 ChatGPT 的模式。其核心價值在於承接使用者的思考脈絡，例如備課構想、研究問題推敲、文章改寫與教學設計。</p>
+        <h3>2. Work：任務執行層</h3><p>Work 被定位為可處理較長、多步驟、需要產出成品的 agent。它適合用於資料分析、跨文件整理、撰寫文件、製作試算表、簡報與報告。官方說明指出，Work 在 Web 與 Mobile 上執行於雲端；在桌面版中，若方案與權限允許，則可在授權下使用本機檔案與桌面 App。</p>
+        <h3>3. Codex：軟體工程層</h3><p>Codex 仍然是桌面版裡的獨立視圖，專注於程式撰寫、除錯、執行測試、操作 repository、terminal 與開發工具。官方特別指出 Codex 的歷史紀錄與 ChatGPT 歷史分開，且不能像 Chat 或 Work 一樣直接在 Web 或 Mobile 中作為一般模式選用。</p>
+      </section>
+      <section class="card" id="comparison">
+        <h2>三、Chat / Work / Codex 同步比較表</h2>
+        <div class="table-wrap"><table><thead><tr><th>項目</th><th>Chat</th><th>Work（Cloud Work）</th><th>Work（Local Work）</th><th>Codex</th></tr></thead><tbody>
+          <tr><th>主要定位</th><td>快速對話、推理、寫作、規劃</td><td>雲端執行的多步驟任務、文件與分析工作</td><td>結合本機檔案與桌面應用程式的任務執行</td><td>軟體開發、測試、Git 與 terminal 工作流</td></tr>
+          <tr><th>跨桌面／Web／手機同步</th><td>是</td><td>是</td><td>僅對話與部分上下文可能保存在雲端；本機執行環境不會完整搬移</td><td>否；非一般 Web／Mobile 模式。僅部分支援的桌面 Codex 對話可從手機 Remote 存取</td></tr>
+          <tr><th>本機檔案存取</th><td>一般需上傳或透過連接來源</td><td>以雲端任務為主</td><td>可，在使用者授權下使用本機檔案</td><td>可，本機資料夾、repo、terminal、開發工具</td></tr>
+          <tr><th>歷史紀錄</th><td>與 ChatGPT 歷史整合</td><td>與 Chat 一起出現在 Recents，可排序、篩選、釘選</td><td>同左，但執行內容受本機限制</td><td>與 ChatGPT 一般歷史分開</td></tr>
+          <tr><th>典型風險</th><td>把對話誤當成檔案管理系統</td><td>誤以為所有內容都能離線或本機操作</td><td>誤以為換電腦後原本機資料夾仍可直接使用</td><td>誤以為登入同帳號後，本機 repo 會自動同步到另一台電腦</td></tr>
+          <tr><th>最佳搭配</th><td>Projects、寫作、研究脈絡整理</td><td>Google Drive、雲端文件、跨裝置續作</td><td>本機專案資料夾、桌面 App、自動化任務</td><td>Git／GitHub、CI/CD、本機開發環境</td></tr>
+        </tbody></table></div>
+        <p class="quote">重點判斷：Chat 與 Cloud Work 同步的是 AI 工作上下文；Local Work 與 Codex 則明確依賴原始電腦的本機環境。</p>
+      </section>
+      <section class="card" id="layers">
+        <h2>四、四層架構圖：跨裝置同步的正確邏輯</h2>
+        <p>一套穩定的 AI 工作系統，至少要把資料分成四層管理。這四層分別負責不同的同步任務，不能互相替代。</p>
+        <div class="layers">
+          <div class="layer"><b>第一層<br>AI 上下文層</b><div><strong>ChatGPT／OpenAI Cloud</strong><br>Chat、Projects、Cloud Work、對話脈絡、任務上下文。可跨桌面、Web、手機同步，是「AI 大腦」與工作記憶層。</div></div>
+          <div class="layer"><b>第二層<br>文件雲層</b><div><strong>雲端儲存服務</strong><br>Google Drive、OneDrive、Dropbox、Notion、SharePoint。負責 Word、PDF、試算表、相片、研究紀錄等文件同步。</div></div>
+          <div class="layer"><b>第三層<br>程式版本控制層</b><div><strong>Git／GitHub</strong><br>Repository、Commit、Branch、Pull／Push。負責跨機器同步原始碼與開發歷程，是 Codex 工作流的核心。</div></div>
+          <div class="layer"><b>第四層<br>本機執行層</b><div><strong>實體電腦</strong><br><code>C:\project</code>、<code>D:\data</code>、ESP32、Arduino、USB、Python、Terminal、Docker。不會因登入 ChatGPT 而自動同步，是實際執行與連接硬體的地方。</div></div>
+        </div>
+        <h3>圖解重點</h3><ul><li>ChatGPT 最適合承接「AI 上下文」與工作記憶，不應替代文件雲或 Git。</li><li>Google Drive 類服務最適合承接教案、研究資料、圖片、表單與報告。</li><li>GitHub 最適合承接原始碼同步與多人協作；它是 Codex 跨機器工作的真正基礎。</li><li>本機層承接硬體、感測器、USB、終端機與實際執行環境，不會因帳號登入自動同步。</li></ul>
+      </section>
+      <section class="card" id="blackbear">
+        <h2>五、黑熊老師 AI 工作架構示意圖</h2>
+        <p>以下示意將同步邏輯轉化為適合教育工作者的實務架構。它特別適合像黑熊老師這樣，同時進行教學設計、科展研究、文章寫作、數位教材開發與程式工程的人。</p>
+        <div class="work-system"><div class="system-box"><b>Chat｜思考、寫作、規劃</b>連接教學 OS、科展／研究 OS、寫作／內容 OS。</div><div class="system-box"><b>Work｜資料整理、報告產出</b>串接 Google Drive、研究文件、教材、照片、試算表。</div><div class="system-box"><b>Codex｜程式開發、測試、Git</b>串接 GitHub、本機電腦、ESP32 與工程 OS。</div></div>
+        <h3>此架構的實際優勢</h3><ul><li>教學與研究資料不再散落於單一聊天視窗。</li><li>Work 接手整理任務，Chat 專注思考與寫作。</li><li>Codex 與 GitHub 結合後，跨機器開發更穩定。</li></ul>
+        <h3>最適合的應用情境</h3><ul><li>國小自然科教學設計與研習簡報。</li><li>科展研究與實驗資料管理。</li><li>Science Portal、ESP32、Python Gateway 等專案。</li></ul>
+      </section>
+      <section class="card" id="advice">
+        <h2>六、實務導入建議</h2>
+        <h3>1. 多地點切換工作：建立「雲端優先」原則</h3><p>研究文件、教案、簡報、實驗數據與照片，應優先放在 Google Drive 或其他雲端文件平台，而不是只放在某一台電腦的 D:\ 資料夾。如此一來，Work 才能與雲端資料形成穩定的續作流程。</p>
+        <h3>2. 跨機器寫程式：把 GitHub 當成標準流程</h3><p>Codex 的真正跨機器能力，不是來自「ChatGPT 自動同步本機 repo」，而是來自 <code>git commit → git push → git pull</code> 的分散式版本控制流程。對於 Science Portal、Arduino／ESP32、Python Gateway 或多 AI 軟體工程專案，都應建立明確的 Git 規範。</p>
+        <h3>3. 把 ChatGPT 當成「AI 工作控制層」</h3><p>ChatGPT 最擅長的是任務理解、推理、整理與產出建議；文件、原始碼與硬體仍需交給更適合的系統承接。這種分工能大幅降低版本混亂與遺失風險。</p>
+        <h3>4. 教育場域中，Work 與 Chat 的分工尤其關鍵</h3><p>例如：Chat 用於教學反思、概念推敲、研究問題設計；Work 用於整理教師研習教材、彙整學生資料、比對科展文件與生成週報。當角色分工明確，整體生產力會顯著提升。</p>
+      </section>
+      <section class="card" id="conclusion">
+        <h2>七、結論與執行要點</h2>
+        <p>新版 ChatGPT 桌面版的進化方向很清楚：Chat 負責思考與互動、Work 負責多步驟任務執行、Codex 負責軟體工程與技術工作。但這三者並不是單獨就能完成所有同步任務。真正穩定的 AI 工作流，必須建立在分層架構之上。</p>
+        <p><b>請記住以下四句話：</b></p><ol><li>Chat 同步的是對話與工作上下文。</li><li>Cloud Work 同步的是可跨裝置續作的雲端任務。</li><li>Codex 不等於 GitHub；本機 repo 不會因登入 ChatGPT 自動搬到另一台電腦。</li><li>本機檔案、硬體與終端機環境，必須另外規劃同步、備份與版本控制。</li></ol>
+        <div class="formula">ChatGPT 同步「AI 工作上下文」，Google Drive 同步「文件」，GitHub 同步「程式」，本機電腦負責「實際執行環境」。</div>
+        <p>當這個分工被真正落實後，ChatGPT 桌面版就不再只是對話工具，而會逐步成為個人與團隊的 AI 工作作業系統。</p>
+      </section>
+      <section class="card sources" id="sources">
+        <h2>附錄：主要官方依據（撰寫時點）</h2>
+        <ul><li><b>OpenAI Help Center — ChatGPT Work and Codex：</b>說明 Chat、Work、Codex 的定位，以及 Cloud Work、Local Work 與 Codex 歷史分離的關係。</li><li><b>OpenAI Help Center — ChatGPT Release Notes：</b>確認近期對 Work、Codex 與 Voice 的功能更新與適用範圍。</li></ul>
+        <p>本白皮書為技術導讀與工作流設計文件，內容依據 OpenAI 官方可公開檢索之文件整理與解釋，日期為 2026-09-26。</p>
+      </section>
+    </main>
+  </div>
+  <footer class="footer">依原 PDF 內容轉製為響應式 HTML · 2026-09-26</footer>
+</body>
+</html>
